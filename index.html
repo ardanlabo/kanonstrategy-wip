@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanon Strategy — Decision Systems</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --white: #F5F5F3;
+    --black: #0A0A0A;
+    --grey-1: #1A1A1A;
+    --grey-2: #2A2A2A;
+    --grey-3: #888888;
+    --grey-4: #444444;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none; z-index: 0;
+  }
+
+  .corner { position: fixed; width: 12px; height: 12px; z-index: 50; }
+  .corner.tl { top:20px; left:20px; border-top:1px solid rgba(255,255,255,0.15); border-left:1px solid rgba(255,255,255,0.15); }
+  .corner.tr { top:20px; right:20px; border-top:1px solid rgba(255,255,255,0.15); border-right:1px solid rgba(255,255,255,0.15); }
+  .corner.bl { bottom:20px; left:20px; border-bottom:1px solid rgba(255,255,255,0.15); border-left:1px solid rgba(255,255,255,0.15); }
+  .corner.br { bottom:20px; right:20px; border-bottom:1px solid rgba(255,255,255,0.15); border-right:1px solid rgba(255,255,255,0.15); }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 24px 56px;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .logo-mark { display:flex; align-items:center; gap:14px; text-decoration:none; }
+  .logo-icon { width:26px; height:26px; }
+  .logo-text { font-size:11px; font-weight:500; letter-spacing:4px; text-transform:uppercase; color:var(--white); }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; }
+  .nav-links a { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-3); text-decoration:none; transition:color 0.2s; }
+  .nav-links a:hover { color:var(--white); }
+  .nav-cta { border:1px solid var(--grey-4) !important; padding:0.38rem 1.2rem; color:var(--white) !important; }
+  .nav-cta:hover { background:rgba(255,255,255,0.05) !important; }
+
+  /* SECTIONS */
+  section { position:relative; z-index:1; padding:110px 56px; }
+  .section-rule { position:relative; z-index:1; height:1px; background:linear-gradient(to right, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent); }
+
+  /* HERO */
+  #hero {
+    min-height:100vh; display:flex; flex-direction:column;
+    justify-content:space-between; padding-top:120px; padding-bottom:56px;
+  }
+  .hero-top { display:flex; justify-content:flex-end; }
+  .coord { font-size:9px; letter-spacing:2px; color:var(--grey-3); font-weight:300; line-height:1.8; text-align:right; }
+  .hero-main { margin-top:auto; padding-top:6vh; }
+  .eyebrow {
+    font-size:9px; letter-spacing:5px; text-transform:uppercase;
+    color:var(--grey-3); margin-bottom:24px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .eyebrow::before { content:''; display:block; width:32px; height:1px; background:var(--grey-4); }
+  h1 {
+    font-size: clamp(44px, 7vw, 88px);
+    font-weight:700; letter-spacing:-2px; line-height:0.95;
+    color:var(--white); text-transform:uppercase;
+  }
+  h1 .thin { font-weight:200; color:var(--grey-3); }
+  h1 .block { display:block; }
+  .hero-sub {
+    margin-top:36px; font-size:12px; font-weight:300;
+    letter-spacing:0.04em; color:var(--grey-3); max-width:480px; line-height:2;
+  }
+  .hero-bottom {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-top:72px; padding-top:28px;
+    border-top:1px solid rgba(255,255,255,0.05);
+  }
+  .hero-stats { display:flex; gap:3.5rem; }
+  .stat-num { font-size:1.7rem; font-weight:700; color:var(--white); letter-spacing:-0.02em; line-height:1; }
+  .stat-label { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-3); margin-top:5px; font-weight:300; }
+  .hero-cta { display:flex; gap:1.5rem; align-items:center; }
+  .btn-primary {
+    display:inline-block; padding:0.7rem 1.8rem;
+    border:1px solid var(--white); background:var(--white); color:var(--black);
+    font-size:9px; font-weight:500; letter-spacing:3px; text-transform:uppercase;
+    text-decoration:none; transition:background 0.2s, color 0.2s;
+  }
+  .btn-primary:hover { background:transparent; color:var(--white); }
+  .btn-ghost { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-3); text-decoration:none; transition:color 0.2s; }
+  .btn-ghost:hover { color:var(--white); }
+
+  /* SERVICES */
+  .section-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:56px; }
+  .section-label { font-size:9px; letter-spacing:5px; text-transform:uppercase; color:var(--grey-3); display:flex; align-items:center; gap:14px; }
+  .section-label::before { content:''; display:block; width:32px; height:1px; background:var(--grey-4); }
+  h2 { font-size:clamp(1.8rem, 3vw, 3rem); font-weight:700; letter-spacing:-0.03em; line-height:1.1; text-transform:uppercase; color:var(--white); }
+  h2 .thin { font-weight:200; color:var(--grey-3); }
+  .section-intro { font-size:11px; color:var(--grey-3); max-width:340px; line-height:2; font-weight:300; text-align:right; }
+
+  .service-row {
+    display:grid; grid-template-columns:3rem 1fr 2fr auto;
+    gap:2rem; align-items:start; padding:2.2rem 0;
+    border-top:1px solid rgba(255,255,255,0.05);
+    transition:background 0.2s;
+  }
+  .service-row:last-child { border-bottom:1px solid rgba(255,255,255,0.05); }
+  .service-row:hover { background:rgba(255,255,255,0.02); }
+  .service-num { font-size:9px; letter-spacing:3px; color:var(--grey-4); padding-top:3px; font-weight:300; }
+  .service-title { font-size:1rem; font-weight:600; letter-spacing:-0.01em; color:var(--white); text-transform:uppercase; line-height:1.3; }
+  .service-desc { font-size:11px; color:var(--grey-3); line-height:2; font-weight:300; }
+  .service-tags { display:flex; flex-wrap:wrap; gap:0.4rem; justify-content:flex-end; }
+  .tag { font-size:8px; letter-spacing:0.1em; text-transform:uppercase; padding:0.22rem 0.55rem; border:1px solid var(--grey-4); color:var(--grey-3); }
+
+  /* PROOF */
+  #proof { background:var(--grey-1); border-top:1px solid rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.05); }
+  .proof-inner { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+  .proof-text .section-label { margin-bottom:1.8rem; }
+  .proof-text h2 { margin-bottom:1.2rem; }
+  .proof-text p { font-size:11px; color:var(--grey-3); line-height:2; margin-bottom:0.8rem; font-weight:300; }
+  .proof-link {
+    display:inline-flex; align-items:center; gap:0.8rem;
+    font-size:9px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--white); text-decoration:none; margin-top:1.2rem;
+    border-bottom:1px solid var(--grey-4); padding-bottom:3px;
+    transition:border-color 0.2s, gap 0.2s;
+  }
+  .proof-link:hover { border-color:var(--white); gap:1.2rem; }
+  .proof-link::after { content:'→'; }
+
+  .dashboard-mock {
+    background:#0F0F0F; border:1px solid rgba(255,255,255,0.07);
+    padding:1.4rem; aspect-ratio:4/3;
+    display:flex; flex-direction:column; gap:0.7rem;
+    position:relative; overflow:hidden;
+  }
+  .dashboard-mock::before {
+    content:''; position:absolute; inset:0;
+    background-image: linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+    background-size:40px 40px;
+  }
+  .dash-top { display:flex; justify-content:space-between; align-items:center; position:relative; z-index:1; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:0.7rem; }
+  .dash-title { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-3); }
+  .dash-live { display:flex; align-items:center; gap:6px; font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--grey-3); }
+  .live-dot { width:5px; height:5px; border-radius:50%; background:#5B9A6F; animation:livepulse 2s ease-in-out infinite; }
+  @keyframes livepulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  .dash-map { flex:1; background:#141A14; position:relative; overflow:hidden; }
+  .eth-outline {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:55%; height:65%;
+    border:1px solid rgba(255,255,255,0.08);
+    clip-path:polygon(20% 0%,80% 5%,100% 25%,90% 60%,70% 100%,30% 95%,5% 70%,0% 35%);
+    background:rgba(255,255,255,0.02);
+  }
+  .map-dot { position:absolute; border-radius:50%; animation:mappulse 2.5s ease-in-out infinite; }
+  @keyframes mappulse { 0%,100%{opacity:0.7;transform:scale(1)} 50%{opacity:0.3;transform:scale(1.6)} }
+  .map-dot.critical{width:8px;height:8px;background:#C45A5A;top:38%;left:48%;animation-delay:0s}
+  .map-dot.high{width:6px;height:6px;background:#C4955A;top:55%;left:58%;animation-delay:0.5s}
+  .map-dot.medium{width:6px;height:6px;background:#C4955A;top:30%;left:35%;animation-delay:1s}
+  .map-dot.low{width:5px;height:5px;background:#5B9A6F;top:60%;left:38%;animation-delay:0.3s}
+  .map-dot.low2{width:5px;height:5px;background:#5B9A6F;top:42%;left:62%;animation-delay:0.8s}
+  .dash-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; position:relative; z-index:1; }
+  .dash-stat { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:0.45rem 0.65rem; }
+  .dash-stat-n { font-size:0.95rem; font-weight:700; color:var(--white); line-height:1; }
+  .dash-stat-l { font-size:7px; letter-spacing:2px; text-transform:uppercase; color:var(--grey-3); margin-top:3px; }
+
+  /* TEAM */
+  .team-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:3.5rem; }
+  .team-card { background:var(--grey-1); padding:2.8rem; border:1px solid rgba(255,255,255,0.04); transition:border-color 0.2s; }
+  .team-card:hover { border-color:rgba(255,255,255,0.1); }
+  .team-role { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:var(--grey-3); margin-bottom:0.8rem; }
+  .team-name { font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; text-transform:uppercase; color:var(--white); margin-bottom:1.2rem; line-height:1.1; }
+  .team-bio { font-size:11px; color:var(--grey-3); line-height:2; font-weight:300; margin-bottom:1.2rem; }
+  .team-creds { display:flex; flex-wrap:wrap; gap:0.4rem; }
+  .cred { font-size:8px; letter-spacing:2px; text-transform:uppercase; padding:0.22rem 0.65rem; border:1px solid var(--grey-4); color:var(--grey-3); }
+
+  /* CONTACT */
+  #contact { background:var(--grey-1); border-top:1px solid rgba(255,255,255,0.05); }
+  .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
+  .contact-left .section-label { margin-bottom:1.8rem; }
+  .contact-left h2 { margin-bottom:1.2rem; }
+  .contact-left p { font-size:11px; color:var(--grey-3); line-height:2; font-weight:300; margin-bottom:1.8rem; }
+  .contact-email-link { font-size:0.95rem; font-weight:300; letter-spacing:0.04em; color:var(--white); text-decoration:none; border-bottom:1px solid var(--grey-4); padding-bottom:3px; transition:border-color 0.2s; }
+  .contact-email-link:hover { border-color:var(--white); }
+  .contact-form { display:flex; flex-direction:column; gap:0.9rem; }
+  .form-field { display:flex; flex-direction:column; gap:0.35rem; }
+  .form-field label { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-4); }
+  .form-field input, .form-field textarea {
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+    color:var(--white); font-family:inherit; font-size:12px; font-weight:300;
+    padding:0.75rem 0.9rem; outline:none; transition:border-color 0.2s; resize:none;
+  }
+  .form-field input:focus, .form-field textarea:focus { border-color:rgba(255,255,255,0.25); }
+  .form-field input::placeholder, .form-field textarea::placeholder { color:var(--grey-4); }
+  .btn-send {
+    align-self:flex-start; padding:0.7rem 1.8rem;
+    background:var(--white); color:var(--black);
+    font-family:inherit; font-size:9px; font-weight:500; letter-spacing:3px; text-transform:uppercase;
+    border:none; cursor:pointer; margin-top:0.4rem; transition:background 0.2s;
+  }
+  .btn-send:hover { background:var(--grey-3); }
+
+  /* FOOTER */
+  footer {
+    position:relative; z-index:1; padding:1.8rem 56px;
+    border-top:1px solid rgba(255,255,255,0.05);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .footer-left { display:flex; align-items:center; gap:12px; }
+  .footer-left span { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-4); }
+  .footer-right { font-size:9px; letter-spacing:2px; color:var(--grey-4); }
+  .status-dot { display:flex; align-items:center; gap:8px; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--grey-4); }
+  .dot { width:5px;height:5px;border-radius:50%;background:var(--white);opacity:0.3;animation:dotpulse 3s ease-in-out infinite; }
+  @keyframes dotpulse { 0%,100%{opacity:0.2} 50%{opacity:0.7} }
+
+  /* FADE */
+  .fade-up { opacity:0; transform:translateY(22px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .fade-up.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:860px){
+    nav{padding:1.2rem 1.5rem;}
+    .nav-links{display:none;}
+    section{padding:72px 1.5rem;}
+    #hero{padding:110px 1.5rem 3rem;}
+    .service-row{grid-template-columns:2.5rem 1fr;}
+    .service-tags{display:none;}
+    .proof-inner,.team-grid,.contact-inner{grid-template-columns:1fr;}
+    .section-header{flex-direction:column;align-items:flex-start;gap:1rem;}
+    .section-intro{text-align:left;}
+    .hero-stats{gap:2rem;flex-wrap:wrap;}
+    .hero-bottom{flex-direction:column;align-items:flex-start;gap:2rem;}
+    footer{padding:1.5rem;flex-direction:column;gap:0.5rem;text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<nav>
+  <a href="#" class="logo-mark">
+    <svg class="logo-icon" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="12" stroke="white" stroke-width="0.8" opacity="0.2"/>
+      <circle cx="14" cy="14" r="8" stroke="white" stroke-width="1" opacity="0.45"/>
+      <circle cx="14" cy="14" r="4" stroke="white" stroke-width="1.5" opacity="0.85"/>
+      <circle cx="14" cy="14" r="1.5" fill="white"/>
+      <line x1="14" y1="0" x2="14" y2="8" stroke="white" stroke-width="0.6" opacity="0.25"/>
+      <line x1="14" y1="20" x2="14" y2="28" stroke="white" stroke-width="0.6" opacity="0.25"/>
+      <line x1="0" y1="14" x2="8" y2="14" stroke="white" stroke-width="0.6" opacity="0.25"/>
+      <line x1="20" y1="14" x2="28" y2="14" stroke="white" stroke-width="0.6" opacity="0.25"/>
+    </svg>
+    <span class="logo-text">Kanon Strategy</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#proof">Work</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-top">
+    <div class="coord">
+      <div>9.0250° N, 38.7469° E</div>
+      <div>Addis Ababa · UAE · East Africa</div>
+    </div>
+  </div>
+  <div class="hero-main">
+    <div class="eyebrow">Decision Systems</div>
+    <h1>
+      <span class="block">We turn</span>
+      <span class="block thin">complex data</span>
+      <span class="block">into clear</span>
+      <span class="block thin">decisions_</span>
+    </h1>
+    <p class="hero-sub">Kanon Strategy partners with development organizations, humanitarian agencies, and private sector leaders to transform information into actionable priorities.</p>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Years field operations</div></div>
+      <div class="stat"><div class="stat-num">Horn</div><div class="stat-label">of Africa expertise</div></div>
+      <div class="stat"><div class="stat-num">UN · EU</div><div class="stat-label">Ecosystem fluency</div></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#contact" class="btn-primary">Start a conversation</a>
+      <a href="#services" class="btn-ghost">Our services ↓</a>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<section id="services">
+  <div class="section-header fade-up">
+    <div>
+      <div class="section-label" style="margin-bottom:1.4rem">What we do</div>
+      <h2>Built for <span class="thin">organizations<br>at the edge</span></h2>
+    </div>
+    <p class="section-intro">We build the systems that help organizations act in complexity — before the situation forces the decision.</p>
+  </div>
+  <div class="services-list">
+    <div class="service-row fade-up">
+      <div class="service-num">01</div>
+      <div class="service-title">Decision<br>Intelligence</div>
+      <div class="service-desc">The analytical layer between your data and your next move. Risk indices, operational dashboards, geographic prioritization — designed for decision-makers who act, not analysts who report.</div>
+      <div class="service-tags"><span class="tag">GIS & Mapping</span><span class="tag">Risk Indexing</span><span class="tag">Cluster Support</span></div>
+    </div>
+    <div class="service-row fade-up">
+      <div class="service-num">02</div>
+      <div class="service-title">Early Warning<br>Mechanisms</div>
+      <div class="service-desc">Anticipation systems that flag deteriorating conditions before they become crises. Indicator design, threshold calibration, alert workflows — built to survive field conditions.</div>
+      <div class="service-tags"><span class="tag">Indicator Design</span><span class="tag">Alert Systems</span><span class="tag">Field-Ready</span></div>
+    </div>
+    <div class="service-row fade-up">
+      <div class="service-num">03</div>
+      <div class="service-title">Coordination<br>Tools</div>
+      <div class="service-desc">Frameworks and platforms that align multi-actor operations. 4W mapping, actor analysis, inter-agency coordination support — where fragmentation is the default problem.</div>
+      <div class="service-tags"><span class="tag">4W Mapping</span><span class="tag">Actor Analysis</span><span class="tag">Multi-Agency</span></div>
+    </div>
+    <div class="service-row fade-up">
+      <div class="service-num">04</div>
+      <div class="service-title">Programme<br>Architecture</div>
+      <div class="service-desc">Programs that survive contact with reality. Concept notes, M&E frameworks, donor-aligned theories of change, and governance structures built to hold under pressure.</div>
+      <div class="service-tags"><span class="tag">M&E Design</span><span class="tag">EU / ECHO</span><span class="tag">Concept Notes</span></div>
+    </div>
+    <div class="service-row fade-up">
+      <div class="service-num">05</div>
+      <div class="service-title">Strategic<br>Advisory</div>
+      <div class="service-desc">Positioning, market entry, stakeholder mapping. For organizations navigating donor ecosystems, fragile geographies, or complex competitive landscapes — we map the terrain before you move.</div>
+      <div class="service-tags"><span class="tag">Donor Strategy</span><span class="tag">Market Entry</span><span class="tag">Stakeholder Mapping</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<section id="proof">
+  <div class="proof-inner">
+    <div class="proof-text fade-up">
+      <div class="section-label">Proof of work</div>
+      <h2>Decision tools<br><span class="thin">built for<br>the field</span></h2>
+      <p>Our Last Mile Risk Index (LMRI) for the Ethiopia Nutrition Coalition aggregates humanitarian indicators across woredas into operational priorities — updated in real time, built for cluster coordinators.</p>
+      <p>This is what we mean by decision intelligence: not a visualization. A system that tells you where to act first.</p>
+      <a href="https://ardanlabo.github.io/nutrition-coalition-V1/" target="_blank" class="proof-link">View live dashboard</a>
+    </div>
+    <div class="dashboard-mock fade-up">
+      <div class="dash-top">
+        <span class="dash-title">Ethiopia Nutrition Coalition — LMRI</span>
+        <span class="dash-live"><span class="live-dot"></span>Live</span>
+      </div>
+      <div class="dash-map">
+        <div class="eth-outline"></div>
+        <div class="map-dot critical"></div>
+        <div class="map-dot high"></div>
+        <div class="map-dot medium"></div>
+        <div class="map-dot low"></div>
+        <div class="map-dot low2"></div>
+      </div>
+      <div class="dash-stats">
+        <div class="dash-stat"><div class="dash-stat-n">T1/T2</div><div class="dash-stat-l">Priority woredas</div></div>
+        <div class="dash-stat"><div class="dash-stat-n">4W</div><div class="dash-stat-l">Actor mapping</div></div>
+        <div class="dash-stat"><div class="dash-stat-n">LMRI</div><div class="dash-stat-l">Risk index</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<section id="team">
+  <div class="section-label fade-up" style="margin-bottom:1.4rem">The team</div>
+  <h2 class="fade-up">Two profiles.<br><span class="thin">One operating structure.</span></h2>
+  <div class="team-grid">
+    <div class="team-card fade-up">
+      <div class="team-role">Managing Director</div>
+      <div class="team-name">Hidaya<br>Saad</div>
+      <p class="team-bio">Ten years shaping brand strategy and consumer operations at Procter & Gamble across MENA and global markets. NYU Abu Dhabi. UAE Golden Visa holder. Hidaya leads client relationships and strategic positioning, bringing cross-sector fluency from global FMCG to development finance.</p>
+      <div class="team-creds">
+        <span class="cred">NYU Abu Dhabi</span>
+        <span class="cred">P&G MENA</span>
+        <span class="cred">UAE Resident</span>
+        <span class="cred">Brand Strategy</span>
+      </div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-role">Operations & Analytics Lead</div>
+      <div class="team-name">André<br>E.</div>
+      <p class="team-bio">Senior program director with 10+ years in fragile contexts across the Horn of Africa. Former Médecins du Monde, Expertise France, French Red Cross. PMP certified. André architects the analytical systems and operational frameworks that underpin every engagement.</p>
+      <div class="team-creds">
+        <span class="cred">PMP</span>
+        <span class="cred">Horn of Africa</span>
+        <span class="cred">EU / ECHO</span>
+        <span class="cred">GIS / Analytics</span>
+        <span class="cred">MdM · EF</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-left fade-up">
+      <div class="section-label">Get in touch</div>
+      <h2>Let's work<br><span class="thin">together_</span></h2>
+      <p>Whether you need a rapid decision framework, an early warning system, a programme architecture review — or a strategic partner embedded in your context. We'd like to hear about it.</p>
+      <a href="mailto:contact@kanonstrategy.com" class="contact-email-link">contact@kanonstrategy.com</a>
+    </div>
+    <div class="contact-form fade-up">
+      <div class="form-field"><label>Name</label><input type="text" placeholder="Full name" /></div>
+      <div class="form-field"><label>Organization</label><input type="text" placeholder="Organization or company" /></div>
+      <div class="form-field"><label>Email</label><input type="email" placeholder="your@email.com" /></div>
+      <div class="form-field"><label>Message</label><textarea rows="4" placeholder="Tell us about your project or context..."></textarea></div>
+      <button class="btn-send">Send message</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <svg width="16" height="16" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="8" stroke="white" stroke-width="1" opacity="0.25"/>
+      <circle cx="14" cy="14" r="4" stroke="white" stroke-width="1" opacity="0.4"/>
+      <circle cx="14" cy="14" r="1.5" fill="white" opacity="0.4"/>
+    </svg>
+    <span>Kanon Strategy FZE — Sharjah, UAE</span>
+  </div>
+  <div class="status-dot"><span class="dot"></span><span>Active</span></div>
+  <div class="footer-right">© 2026 Kanon Strategy. All rights reserved.</div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  document.querySelector('.btn-send').addEventListener('click', () => {
+    const inputs = document.querySelectorAll('input');
+    const name = inputs[0].value, org = inputs[1].value, email = inputs[2].value;
+    const msg = document.querySelector('textarea').value;
+    if (!email || !msg) { alert('Please fill in at least your email and message.'); return; }
+    const s = encodeURIComponent(`Kanon Strategy — Inquiry from ${name || 'a visitor'}`);
+    const b = encodeURIComponent(`Name: ${name}\nOrganization: ${org}\nEmail: ${email}\n\n${msg}`);
+    window.location.href = `mailto:contact@kanonstrategy.com?subject=${s}&body=${b}`;
+  });
+</script>
+</body>
+</html>
