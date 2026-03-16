@@ -672,9 +672,16 @@
     logoPosition: 'bottom-right'
   });
 
+  function safeSetPaint(id, prop, val) {
+    try { if (map.getLayer(id)) map.setPaintProperty(id, prop, val); } catch(e) {}
+  }
+  function safeSetLayout(id, prop, val) {
+    try { if (map.getLayer(id)) map.setLayoutProperty(id, prop, val); } catch(e) {}
+  }
+
   map.on('load', function() {
 
-    // Terrain + hillshade for relief
+    // Terrain + hillshade
     map.addSource('mapbox-dem', {
       type: 'raster-dem',
       url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
@@ -682,6 +689,7 @@
       maxzoom: 14
     });
     map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.6 });
+
     map.addLayer({
       id: 'hillshade-layer',
       type: 'hillshade',
@@ -695,61 +703,42 @@
       }
     });
 
-    // Override land colors to dark grey
-    var grayLayers = {
-      'land': '#181818',
-      'landuse': '#1c1c1c',
-      'national-park': '#1e1e1e',
-      'landuse-park': '#1e1e1e',
-      'landuse-residential': '#1a1a1a',
-      'pitch-outline': '#181818',
-    };
-    Object.entries(grayLayers).forEach(function([id, color]) {
-      if (map.getLayer(id)) map.setPaintProperty(id, 'fill-color', color);
-    });
+    // Override land/water to dark greys
+    safeSetPaint('land', 'fill-color', '#181818');
+    safeSetPaint('landuse', 'fill-color', '#1c1c1c');
+    safeSetPaint('national-park', 'fill-color', '#1e1e1e');
+    safeSetPaint('landuse-park', 'fill-color', '#1e1e1e');
+    safeSetPaint('water', 'fill-color', '#080e14');
+    safeSetPaint('water-shadow', 'fill-color', '#060b10');
+    safeSetPaint('waterway', 'line-color', '#0a1018');
 
-    // Water
-    if (map.getLayer('water')) map.setPaintProperty('water', 'fill-color', '#080e14');
-    if (map.getLayer('water-shadow')) map.setPaintProperty('water-shadow', 'fill-color', '#060b10');
-
-    // Roads — hide
+    // Hide roads
     ['road-motorway-trunk','road-primary','road-secondary-tertiary',
      'road-street','road-minor','road-simple','road-path',
-     'bridge-motorway-trunk','bridge-primary','bridge-secondary-tertiary'].forEach(function(id) {
-      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+     'bridge-motorway-trunk','bridge-primary','bridge-secondary-tertiary',
+     'tunnel-motorway-trunk','tunnel-primary'].forEach(function(id) {
+      safeSetLayout(id, 'visibility', 'none');
     });
 
-    // Labels — hide most, keep country labels very faint
-    ['poi-label','transit-label','airport-label','road-label',
-     'settlement-subdivision-label','settlement-minor-label'].forEach(function(id) {
-      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
-    });
-    if (map.getLayer('settlement-major-label')) {
-      map.setPaintProperty('settlement-major-label', 'text-color', 'rgba(255,255,255,0.08)');
-      map.setPaintProperty('settlement-major-label', 'text-halo-color', 'rgba(0,0,0,0)');
-    }
-    if (map.getLayer('country-label')) {
-      map.setPaintProperty('country-label', 'text-color', 'rgba(255,255,255,0.1)');
-      map.setPaintProperty('country-label', 'text-halo-color', 'rgba(0,0,0,0)');
-    }
-    if (map.getLayer('state-label')) {
-      map.setLayoutProperty('state-label', 'visibility', 'none');
-    }
+    // Fade labels
+    safeSetPaint('country-label', 'text-color', 'rgba(255,255,255,0.1)');
+    safeSetPaint('country-label', 'text-halo-color', 'rgba(0,0,0,0)');
+    safeSetPaint('settlement-major-label', 'text-color', 'rgba(255,255,255,0.06)');
+    safeSetPaint('settlement-major-label', 'text-halo-color', 'rgba(0,0,0,0)');
+    safeSetLayout('settlement-minor-label', 'visibility', 'none');
+    safeSetLayout('settlement-subdivision-label', 'visibility', 'none');
+    safeSetLayout('poi-label', 'visibility', 'none');
+    safeSetLayout('transit-label', 'visibility', 'none');
+    safeSetLayout('airport-label', 'visibility', 'none');
+    safeSetLayout('road-label', 'visibility', 'none');
+    safeSetLayout('state-label', 'visibility', 'none');
 
-    // Country borders — subtle
-    if (map.getLayer('admin-0-boundary')) {
-      map.setPaintProperty('admin-0-boundary', 'line-color', '#303030');
-      map.setPaintProperty('admin-0-boundary', 'line-width', 0.7);
-      map.setPaintProperty('admin-0-boundary', 'line-opacity', 0.8);
-    }
-    if (map.getLayer('admin-0-boundary-disputed')) {
-      map.setPaintProperty('admin-0-boundary-disputed', 'line-color', '#2a2a2a');
-    }
-    if (map.getLayer('admin-1-boundary')) {
-      map.setLayoutProperty('admin-1-boundary', 'visibility', 'none');
-    }
+    // Country borders subtle
+    safeSetPaint('admin-0-boundary', 'line-color', '#2e2e2e');
+    safeSetPaint('admin-0-boundary', 'line-width', 0.7);
+    safeSetLayout('admin-1-boundary', 'visibility', 'none');
 
-    // Strategic cities — gold dots
+    // Strategic cities — gold
     map.addSource('kanon-cities', {
       type: 'geojson',
       data: {
@@ -766,40 +755,22 @@
       }
     });
 
-    // Outer pulse ring — Addis only
-    map.addLayer({
-      id: 'cities-pulse',
-      type: 'circle',
-      source: 'kanon-cities',
+    map.addLayer({ id: 'cities-pulse', type: 'circle', source: 'kanon-cities',
       filter: ['==', ['get', 'capital'], true],
-      paint: {
-        'circle-radius': 16,
-        'circle-color': 'transparent',
-        'circle-stroke-width': 0.8,
-        'circle-stroke-color': 'rgba(201,168,76,0.25)',
-        'circle-opacity': 1
-      }
+      paint: { 'circle-radius': 16, 'circle-color': 'transparent',
+        'circle-stroke-width': 0.8, 'circle-stroke-color': 'rgba(201,168,76,0.25)' }
     });
 
-    // Dots
-    map.addLayer({
-      id: 'cities-dots',
-      type: 'circle',
-      source: 'kanon-cities',
+    map.addLayer({ id: 'cities-dots', type: 'circle', source: 'kanon-cities',
       paint: {
         'circle-radius': ['case', ['get', 'capital'], 5.5, 3],
         'circle-color': ['case', ['get', 'capital'], '#C9A84C', 'rgba(201,168,76,0.5)'],
         'circle-stroke-width': ['case', ['get', 'capital'], 1.5, 0.8],
-        'circle-stroke-color': 'rgba(201,168,76,0.3)',
-        'circle-opacity': 1
+        'circle-stroke-color': 'rgba(201,168,76,0.3)'
       }
     });
 
-    // Labels
-    map.addLayer({
-      id: 'cities-labels',
-      type: 'symbol',
-      source: 'kanon-cities',
+    map.addLayer({ id: 'cities-labels', type: 'symbol', source: 'kanon-cities',
       layout: {
         'text-field': ['get', 'name'],
         'text-font': ['DIN Pro Regular', 'Arial Unicode MS Regular'],
@@ -809,7 +780,7 @@
         'text-optional': true
       },
       paint: {
-        'text-color': ['case', ['get', 'capital'], 'rgba(201,168,76,0.75)', 'rgba(255,255,255,0.3)'],
+        'text-color': ['case', ['get', 'capital'], 'rgba(201,168,76,0.8)', 'rgba(255,255,255,0.3)'],
         'text-halo-color': 'rgba(0,0,0,0.8)',
         'text-halo-width': 1
       }
