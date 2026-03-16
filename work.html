@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — Kanon Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:   #0D1117; --void2: #131920; --navy: #0F2952; --navy2: #1A3A6B;
+    --gold:   #C9A84C; --gold-d: #A8863A; --parch: #F7F6F2; --warm: #EDECEA;
+    --ink:    #1A1C1E; --mid: #3D4149; --muted: #6B7280; --rule: #C4C7CE;
+    --serif:  'IBM Plex Serif', Georgia, serif;
+    --sans:   'Inter', system-ui, sans-serif;
+    --mono:   'IBM Plex Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--parch); color: var(--ink); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--void); border-bottom: 0.5px solid rgba(201,168,76,0.15); padding: 0 64px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 14px; }
+  .nav-sep { width: 1px; height: 20px; background: rgba(201,168,76,0.3); }
+  .nav-wordmark { display: flex; flex-direction: column; gap: 1px; }
+  .nav-wordmark-name { font-family: var(--sans); font-weight: 300; font-size: 13px; letter-spacing: 0.22em; color: #fff; }
+  .nav-wordmark-sub { font-family: var(--sans); font-weight: 400; font-size: 7.5px; letter-spacing: 0.42em; color: var(--muted); text-transform: uppercase; }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-link { font-family: var(--sans); font-weight: 400; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.45); transition: color 0.2s; }
+  .nav-link:hover { color: rgba(255,255,255,0.85); }
+  .nav-link.active { color: var(--gold); }
+  .nav-cta { font-family: var(--sans); font-weight: 400; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); border: 0.5px solid rgba(201,168,76,0.4); padding: 7px 18px; transition: all 0.2s; }
+  .nav-cta:hover { background: rgba(201,168,76,0.08); }
+
+  /* PAGE HEADER */
+  .page-header { background: var(--void); padding: 140px 64px 80px; border-bottom: 0.5px solid rgba(201,168,76,0.1); }
+  .page-eyebrow { font-family: var(--sans); font-weight: 500; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-d); margin-bottom: 20px; }
+  .page-headline { font-family: var(--serif); font-weight: 300; font-size: clamp(32px, 4.5vw, 56px); line-height: 1.12; color: #fff; max-width: 700px; }
+
+  /* CASE STUDIES */
+  .cases { padding: 0; }
+
+  .case { padding: 100px 64px; border-bottom: 0.5px solid var(--rule); }
+  .case:nth-child(even) { background: var(--warm); }
+
+  .case-header { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 64px; align-items: start; }
+  .case-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+  .case-tag { font-family: var(--sans); font-weight: 500; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-d); }
+  .case-title { font-family: var(--serif); font-weight: 300; font-size: clamp(24px, 3vw, 38px); line-height: 1.2; color: var(--navy); margin-bottom: 16px; }
+  .case-rule { width: 28px; height: 1px; background: var(--gold); margin-bottom: 20px; }
+  .case-summary { font-family: var(--sans); font-weight: 300; font-size: 15px; line-height: 1.8; color: var(--mid); }
+
+  .case-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--rule); align-self: start; }
+  .case-stat { background: var(--parch); padding: 28px 24px; }
+  .case-stat-num { font-family: var(--mono); font-size: 28px; font-weight: 500; color: var(--navy); line-height: 1; margin-bottom: 8px; }
+  .case-stat-label { font-family: var(--sans); font-weight: 300; font-size: 12px; line-height: 1.5; color: var(--muted); }
+
+  .case-visual { width: 100%; aspect-ratio: 16/7; background: var(--void2); border: 0.5px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; margin-bottom: 48px; position: relative; overflow: hidden; }
+  .case-visual-label { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 0.06em; }
+  .case-visual-mark { position: absolute; right: -40px; bottom: -40px; opacity: 0.05; }
+
+  .case-findings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); }
+  .case-finding { background: var(--void); padding: 36px 32px; }
+  .case-finding-num { font-family: var(--mono); font-size: 11px; color: var(--gold-d); margin-bottom: 12px; }
+  .case-finding-text { font-family: var(--sans); font-weight: 300; font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.55); }
+  .case-finding strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+
+  /* NEXT CTA */
+  .next-cta { background: var(--navy); padding: 100px 64px; display: flex; flex-direction: column; gap: 24px; }
+  .next-eyebrow { font-family: var(--sans); font-weight: 500; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-d); }
+  .next-headline { font-family: var(--serif); font-weight: 300; font-size: clamp(26px, 3.5vw, 46px); line-height: 1.2; color: #fff; max-width: 560px; }
+  .next-rule { width: 32px; height: 1px; background: var(--gold); }
+  .next-body { font-family: var(--sans); font-weight: 300; font-size: 14px; line-height: 1.75; color: rgba(255,255,255,0.38); max-width: 480px; }
+  .next-link { font-family: var(--sans); font-weight: 400; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.4); padding: 13px 28px; display: inline-block; transition: all 0.2s; width: fit-content; }
+  .next-link:hover { background: rgba(201,168,76,0.08); }
+
+  /* FOOTER */
+  footer { background: var(--void); padding: 32px 64px; border-top: 0.5px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-family: var(--sans); font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.2); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-link { font-family: var(--sans); font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.25); transition: color 0.2s; }
+  .footer-link:hover { color: rgba(255,255,255,0.55); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .page-header, .case, .next-cta { padding-left: 24px; padding-right: 24px; }
+    .case-header { grid-template-columns: 1fr; gap: 40px; }
+    .case-findings { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    footer { padding: 24px; flex-direction: column; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div>
+      <svg width="28" height="28" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="1.8"/>
+        <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="1.8"/>
+        <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
+        <circle cx="60" cy="10" r="5.5" fill="#C9A84C"/>
+        <circle cx="103.3" cy="85" r="5.5" fill="#C9A84C"/>
+        <circle cx="16.7" cy="85" r="5.5" fill="#C9A84C"/>
+        <circle cx="87.7" cy="44" r="4" fill="#C9A84C"/>
+        <circle cx="60" cy="92" r="4" fill="#C9A84C"/>
+        <circle cx="32.3" cy="44" r="4" fill="#C9A84C"/>
+        <circle cx="60" cy="44" r="2.8" fill="#C9A84C"/>
+        <circle cx="73.9" cy="68" r="2.8" fill="#C9A84C"/>
+        <circle cx="46.1" cy="68" r="2.8" fill="#C9A84C"/>
+      </svg>
+    </div>
+    <div class="nav-sep"></div>
+    <div class="nav-wordmark">
+      <span class="nav-wordmark-name">KANON</span>
+      <span class="nav-wordmark-sub">Strategy</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="work.html" class="nav-link active">Work</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="about.html#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <p class="page-eyebrow">Selected work</p>
+  <h1 class="page-headline">Tools built from real data, in real contexts, for real decisions.</h1>
+</div>
+
+<section class="cases">
+
+  <!-- CASE 1: LMRI -->
+  <div class="case" id="lmri">
+    <div class="case-header reveal">
+      <div>
+        <div class="case-meta">
+          <span class="case-tag">Nutrition risk · Humanitarian · Ethiopia · 2025</span>
+        </div>
+        <h2 class="case-title">Local Malnutrition Risk Index — Benishangul-Gumuz</h2>
+        <div class="case-rule"></div>
+        <p class="case-summary">A nutrition coalition in western Ethiopia was coordinating supply decisions across 847 health facilities with fragmented, partially reliable data. No one could see which zones were highest risk or where NGO coverage was absent. The data existed — it wasn't usable. Kanon built a composite risk index and decision map that made the invisible visible.</p>
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-num">847</div>
+          <div class="case-stat-label">Health facilities analyzed across Benishangul-Gumuz region</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-num">78%</div>
+          <div class="case-stat-label">Of high-risk facilities had zero active NGO supply coverage</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-num">142</div>
+          <div class="case-stat-label">High-risk facilities made visible and prioritized for action</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-num">0.84</div>
+          <div class="case-stat-label">Average LMRI score in uncovered high-risk zones</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-visual reveal">
+      <span class="case-visual-label">[ LMRI dashboard — 2 dashboards + 3 GIS maps — visuals to be inserted ]</span>
+      <div class="case-visual-mark">
+        <svg width="200" height="200" viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="50" stroke="white" stroke-width="1"/>
+          <circle cx="60" cy="60" r="32" stroke="white" stroke-width="0.8"/>
+          <circle cx="60" cy="60" r="16" stroke="white" stroke-width="0.8"/>
+          <circle cx="60" cy="60" r="4" fill="white"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="case-findings reveal">
+      <div class="case-finding">
+        <div class="case-finding-num">01 — The problem</div>
+        <div class="case-finding-text">The coalition was operating on <strong>Excel reports and qualitative meeting discussions</strong>. Supply prioritization decisions were made without visibility on where risk was highest or where coverage was absent.</div>
+      </div>
+      <div class="case-finding">
+        <div class="case-finding-num">02 — What was built</div>
+        <div class="case-finding-text">A <strong>composite Local Malnutrition Risk Index (LMRI)</strong> combining facility data, stock levels, NGO coverage maps, and intervention history. Output: interactive dashboards and GIS maps showing risk by zone, coverage gaps, and weekly action priorities.</div>
+      </div>
+      <div class="case-finding">
+        <div class="case-finding-num">03 — The result</div>
+        <div class="case-finding-text"><strong>142 high-risk facilities with no NGO supply coverage</strong> became visible in a single view. The Head of Mission could see — for the first time — exactly where to send resources on Monday morning.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 2: RHIZOME -->
+  <div class="case" id="rhizome">
+    <div class="case-header reveal">
+      <div>
+        <div class="case-meta">
+          <span class="case-tag">Relationship intelligence · Commercial · Netherlands · 2026</span>
+        </div>
+        <h2 class="case-title">Rhizome CRM — Relationship Intelligence System for 2Mages</h2>
+        <div class="case-rule"></div>
+        <p class="case-summary">Robert Kluijver, founder of 2Mages (Somaliland essential oils), was launching a commercial operation with a target of 200 customers across B2C and B2B. His commercial model depended on word-of-mouth and relay networks — relationships he had no system to track or activate. Kanon built Rhizome: a custom relationship-intelligence CRM that captures every interaction automatically and maps his network as a living, actionable graph.</p>
+      </div>
+      <div class="case-stats">
+        <div class="case-stat">
+          <div class="case-stat-num">4</div>
+          <div class="case-stat-label">Channels captured automatically — WooCommerce, Gmail, WhatsApp, Telegram</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-num">0</div>
+          <div class="case-stat-label">Manual data entry required — the system listens and structures automatically</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-num">10d</div>
+          <div class="case-stat-label">Delivery time from go-ahead to working system</div>
+        </div>
+        <div class="case-stat">
+          <div class="case-stat-num">~10€</div>
+          <div class="case-stat-label">Monthly running cost — client owns all infrastructure</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-visual reveal">
+      <span class="case-visual-label">[ Rhizome network graph — node visualization — visual to be inserted ]</span>
+      <div class="case-visual-mark">
+        <svg width="200" height="200" viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="50" stroke="white" stroke-width="1"/>
+          <circle cx="60" cy="60" r="32" stroke="white" stroke-width="0.8"/>
+          <circle cx="60" cy="60" r="16" stroke="white" stroke-width="0.8"/>
+          <circle cx="60" cy="60" r="4" fill="white"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="case-findings reveal">
+      <div class="case-finding">
+        <div class="case-finding-num">01 — The problem</div>
+        <div class="case-finding-text">A founder with a <strong>high-value but fragmented network</strong> — customers across WooCommerce, prospects on WhatsApp, relay contacts on Telegram, B2B leads via email. No system to see who to contact, when, or why.</div>
+      </div>
+      <div class="case-finding">
+        <div class="case-finding-num">02 — What was built</div>
+        <div class="case-finding-text">A <strong>custom relationship intelligence system</strong> — passive capture across 4 channels, automatic deduplication, relationship scoring (0–100), network graph showing who introduced whom, and a weekly "Activate this week" list. Self-hostable, €10/month running cost.</div>
+      </div>
+      <div class="case-finding">
+        <div class="case-finding-num">03 — The result</div>
+        <div class="case-finding-text">Every interaction is <strong>captured, attributed, and scored automatically</strong>. The founder sees which relay contacts drive revenue, which B2B prospects are going cold, and exactly who to contact on Monday morning — without opening a spreadsheet.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- NEXT CTA -->
+<section class="next-cta">
+  <p class="next-eyebrow reveal">Your project</p>
+  <h2 class="next-headline reveal">What decision can't you make right now?</h2>
+  <div class="next-rule reveal"></div>
+  <p class="next-body reveal">Tell us the problem. We'll tell you if we can build the tool that solves it — and what it would look like.</p>
+  <a href="about.html#contact" class="next-link reveal">Start a conversation →</a>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Kanon Strategy FZE — All rights reserved</span>
+  <div class="footer-links">
+    <a href="work.html" class="footer-link">Work</a>
+    <a href="about.html" class="footer-link">About</a>
+    <a href="about.html#contact" class="footer-link">Contact</a>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
