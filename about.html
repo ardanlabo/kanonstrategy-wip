@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Kanon Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:   #0D1117;
+    --void2:  #131920;
+    --navy:   #0F2952;
+    --gold:   #C9A84C;
+    --gold-d: #A8863A;
+    --parch:  #F7F6F2;
+    --ink:    #1A1C1E;
+    --mid:    #3D4149;
+    --muted:  #6B7280;
+    --rule:   #C4C7CE;
+    --serif:  'IBM Plex Serif', Georgia, serif;
+    --sans:   'Inter', system-ui, sans-serif;
+    --mono:   'IBM Plex Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--void); color: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--void); border-bottom: 0.5px solid rgba(201,168,76,0.12); padding: 0 64px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { display: flex; align-items: center; gap: 14px; }
+  .nav-sep { width: 1px; height: 20px; background: rgba(201,168,76,0.3); }
+  .nav-wordmark { display: flex; flex-direction: column; gap: 1px; }
+  .nav-wordmark-name { font-family: var(--sans); font-weight: 300; font-size: 13px; letter-spacing: 0.22em; color: #fff; }
+  .nav-wordmark-sub { font-family: var(--sans); font-weight: 400; font-size: 7.5px; letter-spacing: 0.42em; color: var(--muted); text-transform: uppercase; }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-link { font-family: var(--sans); font-weight: 400; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.38); transition: color 0.2s; }
+  .nav-link:hover { color: rgba(255,255,255,0.8); }
+  .nav-link.active { color: var(--gold); }
+  .nav-cta { font-family: var(--sans); font-weight: 400; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); border: 0.5px solid rgba(201,168,76,0.35); padding: 7px 18px; transition: all 0.2s; }
+  .nav-cta:hover { background: rgba(201,168,76,0.07); }
+
+  /* OPENING */
+  .opening {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 64px 64px 96px;
+    position: relative; overflow: hidden;
+  }
+  .opening-bg { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 60% 60% at 80% 50%, rgba(15,41,82,0.35) 0%, transparent 70%); }
+  .opening-mark { position: absolute; right: -60px; top: 50%; transform: translateY(-50%); opacity: 0.035; pointer-events: none; }
+  .opening-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--gold-d); margin-bottom: 48px; opacity: 0; animation: up 0.9s 0.1s forwards; }
+  .opening-headline { font-family: var(--serif); font-weight: 300; font-size: clamp(40px, 6vw, 80px); line-height: 1.06; letter-spacing: -0.01em; color: #fff; max-width: 900px; opacity: 0; animation: up 0.9s 0.25s forwards; }
+  .opening-headline .dim { color: rgba(255,255,255,0.22); }
+  .opening-headline .gold { color: var(--gold); font-style: italic; }
+  .opening-rule { width: 1px; height: 80px; background: rgba(201,168,76,0.25); margin: 48px 0; opacity: 0; animation: up 0.9s 0.4s forwards; }
+  .opening-sub { font-family: var(--sans); font-weight: 300; font-size: 16px; line-height: 1.85; color: rgba(255,255,255,0.35); max-width: 460px; opacity: 0; animation: up 0.9s 0.5s forwards; }
+
+  /* MANIFESTO */
+  .manifesto { padding: 160px 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: center; border-top: 0.5px solid rgba(255,255,255,0.05); }
+  .manifesto-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--gold-d); margin-bottom: 40px; }
+  .manifesto-statement { font-family: var(--serif); font-weight: 300; font-size: clamp(22px, 2.8vw, 34px); line-height: 1.45; color: rgba(255,255,255,0.9); }
+  .manifesto-statement strong { color: #fff; font-weight: 400; }
+  .manifesto-right { display: flex; flex-direction: column; gap: 48px; }
+  .manifesto-item-num { font-family: var(--mono); font-size: 10px; color: rgba(201,168,76,0.5); margin-bottom: 10px; }
+  .manifesto-item-text { font-family: var(--sans); font-weight: 300; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.4); }
+  .manifesto-item-text strong { color: rgba(255,255,255,0.75); font-weight: 400; }
+
+  /* TERRAIN */
+  .terrain { padding: 0 64px 160px; }
+  .terrain-inner { border-top: 0.5px solid rgba(255,255,255,0.06); padding-top: 80px; display: grid; grid-template-columns: 280px 1fr; gap: 80px; align-items: start; }
+  .terrain-left { position: sticky; top: 100px; }
+  .terrain-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--gold-d); margin-bottom: 20px; }
+  .terrain-title { font-family: var(--serif); font-weight: 300; font-size: 28px; line-height: 1.3; color: rgba(255,255,255,0.8); }
+  .terrain-rule { width: 24px; height: 1px; background: var(--gold); margin: 20px 0; }
+  .terrain-note { font-family: var(--sans); font-weight: 300; font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.22); }
+  .terrain-right { display: flex; flex-direction: column; }
+  .terrain-stat { padding: 48px 0; border-bottom: 0.5px solid rgba(255,255,255,0.05); display: grid; grid-template-columns: 120px 1fr; gap: 40px; align-items: start; }
+  .terrain-stat:first-child { border-top: 0.5px solid rgba(255,255,255,0.05); }
+  .terrain-stat-num { font-family: var(--mono); font-size: 36px; font-weight: 500; color: var(--gold); line-height: 1; }
+  .terrain-stat-body { padding-top: 4px; }
+  .terrain-stat-label { font-family: var(--sans); font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+  .terrain-stat-desc { font-family: var(--sans); font-weight: 300; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.32); }
+
+  /* APPROACH */
+  .approach { background: rgba(15,41,82,0.25); border-top: 0.5px solid rgba(201,168,76,0.1); border-bottom: 0.5px solid rgba(201,168,76,0.1); padding: 120px 64px; }
+  .approach-top { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 80px; align-items: end; }
+  .approach-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--gold-d); margin-bottom: 20px; }
+  .approach-headline { font-family: var(--serif); font-weight: 300; font-size: clamp(26px, 3.5vw, 44px); line-height: 1.2; color: #fff; }
+  .approach-intro { font-family: var(--sans); font-weight: 300; font-size: 14px; line-height: 1.85; color: rgba(255,255,255,0.35); align-self: end; padding-bottom: 4px; }
+  .approach-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.04); }
+  .step { background: var(--void); padding: 40px 32px; transition: background 0.25s; }
+  .step:hover { background: rgba(15,41,82,0.4); }
+  .step-num { font-family: var(--mono); font-size: 10px; color: rgba(201,168,76,0.45); margin-bottom: 20px; display: block; }
+  .step-title { font-family: var(--serif); font-weight: 300; font-size: 18px; line-height: 1.3; color: rgba(255,255,255,0.8); margin-bottom: 14px; }
+  .step-body { font-family: var(--sans); font-weight: 300; font-size: 12px; line-height: 1.75; color: rgba(255,255,255,0.32); }
+
+  /* VALUES */
+  .values { padding: 160px 64px; }
+  .values-header { max-width: 600px; margin-bottom: 100px; }
+  .values-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--gold-d); margin-bottom: 20px; }
+  .values-headline { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 4vw, 52px); line-height: 1.12; color: rgba(255,255,255,0.9); }
+  .values-headline em { color: rgba(255,255,255,0.28); font-style: italic; }
+  .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 80px; }
+  .value-rule { width: 1px; height: 40px; background: rgba(201,168,76,0.35); margin-bottom: 24px; }
+  .value-title { font-family: var(--sans); font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.7); letter-spacing: 0.02em; margin-bottom: 14px; }
+  .value-body { font-family: var(--sans); font-weight: 300; font-size: 13px; line-height: 1.8; color: rgba(255,255,255,0.3); }
+
+  /* CONTACT */
+  .contact { border-top: 0.5px solid rgba(201,168,76,0.1); padding: 120px 64px 100px; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .contact-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--gold-d); margin-bottom: 24px; }
+  .contact-headline { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 4vw, 54px); line-height: 1.1; color: #fff; margin-bottom: 28px; }
+  .contact-rule { width: 32px; height: 1.5px; background: var(--gold); margin-bottom: 28px; }
+  .contact-body { font-family: var(--sans); font-weight: 300; font-size: 14px; line-height: 1.85; color: rgba(255,255,255,0.32); max-width: 400px; }
+  .contact-right { padding-top: 60px; }
+  .contact-items { display: flex; flex-direction: column; gap: 40px; }
+  .contact-item-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(201,168,76,0.55); margin-bottom: 8px; }
+  .contact-item-value { font-family: var(--sans); font-weight: 300; font-size: 15px; color: rgba(255,255,255,0.5); transition: color 0.2s; display: block; }
+  .contact-item-value:hover { color: var(--gold); }
+
+  /* FOOTER */
+  footer { padding: 28px 64px; border-top: 0.5px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-family: var(--sans); font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.15); }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-link { font-family: var(--sans); font-size: 11px; color: rgba(255,255,255,0.2); transition: color 0.2s; }
+  .footer-link:hover { color: rgba(255,255,255,0.5); }
+
+  @keyframes up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    nav { padding: 0 24px; }
+    .opening, .manifesto, .terrain, .approach, .values, .contact { padding-left: 24px; padding-right: 24px; }
+    .manifesto { grid-template-columns: 1fr; gap: 64px; padding-top: 100px; padding-bottom: 100px; }
+    .terrain-inner { grid-template-columns: 1fr; }
+    .terrain-left { position: static; }
+    .approach-top { grid-template-columns: 1fr; gap: 32px; }
+    .approach-steps { grid-template-columns: 1fr 1fr; }
+    .values-grid { grid-template-columns: 1fr; gap: 48px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .contact-right { padding-top: 0; }
+    .nav-links { display: none; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="1.8"/>
+      <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="1.8"/>
+      <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
+      <circle cx="60" cy="10" r="5.5" fill="#C9A84C"/>
+      <circle cx="103.3" cy="85" r="5.5" fill="#C9A84C"/>
+      <circle cx="16.7" cy="85" r="5.5" fill="#C9A84C"/>
+      <circle cx="87.7" cy="44" r="4" fill="#C9A84C"/>
+      <circle cx="60" cy="92" r="4" fill="#C9A84C"/>
+      <circle cx="32.3" cy="44" r="4" fill="#C9A84C"/>
+      <circle cx="60" cy="44" r="2.8" fill="#C9A84C"/>
+      <circle cx="73.9" cy="68" r="2.8" fill="#C9A84C"/>
+      <circle cx="46.1" cy="68" r="2.8" fill="#C9A84C"/>
+    </svg>
+    <div class="nav-sep"></div>
+    <div class="nav-wordmark">
+      <span class="nav-wordmark-name">KANON</span>
+      <span class="nav-wordmark-sub">Strategy</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="work.html" class="nav-link">Work</a>
+    <a href="about.html" class="nav-link active">About</a>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<!-- OPENING -->
+<section class="opening">
+  <div class="opening-bg"></div>
+  <div class="opening-mark">
+    <svg width="640" height="640" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="50" stroke="white" stroke-width="0.8"/>
+      <circle cx="60" cy="60" r="32" stroke="white" stroke-width="0.6"/>
+      <circle cx="60" cy="60" r="16" stroke="white" stroke-width="0.6"/>
+      <circle cx="60" cy="60" r="4" fill="white"/>
+      <circle cx="60" cy="10" r="5.5" fill="white"/>
+      <circle cx="103.3" cy="85" r="5.5" fill="white"/>
+      <circle cx="16.7" cy="85" r="5.5" fill="white"/>
+      <circle cx="87.7" cy="44" r="4" fill="white"/>
+      <circle cx="60" cy="92" r="4" fill="white"/>
+      <circle cx="32.3" cy="44" r="4" fill="white"/>
+      <circle cx="60" cy="44" r="2.8" fill="white"/>
+      <circle cx="73.9" cy="68" r="2.8" fill="white"/>
+      <circle cx="46.1" cy="68" r="2.8" fill="white"/>
+    </svg>
+  </div>
+  <p class="opening-label">Kanon Strategy — About</p>
+  <h1 class="opening-headline">
+    Built by someone<br>
+    <span class="dim">who has been in</span><br>
+    <span class="gold">the room.</span>
+  </h1>
+  <div class="opening-rule"></div>
+  <p class="opening-sub">Not a consulting firm that studies complex environments. An operator who has worked inside them — and built the tools to navigate them.</p>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="reveal">
+    <p class="manifesto-tag">// why Kanon exists</p>
+    <p class="manifesto-statement">The organizations that need decision-support systems most urgently are <strong>precisely the ones that can't access them.</strong> Enterprise platforms are too expensive. Consulting firms produce reports, not tools. The gap between having data and being able to act on it remains <strong>enormous</strong> — and almost no one is working on it from the inside.</p>
+  </div>
+  <div class="manifesto-right reveal">
+    <div class="manifesto-item">
+      <div class="manifesto-item-num">001</div>
+      <p class="manifesto-item-text">Kanon was founded after observing the same problem across multiple organizations: <strong>the data to make a better decision existed. It just wasn't visible.</strong></p>
+    </div>
+    <div class="manifesto-item">
+      <div class="manifesto-item-num">002</div>
+      <p class="manifesto-item-text">The response was not to write a report about it. It was to <strong>build the tool that fixes it</strong> — custom, from your own data, deployable in days.</p>
+    </div>
+    <div class="manifesto-item">
+      <div class="manifesto-item-num">003</div>
+      <p class="manifesto-item-text">The result is a firm that operates at the intersection of <strong>field intelligence, analytical rigour, and AI-enabled building capacity.</strong> A combination that didn't exist before.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TERRAIN -->
+<section class="terrain">
+  <div class="terrain-inner">
+    <div class="terrain-left reveal">
+      <p class="terrain-tag">// the ground we know</p>
+      <h2 class="terrain-title">A decade in complex environments.</h2>
+      <div class="terrain-rule"></div>
+      <p class="terrain-note">Figures and contexts shared without identifying details, by design.</p>
+    </div>
+    <div class="terrain-right">
+      <div class="terrain-stat reveal">
+        <div class="terrain-stat-num">10+</div>
+        <div class="terrain-stat-body">
+          <div class="terrain-stat-label">Years of field operations</div>
+          <p class="terrain-stat-desc">Humanitarian response, migration governance, urban regeneration, and crisis coordination across East Africa and beyond. The understanding of how decisions actually get made — or don't — was earned in the field, not in a seminar room.</p>
+        </div>
+      </div>
+      <div class="terrain-stat reveal">
+        <div class="terrain-stat-num">4+</div>
+        <div class="terrain-stat-body">
+          <div class="terrain-stat-label">Countries of sustained operational presence</div>
+          <p class="terrain-stat-desc">Ethiopia, Somalia, Mali, UAE — and counting. Each context brought a different set of coordination failures, data gaps, and decision voids. Kanon's tools are built for environments like these.</p>
+        </div>
+      </div>
+      <div class="terrain-stat reveal">
+        <div class="terrain-stat-num">EU</div>
+        <div class="terrain-stat-body">
+          <div class="terrain-stat-label">Donor-funded programme management</div>
+          <p class="terrain-stat-desc">Consortium lead experience managing multi-partner EU/ECHO-funded programmes across Eastern Africa. Understanding how institutional funding cycles affect operational decisions is part of how Kanon thinks about every tool it builds.</p>
+        </div>
+      </div>
+      <div class="terrain-stat reveal">
+        <div class="terrain-stat-num">PMP®</div>
+        <div class="terrain-stat-body">
+          <div class="terrain-stat-label">Certified Project Management Professional</div>
+          <p class="terrain-stat-desc">The analytical rigour behind Kanon's tools isn't improvised. It's grounded in structured methodology — applied to contexts where methodology typically breaks down.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section class="approach">
+  <div class="approach-top">
+    <div class="reveal">
+      <p class="approach-tag">// how it works</p>
+      <h2 class="approach-headline">From the decision you can't make to the tool that makes it obvious.</h2>
+    </div>
+    <p class="approach-intro reveal">Every engagement follows the same logic. The problem leads. The tool follows. Nothing is built before the decision is understood.</p>
+  </div>
+  <div class="approach-steps">
+    <div class="step reveal">
+      <span class="step-num">01</span>
+      <h3 class="step-title">Diagnose the decision gap</h3>
+      <p class="step-body">What decision can't you make right now — and why? This question defines everything. If you can't articulate it, we find it together.</p>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">02</span>
+      <h3 class="step-title">Map what you already have</h3>
+      <p class="step-body">The data almost always exists. Fragmented, partially reliable, in the wrong format. Kanon structures it for decision use — not for a warehouse. For a specific decision.</p>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">03</span>
+      <h3 class="step-title">Build the system</h3>
+      <p class="step-body">Custom-built from your data. A working system — not a template, not a subscription. Delivered in days. The tool exists because your problem exists. It exists for no one else.</p>
+    </div>
+    <div class="step reveal">
+      <span class="step-num">04</span>
+      <h3 class="step-title">You own everything</h3>
+      <p class="step-body">All code, all data, all infrastructure. No vendor lock-in. No platform fees. You run it independently from day one. Kanon's job ends at delivery. That's a feature.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values">
+  <div class="values-header reveal">
+    <p class="values-tag">// what we stand for</p>
+    <h2 class="values-headline">Operational clarity,<br><em>not analytical performance.</em></h2>
+  </div>
+  <div class="values-grid">
+    <div class="reveal">
+      <div class="value-rule"></div>
+      <h4 class="value-title">Tools, not reports</h4>
+      <p class="value-body">A report describes a problem. A tool solves it. Kanon builds the latter. Every engagement ends with a working system in the client's hands — not a document in their inbox.</p>
+    </div>
+    <div class="reveal">
+      <div class="value-rule"></div>
+      <h4 class="value-title">Your data, your context</h4>
+      <p class="value-body">Generic solutions don't work in complex environments. Every Kanon tool is built from your operational data, for your exact decision context. Nothing is repurposed from a previous engagement.</p>
+    </div>
+    <div class="reveal">
+      <div class="value-rule"></div>
+      <h4 class="value-title">Field-earned credibility</h4>
+      <p class="value-body">Kanon was built by someone who has coordinated operations in fragile states. That experience isn't a credential on a wall — it's what makes every tool actually usable in the environments it's designed for.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-grid">
+    <div class="reveal">
+      <p class="contact-tag">// start a conversation</p>
+      <h2 class="contact-headline">Tell us what decision you can't make right now.</h2>
+      <div class="contact-rule"></div>
+      <p class="contact-body">No pitch deck. No discovery call theatre. A direct conversation about your problem — and whether Kanon can build the tool that solves it.</p>
+    </div>
+    <div class="contact-right reveal">
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-item-label">Email</div>
+          <a href="mailto:andre@kanonstrategy.com" class="contact-item-value">andre@kanonstrategy.com</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">LinkedIn</div>
+          <a href="https://linkedin.com/in/kanonstrategy" target="_blank" class="contact-item-value">linkedin.com/in/kanonstrategy</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">Location</div>
+          <span class="contact-item-value" style="cursor:default;">Addis Ababa, Ethiopia · Available globally</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Kanon Strategy FZE</span>
+  <div class="footer-links">
+    <a href="work.html" class="footer-link">Work</a>
+    <a href="about.html" class="footer-link">About</a>
+    <a href="#contact" class="footer-link">Contact</a>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 90);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
