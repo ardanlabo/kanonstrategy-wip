@@ -87,6 +87,14 @@
     position: absolute; inset: 0; pointer-events: none;
     overflow: hidden;
   }
+  #map {
+    position: absolute;
+    right: 0; top: 0;
+    width: 72%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
   .hero-map svg {
     position: absolute;
     right: -5%; top: 50%; transform: translateY(-48%);
@@ -668,8 +676,8 @@ window.addEventListener('load', function() {
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v11',
     center: [42.0, 8.5],
-    zoom: 4.0,
-    pitch: 38,
+    zoom: 4.2,
+    pitch: 40,
     bearing: -6,
     interactive: false,
     attributionControl: false,
@@ -678,63 +686,30 @@ window.addEventListener('load', function() {
 
   map.on('load', function() {
 
-    // Two separate DEM sources — one for terrain, one for hillshade
-    map.addSource('terrain-dem', {
+    // Terrain + hillshade — separate sources
+    map.addSource('terrain-src', {
       type: 'raster-dem',
       url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
       tileSize: 512, maxzoom: 14
     });
-    map.addSource('hillshade-dem', {
+    map.addSource('hillshade-src', {
       type: 'raster-dem',
       url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
       tileSize: 512, maxzoom: 14
     });
-    map.setTerrain({ source: 'terrain-dem', exaggeration: 1.6 });
+    map.setTerrain({ source: 'terrain-src', exaggeration: 1.5 });
     map.addLayer({
-      id: 'hillshade-layer', type: 'hillshade', source: 'hillshade-dem',
+      id: 'hillshade-layer', type: 'hillshade', source: 'hillshade-src',
       paint: {
-        'hillshade-exaggeration': 0.5,
-        'hillshade-highlight-color': '#2c2c2c',
-        'hillshade-shadow-color': '#050505',
+        'hillshade-exaggeration': 0.45,
+        'hillshade-highlight-color': '#282828',
+        'hillshade-shadow-color': '#040404',
         'hillshade-illumination-direction': 315,
         'hillshade-illumination-anchor': 'viewport'
       }
     });
 
-    // Safe helpers
-    function sp(id, prop, val) {
-      try { if (map.getLayer(id)) map.setPaintProperty(id, prop, val); } catch(e) {}
-    }
-    function sl(id, prop, val) {
-      try { if (map.getLayer(id)) map.setLayoutProperty(id, prop, val); } catch(e) {}
-    }
-
-    // Dark land + water
-    sp('land', 'fill-color', '#181818');
-    sp('landuse', 'fill-color', '#1c1c1c');
-    sp('national-park', 'fill-color', '#1e1e1e');
-    sp('water', 'fill-color', '#080e14');
-    sp('water-shadow', 'fill-color', '#060b10');
-    sp('waterway', 'line-color', '#0a1018');
-
-    // Hide roads
-    ['road-motorway-trunk','road-primary','road-secondary-tertiary',
-     'road-street','road-minor','road-path'].forEach(function(id){ sl(id,'visibility','none'); });
-
-    // Fade labels
-    sp('country-label','text-color','rgba(255,255,255,0.1)');
-    sp('country-label','text-halo-color','rgba(0,0,0,0)');
-    sp('settlement-major-label','text-color','rgba(255,255,255,0.05)');
-    sp('settlement-major-label','text-halo-color','rgba(0,0,0,0)');
-    ['settlement-minor-label','settlement-subdivision-label',
-     'poi-label','airport-label','state-label'].forEach(function(id){ sl(id,'visibility','none'); });
-
-    // Borders
-    sp('admin-0-boundary','line-color','#2e2e2e');
-    sp('admin-0-boundary','line-width', 0.7);
-    sl('admin-1-boundary','visibility','none');
-
-    // Gold city markers
+    // Gold city markers — only add new layers, never touch existing ones
     map.addSource('kanon-cities', {
       type: 'geojson',
       data: {
@@ -753,27 +728,36 @@ window.addEventListener('load', function() {
 
     map.addLayer({ id:'cities-pulse', type:'circle', source:'kanon-cities',
       filter:['==',['get','capital'],true],
-      paint:{'circle-radius':16,'circle-color':'transparent',
-        'circle-stroke-width':0.8,'circle-stroke-color':'rgba(201,168,76,0.25)'}
-    });
-    map.addLayer({ id:'cities-dots', type:'circle', source:'kanon-cities',
       paint:{
-        'circle-radius':['case',['get','capital'],5.5,3],
-        'circle-color':['case',['get','capital'],'#C9A84C','rgba(201,168,76,0.5)'],
-        'circle-stroke-width':['case',['get','capital'],1.5,0.8],
-        'circle-stroke-color':'rgba(201,168,76,0.3)'
+        'circle-radius': 15,
+        'circle-color': 'transparent',
+        'circle-stroke-width': 0.8,
+        'circle-stroke-color': 'rgba(201,168,76,0.3)'
       }
     });
+
+    map.addLayer({ id:'cities-dots', type:'circle', source:'kanon-cities',
+      paint:{
+        'circle-radius': ['case',['get','capital'],5.5,3],
+        'circle-color': ['case',['get','capital'],'#C9A84C','rgba(201,168,76,0.55)'],
+        'circle-stroke-width': ['case',['get','capital'],1.5,0.8],
+        'circle-stroke-color': 'rgba(201,168,76,0.3)'
+      }
+    });
+
     map.addLayer({ id:'cities-labels', type:'symbol', source:'kanon-cities',
       layout:{
-        'text-field':['get','name'],
-        'text-font':['DIN Pro Regular','Arial Unicode MS Regular'],
-        'text-size':['case',['get','capital'],10,9],
-        'text-offset':[0,-1.2],'text-anchor':'bottom','text-optional':true
+        'text-field': ['get','name'],
+        'text-font': ['DIN Pro Regular','Arial Unicode MS Regular'],
+        'text-size': ['case',['get','capital'],11,9],
+        'text-offset': [0,-1.3],
+        'text-anchor': 'bottom',
+        'text-optional': true
       },
       paint:{
-        'text-color':['case',['get','capital'],'rgba(201,168,76,0.8)','rgba(255,255,255,0.3)'],
-        'text-halo-color':'rgba(0,0,0,0.8)','text-halo-width':1
+        'text-color': ['case',['get','capital'],'rgba(201,168,76,0.85)','rgba(255,255,255,0.35)'],
+        'text-halo-color': 'rgba(0,0,0,0.85)',
+        'text-halo-width': 1.2
       }
     });
   });
