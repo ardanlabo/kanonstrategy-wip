@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kanon Strategy — Decision-Support Systems</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -79,9 +79,105 @@
     padding: 64px 64px 80px;
     position: relative; overflow: hidden;
   }
-  .hero-bg-mark {
+  .hero > *:not(.hero-map):not(.hud) {
+    position: relative;
+    z-index: 10;
+  }
+  .hero-map {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-map svg {
+    position: absolute;
+    right: -5%; top: 50%; transform: translateY(-48%);
+    width: 70%; height: auto;
+    opacity: 1;
+  }
+  /* Fade left so map dissolves into content */
+  .hero-map::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, #0D1117 18%, rgba(13,17,23,0.7) 45%, rgba(13,17,23,0.05) 100%);
+    z-index: 1;
+  }
+  /* HUD overlay elements */
+  .hud {
+    position: absolute; inset: 0; pointer-events: none; z-index: 5;
+  }
+  .hud-corner {
+    position: absolute; width: 24px; height: 24px;
+  }
+  .hud-corner--tl { top: 80px; left: 64px; border-top: 1px solid rgba(201,168,76,0.35); border-left: 1px solid rgba(201,168,76,0.35); }
+  .hud-corner--tr { top: 80px; right: 64px; border-top: 1px solid rgba(201,168,76,0.35); border-right: 1px solid rgba(201,168,76,0.35); }
+  .hud-corner--bl { bottom: 40px; left: 64px; border-bottom: 1px solid rgba(201,168,76,0.35); border-left: 1px solid rgba(201,168,76,0.35); }
+  .hud-corner--br { bottom: 40px; right: 64px; border-bottom: 1px solid rgba(201,168,76,0.35); border-right: 1px solid rgba(201,168,76,0.35); }
+  .hud-scanline {
+    position: absolute; left: 0; right: 0;
+    height: 0.5px; background: rgba(201,168,76,0.06);
+    animation: scan 8s linear infinite;
+  }
+  @keyframes scan {
+    0%   { top: 64px; opacity: 0; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+  .hud-readout {
+    position: absolute; right: 68px; bottom: 120px;
+    display: flex; flex-direction: column; gap: 8px;
+    opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+  }
+  .hud-readout-item {
+    display: flex; gap: 10px; align-items: center;
+  }
+  .hud-readout-label {
+    font-family: var(--mono); font-size: 9px; font-weight: 400;
+    letter-spacing: 0.1em; color: rgba(201,168,76,0.4);
+    text-transform: uppercase; min-width: 80px; text-align: right;
+  }
+  .hud-readout-value {
+    font-family: var(--mono); font-size: 10px;
+    color: rgba(255,255,255,0.25); letter-spacing: 0.06em;
+  }
+  .hud-readout-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold); opacity: 0.6;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.3); }
+  }
+  .hud-ping {
+    position: absolute; pointer-events: none;
+  }
+  .hud-ping::before {
+    content: '';
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%; background: var(--gold);
+    top: -3px; left: -3px;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  .hud-ping::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border-radius: 50%; border: 0.5px solid rgba(201,168,76,0.3);
+    top: -10px; left: -10px;
+    animation: ring 2.5s ease-out infinite;
+  }
+  @keyframes ring {
+    0% { transform: scale(0.5); opacity: 0.6; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+  /* ping positions on map */
+  .ping-addis  { top: 48%; right: 38%; }
+  .ping-nairobi { top: 52%; right: 34%; }
+  .ping-bamako  { top: 42%; right: 55%; }
+  .hud-bg-mark {
     position: absolute; right: -80px; top: 50%; transform: translateY(-50%);
-    opacity: 0.04; pointer-events: none;
+    opacity: 0.03; pointer-events: none;
   }
   .hero-eyebrow {
     font-family: var(--sans); font-weight: 500; font-size: 10px;
@@ -123,7 +219,7 @@
   }
   .btn-ghost:hover { color: rgba(255,255,255,0.65); }
   .hero-scroll {
-    position: absolute; bottom: 32px; right: 64px;
+    position: absolute; bottom: 32px; right: 64px; z-index: 10;
     display: flex; flex-direction: column; align-items: center; gap: 8px;
     opacity: 0; animation: fadeUp 0.8s 1s forwards;
   }
@@ -386,24 +482,8 @@
 
 <!-- HERO -->
 <section class="hero">
-  <!-- Background watermark mark -->
-  <div class="hero-bg-mark">
-    <svg width="600" height="600" viewBox="0 0 120 120" fill="none">
-      <circle cx="60" cy="60" r="50" stroke="white" stroke-width="1"/>
-      <circle cx="60" cy="60" r="32" stroke="white" stroke-width="0.8"/>
-      <circle cx="60" cy="60" r="16" stroke="white" stroke-width="0.8"/>
-      <circle cx="60" cy="60" r="4" fill="white"/>
-      <circle cx="60" cy="10" r="5.5" fill="white"/>
-      <circle cx="103.3" cy="85" r="5.5" fill="white"/>
-      <circle cx="16.7" cy="85" r="5.5" fill="white"/>
-      <circle cx="87.7" cy="44" r="4" fill="white"/>
-      <circle cx="60" cy="92" r="4" fill="white"/>
-      <circle cx="32.3" cy="44" r="4" fill="white"/>
-      <circle cx="60" cy="44" r="2.8" fill="white"/>
-      <circle cx="73.9" cy="68" r="2.8" fill="white"/>
-      <circle cx="46.1" cy="68" r="2.8" fill="white"/>
-    </svg>
-  </div>
+  <!-- Horn of Africa map background -->
+  <div class="hero-map"><div id="map"></div></div>
 
   <p class="hero-eyebrow">Decision-support systems</p>
   <h1 class="hero-headline">
@@ -571,6 +651,171 @@
     });
   }, { threshold: 0.12 });
   reveals.forEach(el => io.observe(el));
+</script>
+
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script>
+(function() {
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYmV5b25kYXJkYW4iLCJhIjoiY21tdDc3cnJhMWNhaDJwcjJxNmpvZTlkZSJ9.Soxwar_-MHR3fTvqG5ePGQ';
+
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v11',
+    center: [42.0, 8.5],
+    zoom: 4.0,
+    pitch: 38,
+    bearing: -6,
+    interactive: false,
+    attributionControl: false,
+    logoPosition: 'bottom-right'
+  });
+
+  map.on('load', function() {
+
+    // Terrain + hillshade for relief
+    map.addSource('mapbox-dem', {
+      type: 'raster-dem',
+      url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+      tileSize: 512,
+      maxzoom: 14
+    });
+    map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.6 });
+    map.addLayer({
+      id: 'hillshade-layer',
+      type: 'hillshade',
+      source: 'mapbox-dem',
+      paint: {
+        'hillshade-exaggeration': 0.5,
+        'hillshade-highlight-color': '#2c2c2c',
+        'hillshade-shadow-color': '#050505',
+        'hillshade-illumination-direction': 315,
+        'hillshade-illumination-anchor': 'viewport'
+      }
+    });
+
+    // Override land colors to dark grey
+    var grayLayers = {
+      'land': '#181818',
+      'landuse': '#1c1c1c',
+      'national-park': '#1e1e1e',
+      'landuse-park': '#1e1e1e',
+      'landuse-residential': '#1a1a1a',
+      'pitch-outline': '#181818',
+    };
+    Object.entries(grayLayers).forEach(function([id, color]) {
+      if (map.getLayer(id)) map.setPaintProperty(id, 'fill-color', color);
+    });
+
+    // Water
+    if (map.getLayer('water')) map.setPaintProperty('water', 'fill-color', '#080e14');
+    if (map.getLayer('water-shadow')) map.setPaintProperty('water-shadow', 'fill-color', '#060b10');
+
+    // Roads — hide
+    ['road-motorway-trunk','road-primary','road-secondary-tertiary',
+     'road-street','road-minor','road-simple','road-path',
+     'bridge-motorway-trunk','bridge-primary','bridge-secondary-tertiary'].forEach(function(id) {
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+    });
+
+    // Labels — hide most, keep country labels very faint
+    ['poi-label','transit-label','airport-label','road-label',
+     'settlement-subdivision-label','settlement-minor-label'].forEach(function(id) {
+      if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', 'none');
+    });
+    if (map.getLayer('settlement-major-label')) {
+      map.setPaintProperty('settlement-major-label', 'text-color', 'rgba(255,255,255,0.08)');
+      map.setPaintProperty('settlement-major-label', 'text-halo-color', 'rgba(0,0,0,0)');
+    }
+    if (map.getLayer('country-label')) {
+      map.setPaintProperty('country-label', 'text-color', 'rgba(255,255,255,0.1)');
+      map.setPaintProperty('country-label', 'text-halo-color', 'rgba(0,0,0,0)');
+    }
+    if (map.getLayer('state-label')) {
+      map.setLayoutProperty('state-label', 'visibility', 'none');
+    }
+
+    // Country borders — subtle
+    if (map.getLayer('admin-0-boundary')) {
+      map.setPaintProperty('admin-0-boundary', 'line-color', '#303030');
+      map.setPaintProperty('admin-0-boundary', 'line-width', 0.7);
+      map.setPaintProperty('admin-0-boundary', 'line-opacity', 0.8);
+    }
+    if (map.getLayer('admin-0-boundary-disputed')) {
+      map.setPaintProperty('admin-0-boundary-disputed', 'line-color', '#2a2a2a');
+    }
+    if (map.getLayer('admin-1-boundary')) {
+      map.setLayoutProperty('admin-1-boundary', 'visibility', 'none');
+    }
+
+    // Strategic cities — gold dots
+    map.addSource('kanon-cities', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [
+          { type: 'Feature', geometry: { type: 'Point', coordinates: [38.7469, 9.0250] }, properties: { name: 'Addis Ababa', capital: true } },
+          { type: 'Feature', geometry: { type: 'Point', coordinates: [45.3182, 2.0469] }, properties: { name: 'Mogadishu', capital: false } },
+          { type: 'Feature', geometry: { type: 'Point', coordinates: [36.8219, -1.2921] }, properties: { name: 'Nairobi', capital: false } },
+          { type: 'Feature', geometry: { type: 'Point', coordinates: [43.1456, 11.5886] }, properties: { name: 'Djibouti', capital: false } },
+          { type: 'Feature', geometry: { type: 'Point', coordinates: [38.9318, 15.3229] }, properties: { name: 'Asmara', capital: false } },
+          { type: 'Feature', geometry: { type: 'Point', coordinates: [44.0650, 9.5600] },  properties: { name: 'Hargeisa', capital: false } },
+          { type: 'Feature', geometry: { type: 'Point', coordinates: [31.5825, 4.8594] },  properties: { name: 'Juba', capital: false } }
+        ]
+      }
+    });
+
+    // Outer pulse ring — Addis only
+    map.addLayer({
+      id: 'cities-pulse',
+      type: 'circle',
+      source: 'kanon-cities',
+      filter: ['==', ['get', 'capital'], true],
+      paint: {
+        'circle-radius': 16,
+        'circle-color': 'transparent',
+        'circle-stroke-width': 0.8,
+        'circle-stroke-color': 'rgba(201,168,76,0.25)',
+        'circle-opacity': 1
+      }
+    });
+
+    // Dots
+    map.addLayer({
+      id: 'cities-dots',
+      type: 'circle',
+      source: 'kanon-cities',
+      paint: {
+        'circle-radius': ['case', ['get', 'capital'], 5.5, 3],
+        'circle-color': ['case', ['get', 'capital'], '#C9A84C', 'rgba(201,168,76,0.5)'],
+        'circle-stroke-width': ['case', ['get', 'capital'], 1.5, 0.8],
+        'circle-stroke-color': 'rgba(201,168,76,0.3)',
+        'circle-opacity': 1
+      }
+    });
+
+    // Labels
+    map.addLayer({
+      id: 'cities-labels',
+      type: 'symbol',
+      source: 'kanon-cities',
+      layout: {
+        'text-field': ['get', 'name'],
+        'text-font': ['DIN Pro Regular', 'Arial Unicode MS Regular'],
+        'text-size': ['case', ['get', 'capital'], 10, 9],
+        'text-offset': [0, -1.2],
+        'text-anchor': 'bottom',
+        'text-optional': true
+      },
+      paint: {
+        'text-color': ['case', ['get', 'capital'], 'rgba(201,168,76,0.75)', 'rgba(255,255,255,0.3)'],
+        'text-halo-color': 'rgba(0,0,0,0.8)',
+        'text-halo-width': 1
+      }
+    });
+  });
+})();
 </script>
 </body>
 </html>
