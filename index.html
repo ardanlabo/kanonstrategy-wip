@@ -241,7 +241,7 @@
 
   /* ── OUTPUTS ────────────────────────────────────────── */
   .outputs {
-    background: var(--navy);
+    background: var(--void2);
     padding: 120px 64px;
   }
   .section-eyebrow {
@@ -364,7 +364,7 @@
 
   /* ── STAT BAND ──────────────────────────────────────── */
   .stat-band {
-    background: var(--void); padding: 80px 64px;
+    background: var(--void2); padding: 80px 64px;
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 1px; border-top: 0.5px solid rgba(201,168,76,0.12);
   }
@@ -494,8 +494,7 @@
   <p class="hero-eyebrow">Decision-support systems</p>
   <h1 class="hero-headline">
     We build custom tools<br>
-    that turn your operational data<br>
-    <em>into decisions.</em>
+    that turn your operational data <em>into decisions.</em>
   </h1>
   <div class="hero-rule"></div>
   <p class="hero-sub">Fast. Tailored. Yours. For organizations operating where complexity is highest and decision infrastructure is most absent.</p>
@@ -673,7 +672,7 @@ window.addEventListener('load', function() {
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/navigation-night-v1',
-    center: [46.0, 10.0],
+    center: [38.0, 8.5],
     zoom: 3.8,
     pitch: 40,
     bearing: -6,
