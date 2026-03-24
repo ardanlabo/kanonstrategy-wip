@@ -254,7 +254,7 @@
     line-height: 1.2; color: #fff; max-width: 640px; margin-bottom: 64px;
   }
   .outputs-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
     background: rgba(255,255,255,0.06);
   }
   .output-card {
@@ -318,6 +318,10 @@
   .output-cta-title {
     font-family: var(--serif); font-weight: 300; font-size: 20px;
     line-height: 1.35; color: rgba(255,255,255,0.5); margin-bottom: 20px;
+  }
+  .output-cta-desc {
+    font-family: var(--sans); font-weight: 300; font-size: 13px;
+    line-height: 1.65; color: rgba(255,255,255,0.25); margin-bottom: 24px;
   }
   .output-cta-arrow {
     font-family: var(--sans); font-size: 20px; color: var(--gold); opacity: 0.5;
@@ -437,6 +441,9 @@
   .reveal.visible { opacity: 1; transform: none; }
 
   /* ── RESPONSIVE ─────────────────────────────────────── */
+  @media (max-width: 1100px) {
+    .outputs-grid { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 900px) {
     nav { padding: 0 24px; }
     .hero { padding: 80px 24px 64px; }
@@ -497,7 +504,7 @@
     that turn your operational data <em>into decisions.</em>
   </h1>
   <div class="hero-rule"></div>
-  <p class="hero-sub">Fast. Tailored. Yours. For organizations operating where complexity is highest and decision infrastructure is most absent.</p>
+  <p class="hero-sub">Your data exists. The problem is structural — it's fragmented, unlabelled, and invisible to the people who need to act on it. We build the system that fixes that. Fast. Tailored. Yours.</p>
   <div class="hero-actions">
     <a href="work.html" class="btn-primary">See the work</a>
     <a href="about.html" class="btn-ghost">How it works →</a>
@@ -512,13 +519,13 @@
 <!-- OUTPUTS -->
 <section class="outputs">
   <p class="section-eyebrow reveal">Selected work</p>
-  <h2 class="section-headline reveal">Tools built. Problems solved. Organizations that can finally decide.</h2>
+  <h2 class="section-headline reveal">Three tools built. Three problems that didn't have a solution until they did.</h2>
 
   <div class="outputs-grid">
 
     <!-- Card 1: LMRI -->
     <div class="output-card reveal">
-      <p class="output-tag">Nutrition risk · Ethiopia</p>
+      <p class="output-tag">Nutrition coalition · Ethiopia</p>
       <div class="output-placeholder">
         <span class="output-placeholder-label">[ LMRI dashboard — visual ]</span>
         <div class="output-placeholder-mark">
@@ -531,13 +538,13 @@
         </div>
       </div>
       <h3 class="output-title">Local Malnutrition Risk Index — Benishangul-Gumuz</h3>
-      <p class="output-desc">A decision-support system that turned fragmented nutrition data into a risk index, revealing that 78% of high-risk facilities had zero NGO coverage.</p>
+      <p class="output-desc">The coalition had the data. No one could see which facilities were actually at risk — or where coverage had collapsed. The LMRI revealed it: 78% of high-risk facilities had zero NGO supply coverage. That became the decision map for the next operational cycle.</p>
       <a href="work.html#lmri" class="output-link">View case study →</a>
     </div>
 
     <!-- Card 2: Rhizome -->
     <div class="output-card reveal">
-      <p class="output-tag">Relationship intelligence · Netherlands</p>
+      <p class="output-tag">Coalition intelligence · Field coordination</p>
       <div class="output-placeholder">
         <span class="output-placeholder-label">[ Rhizome network graph — visual ]</span>
         <div class="output-placeholder-mark">
@@ -549,16 +556,36 @@
           </svg>
         </div>
       </div>
-      <h3 class="output-title">Rhizome CRM — Relationship Intelligence System</h3>
-      <p class="output-desc">A custom relationship-intelligence CRM built for 2Mages, capturing interactions across WooCommerce, Gmail, WhatsApp and Telegram into a live network graph.</p>
+      <h3 class="output-title">Rhizome — Coalition Mapping System</h3>
+      <p class="output-desc">In a multi-actor coalition, the coordination gap is rarely the data — it's visibility. Who has access to whom. Where relationships are duplicated. Where the critical nodes are. Rhizome maps it: from real interaction data into a live network graph your coordination team can act on.</p>
       <a href="work.html#rhizome" class="output-link">View case study →</a>
     </div>
 
-    <!-- Card 3: CTA -->
+    <!-- Card 3: GIS -->
+    <div class="output-card reveal">
+      <p class="output-tag">Spatial intelligence · Operational mapping</p>
+      <div class="output-placeholder">
+        <span class="output-placeholder-label">[ GIS operational map — visual ]</span>
+        <div class="output-placeholder-mark">
+          <svg width="80" height="80" viewBox="0 0 120 120" fill="none">
+            <circle cx="60" cy="60" r="50" stroke="white" stroke-width="1.5"/>
+            <circle cx="60" cy="60" r="32" stroke="white" stroke-width="1.2"/>
+            <circle cx="60" cy="60" r="16" stroke="white" stroke-width="1.2"/>
+            <circle cx="60" cy="60" r="4" fill="white"/>
+          </svg>
+        </div>
+      </div>
+      <h3 class="output-title">Operational GIS — From coordinates to decisions</h3>
+      <p class="output-desc">Where are the coverage gaps? Which zones are inaccessible? Where do risk clusters actually concentrate on the ground? Kanon builds operational GIS systems — from static 4W maps to interactive risk-zoning dashboards — that turn spatial data into the layer your coordination team is missing.</p>
+      <a href="work.html#gis" class="output-link">View case study →</a>
+    </div>
+
+    <!-- Card 4: CTA -->
     <div class="output-card output-card-cta reveal">
       <div class="output-cta-inner">
-        <p class="output-cta-label">Your project</p>
+        <p class="output-cta-label">Your context</p>
         <h3 class="output-cta-title">The tool your organization is missing doesn't exist yet.</h3>
+        <p class="output-cta-desc">Tell me what decision you can't make right now. That's where we start.</p>
         <span class="output-cta-arrow">→</span>
       </div>
     </div>
@@ -571,7 +598,7 @@
   <div class="approach-left reveal">
     <h2 class="approach-headline">Built from your data. Designed for your reality.</h2>
     <div class="approach-rule"></div>
-    <p class="approach-body">Kanon doesn't produce reports or frameworks. It builds the exact system your organization needs — the one that turns your operational complexity into a decision you can actually make. Every tool is custom, every tool runs on your own data, and every tool is yours the moment it's delivered.</p>
+    <p class="approach-body">Kanon doesn't produce reports. It doesn't produce frameworks. It builds the exact system your organization needs to make the decision it's been unable to make — from the data you already have, for the context you're actually operating in. Every tool is custom. Every tool is yours the moment it's delivered.</p>
   </div>
   <div class="approach-right reveal">
     <div class="approach-steps">
@@ -579,28 +606,28 @@
         <span class="step-num">01</span>
         <div class="step-content">
           <h4 class="step-title">Diagnose the decision gap</h4>
-          <p class="step-desc">What decision can't you make right now — and why? Every engagement starts with this question. The answer defines the tool.</p>
+          <p class="step-desc">What decision can't you make right now — and why? That question defines everything. The answer tells us exactly what to build.</p>
         </div>
       </div>
       <div class="approach-step">
         <span class="step-num">02</span>
         <div class="step-content">
           <h4 class="step-title">Map the data you already have</h4>
-          <p class="step-desc">The data almost always exists. It's fragmented, unlabelled, or in the wrong format. Kanon structures it for decision use.</p>
+          <p class="step-desc">The data almost always exists. It's fragmented, in three different formats, owned by four different teams. Kanon structures it for decision use — without asking you to build a new data infrastructure first.</p>
         </div>
       </div>
       <div class="approach-step">
         <span class="step-num">03</span>
         <div class="step-content">
           <h4 class="step-title">Build the decision system</h4>
-          <p class="step-desc">Custom-built from your data. A working system — not a dashboard template. Delivered in days, not months.</p>
+          <p class="step-desc">Not a dashboard template. Not a report with recommendations. A working system — risk index, network graph, or operational map — built from your data, delivered in days.</p>
         </div>
       </div>
       <div class="approach-step">
         <span class="step-num">04</span>
         <div class="step-content">
           <h4 class="step-title">You own everything</h4>
-          <p class="step-desc">All code, all data, all infrastructure. No vendor lock-in. No recurring platform fees. You run it independently from day one.</p>
+          <p class="step-desc">All code. All data. All infrastructure. No vendor lock-in. No platform fees. You run it independently from day one — and you never need us again unless you want to.</p>
         </div>
       </div>
     </div>
@@ -611,15 +638,15 @@
 <div class="stat-band">
   <div class="stat-item reveal">
     <div class="stat-num">10+</div>
-    <div class="stat-label">Years in complex operational environments — humanitarian, development, fragile states</div>
+    <div class="stat-label">Years operating in fragile and complex environments — not advising from a distance</div>
   </div>
   <div class="stat-item reveal">
     <div class="stat-num">847</div>
     <div class="stat-label">Facilities analyzed in the LMRI — from fragmented data to operational decision map</div>
   </div>
   <div class="stat-item reveal">
-    <div class="stat-num">10d</div>
-    <div class="stat-label">Average delivery time — from go-ahead to working system in your hands</div>
+    <div class="stat-num">10</div>
+    <div class="stat-label">Days from go-ahead to working system — not weeks, not months</div>
   </div>
   <div class="stat-item reveal">
     <div class="stat-num">0</div>
@@ -629,8 +656,7 @@
 
 <!-- CONTACT STRIP -->
 <section class="contact-strip">
-  <p class="contact-eyebrow reveal">Start a conversation</p>
-  <h2 class="contact-headline reveal">Tell us what decision you can't make right now.</h2>
+  <h2 class="contact-headline reveal">Tell me what decision you can't make right now.</h2>
   <a href="mailto:andre@kanonstrategy.com" class="contact-email reveal">andre@kanonstrategy.com</a>
 </section>
 
@@ -658,9 +684,6 @@
   reveals.forEach(el => io.observe(el));
 </script>
 
-
-
-
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script>
@@ -683,7 +706,6 @@ window.addEventListener('load', function() {
 
   map.on('load', function() {
 
-    // Terrain + hillshade — separate sources
     map.addSource('terrain-src', {
       type: 'raster-dem',
       url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
@@ -706,7 +728,6 @@ window.addEventListener('load', function() {
       }
     });
 
-    // Gold city markers — only add new layers, never touch existing ones
     map.addSource('kanon-cities', {
       type: 'geojson',
       data: {
