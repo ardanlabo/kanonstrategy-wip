@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:André R. Eylettens
+N:Eylettens;André;R.;;
+ORG:Kanon Strategy
+TITLE:Decision Support Systems · Horn of Africa
+EMAIL;TYPE=WORK:andre@kanonstrategy.com
+URL:https://kanonstrategy.com
+TEL;TYPE=CELL,VOICE;LABEL="Mobile Ethiopia":+251987039670
+TEL;TYPE=CELL,VOICE;LABEL="WhatsApp":+33609027128
+X-SOCIALPROFILE;TYPE=whatsapp:https://wa.me/33609027128
+END:VCARD
