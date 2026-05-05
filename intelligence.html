@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>ABC System — Kanon Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:#0D1117;--navy:#0F2952;--gold:#C9A84C;--gold-d:#A8863A;
+  --parch:#F7F6F2;--warm:#EDECEA;--ink:#1A1C1E;--mid:#3D4149;
+  --muted:#6B7280;--rule:#C4C7CE;--green:#22c55e;--amber:#f59e0b;--red:#ef4444;
+  --serif:'IBM Plex Serif',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--parch);color:var(--ink);-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;background:var(--void);border-bottom:0.5px solid rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:space-between;padding:0 32px;}
+.t-logo{display:flex;align-items:center;gap:10px;}
+.t-sep{width:1px;height:16px;background:rgba(201,168,76,0.25);}
+.t-brand{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.18em;color:rgba(255,255,255,0.85);}
+.t-product{font-family:var(--serif);font-weight:300;font-size:13px;color:rgba(255,255,255,0.5);}
+.t-right{display:flex;align-items:center;gap:20px;}
+.t-ctx{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;}
+.t-back{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.25);transition:color 0.2s;}
+.t-back:hover{color:rgba(201,168,76,0.7);}
+
+/* TABS */
+.tabs-wrap{position:fixed;top:52px;left:0;right:0;z-index:90;background:var(--void);border-bottom:0.5px solid rgba(255,255,255,0.07);display:flex;padding:0 32px;}
+.tab{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:rgba(255,255,255,0.28);padding:12px 20px;cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;transition:all 0.2s;white-space:nowrap;}
+.tab:hover{color:rgba(255,255,255,0.6);}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+.content{margin-top:96px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.section-wrap{max-width:1080px;margin:0 auto;padding:40px 32px 80px;}
+
+/* HEADER */
+.page-header{margin-bottom:36px;padding-bottom:24px;border-bottom:0.5px solid var(--rule);}
+.page-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--gold-d);text-transform:uppercase;margin-bottom:8px;}
+.page-title{font-family:var(--serif);font-weight:300;font-size:26px;color:var(--navy);line-height:1.2;margin-bottom:8px;}
+.page-sub{font-family:var(--sans);font-weight:300;font-size:13px;color:var(--muted);max-width:600px;line-height:1.6;}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;font-weight:500;padding:3px 8px;letter-spacing:0.06em;}
+.pill-green{background:rgba(34,197,94,0.1);color:#16a34a;border:0.5px solid rgba(34,197,94,0.25);}
+.pill-amber{background:rgba(245,158,11,0.1);color:#d97706;border:0.5px solid rgba(245,158,11,0.25);}
+.pill-red{background:rgba(239,68,68,0.1);color:#dc2626;border:0.5px solid rgba(239,68,68,0.25);}
+.pill-grey{background:rgba(107,114,128,0.1);color:var(--muted);border:0.5px solid rgba(107,114,128,0.2);}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* BLOCK */
+.block{background:#fff;border:0.5px solid var(--rule);}
+.block-header{padding:14px 20px 12px;border-bottom:0.5px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+.block-title{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;}
+.block-meta{font-family:var(--mono);font-size:9px;color:rgba(107,114,128,0.6);}
+
+/* ── TAB 1 ── */
+.zone-selector{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+.zone-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;padding:6px 14px;cursor:pointer;transition:all 0.18s;border:0.5px solid var(--rule);background:#fff;color:var(--muted);}
+.zone-btn:hover{border-color:var(--navy);color:var(--navy);}
+.zone-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tracking-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+.ind-row{padding:13px 20px;border-bottom:0.5px solid rgba(196,199,206,0.4);display:grid;grid-template-columns:1fr auto 90px;gap:12px;align-items:center;}
+.ind-row:last-child{border-bottom:none;}
+.ind-name{font-family:var(--sans);font-weight:400;font-size:12.5px;color:var(--ink);}
+.ind-src{font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:2px;}
+.ind-bar-wrap{display:flex;align-items:center;gap:8px;}
+.ind-track{width:70px;height:4px;background:rgba(196,199,206,0.4);border-radius:2px;overflow:hidden;}
+.ind-fill{height:100%;border-radius:2px;}
+.ind-pct{font-family:var(--mono);font-size:11px;font-weight:500;text-align:right;min-width:32px;}
+
+.alert-row{padding:13px 20px;border-bottom:0.5px solid rgba(196,199,206,0.4);display:flex;gap:10px;align-items:flex-start;}
+.alert-row:last-child{border-bottom:none;}
+.alert-dot{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.alert-name{font-family:var(--sans);font-weight:400;font-size:12.5px;color:var(--ink);margin-bottom:2px;}
+.alert-desc{font-family:var(--sans);font-weight:300;font-size:11px;color:var(--muted);line-height:1.5;}
+
+.chair-row{display:flex;justify-content:space-between;padding:5px 0;}
+.chair-lbl{font-family:var(--sans);font-size:11px;color:var(--muted);}
+.chair-val{font-family:var(--mono);font-size:11px;color:var(--ink);}
+
+/* SYNTHESIS */
+.synth{margin-top:20px;background:var(--void);border:0.5px solid rgba(201,168,76,0.15);}
+.synth-header{padding:14px 22px 12px;border-bottom:0.5px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;}
+.synth-title{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(201,168,76,0.6);text-transform:uppercase;}
+.synth-date{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.2);}
+.synth-body{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.05);}
+.synth-cell{background:var(--void);padding:20px 22px;}
+.synth-cell-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:10px;}
+.synth-num{font-family:var(--mono);font-size:34px;font-weight:500;color:var(--gold);line-height:1;margin-bottom:5px;}
+.synth-num-lbl{font-family:var(--sans);font-weight:300;font-size:11px;color:rgba(255,255,255,0.35);}
+.synth-list{display:flex;flex-direction:column;gap:7px;}
+.synth-li{font-family:var(--sans);font-weight:300;font-size:11px;color:rgba(255,255,255,0.45);display:flex;gap:8px;line-height:1.45;}
+.synth-li::before{content:'—';color:rgba(201,168,76,0.4);flex-shrink:0;font-family:var(--mono);font-size:10px;margin-top:1px;}
+.synth-footer{padding:12px 22px;border-top:0.5px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;}
+.synth-fn{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.2);}
+.synth-ft{font-family:var(--mono);font-size:9px;color:rgba(201,168,76,0.45);}
+
+/* ── TAB 2 ── */
+.sup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.zcard{background:#fff;border:0.5px solid var(--rule);}
+.zcard.alert{border-left:3px solid var(--red);}
+.zcard.warning{border-left:3px solid var(--amber);}
+.zcard.ok{border-left:3px solid var(--green);}
+.zc-h{padding:13px 15px 11px;border-bottom:0.5px solid var(--rule);display:flex;justify-content:space-between;align-items:flex-start;}
+.zc-zone{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-bottom:3px;}
+.zc-name{font-family:var(--serif);font-weight:300;font-size:14px;color:var(--navy);}
+.zc-body{padding:13px 15px;}
+.zc-row{display:flex;justify-content:space-between;margin-bottom:6px;}
+.zc-lbl{font-family:var(--sans);font-size:11px;color:var(--muted);}
+.zc-val{font-family:var(--mono);font-size:11px;color:var(--ink);}
+.zc-alerts{margin-top:10px;display:flex;flex-direction:column;gap:5px;}
+.zc-a{font-family:var(--sans);font-size:11px;color:#dc2626;display:flex;gap:6px;line-height:1.4;}
+.zc-a::before{content:'!';font-family:var(--mono);font-size:8px;color:#dc2626;background:rgba(239,68,68,0.1);padding:1px 4px;flex-shrink:0;margin-top:1px;}
+.zc-w{font-family:var(--sans);font-size:11px;color:#d97706;display:flex;gap:6px;line-height:1.4;}
+.zc-w::before{content:'▲';font-size:8px;flex-shrink:0;margin-top:2px;}
+.zc-ok{font-family:var(--sans);font-size:11px;color:#16a34a;}
+.zc-footer{padding:8px 15px;border-top:0.5px solid var(--rule);background:rgba(196,199,206,0.07);}
+.zc-upd{font-family:var(--mono);font-size:8px;color:var(--muted);}
+.sup-bar{background:var(--navy);padding:22px 28px;display:grid;grid-template-columns:repeat(4,1fr);}
+.sb-stat{padding:0 20px;border-right:0.5px solid rgba(255,255,255,0.08);}
+.sb-stat:first-child{padding-left:0;}
+.sb-stat:last-child{border-right:none;}
+.sb-num{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--gold);line-height:1;margin-bottom:5px;}
+.sb-lbl{font-family:var(--sans);font-weight:300;font-size:11px;color:rgba(255,255,255,0.4);line-height:1.4;}
+.hingo-note{margin-top:18px;padding:14px 18px;background:rgba(15,41,82,0.06);border-left:2px solid var(--gold);}
+.hingo-note p{font-family:var(--sans);font-weight:300;font-size:12px;color:var(--mid);line-height:1.65;}
+
+/* ── TAB 3 ── */
+.proto-intro{background:var(--navy);padding:24px 28px;margin-bottom:28px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+.proto-text{font-family:var(--serif);font-weight:300;font-size:17px;color:rgba(255,255,255,0.8);line-height:1.5;}
+.proto-sub{font-family:var(--sans);font-weight:300;font-size:12px;color:rgba(255,255,255,0.35);line-height:1.65;margin-top:8px;}
+.proto-stats{display:flex;flex-direction:column;gap:12px;}
+.pstat{display:flex;align-items:center;gap:12px;}
+.pstat-num{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--gold);min-width:40px;}
+.pstat-lbl{font-family:var(--sans);font-weight:300;font-size:12px;color:rgba(255,255,255,0.4);}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);margin-bottom:28px;}
+.step-card{background:#fff;}
+.sc-h{padding:14px 18px 12px;border-bottom:0.5px solid var(--rule);display:flex;align-items:center;gap:10px;}
+.sc-num{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--gold);background:rgba(201,168,76,0.08);border:0.5px solid rgba(201,168,76,0.2);width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sc-title{font-family:var(--serif);font-weight:300;font-size:15px;color:var(--navy);}
+.sc-body{padding:14px 18px;}
+.sc-desc{font-family:var(--sans);font-weight:300;font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:12px;}
+.sc-items{display:flex;flex-direction:column;gap:5px;}
+.sc-item{font-family:var(--sans);font-size:12px;color:var(--mid);display:flex;gap:7px;line-height:1.4;}
+.sc-item::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--gold-d);flex-shrink:0;margin-top:1px;}
+.sc-footer{padding:10px 18px;border-top:0.5px solid var(--rule);background:rgba(196,199,206,0.06);}
+.zones-proto{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.zp-card{background:#fff;border:0.5px solid var(--rule);}
+.zp-h{padding:13px 15px 11px;border-bottom:0.5px solid var(--rule);}
+.zp-name{font-family:var(--serif);font-weight:300;font-size:14px;color:var(--navy);margin-bottom:3px;}
+.zp-sub{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:0.08em;}
+.zp-steps{padding:13px 15px;display:flex;flex-direction:column;gap:8px;}
+.zp-srow{display:flex;align-items:center;gap:8px;}
+.zp-snum{font-family:var(--mono);font-size:9px;color:var(--muted);min-width:14px;}
+.zp-slbl{font-family:var(--sans);font-size:11px;color:var(--mid);flex:1;}
+.zp-bar{height:3px;background:var(--rule);margin:2px 15px 6px;border-radius:2px;overflow:hidden;}
+.zp-fill{height:100%;border-radius:2px;}
+
+@media(max-width:900px){
+  .topbar,.tabs-wrap{padding:0 16px;}
+  .section-wrap{padding:24px 16px 60px;}
+  .tracking-layout,.sup-grid,.steps-grid,.zones-proto,.synth-body,.proto-intro{grid-template-columns:1fr;}
+  .sup-bar{grid-template-columns:1fr 1fr;gap:16px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="t-logo">
+    <svg width="20" height="20" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2.5"/>
+      <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
+      <circle cx="60" cy="10" r="5" fill="#C9A84C"/>
+      <circle cx="103.3" cy="85" r="5" fill="#C9A84C"/>
+      <circle cx="16.7" cy="85" r="5" fill="#C9A84C"/>
+    </svg>
+    <div class="t-sep"></div>
+    <span class="t-brand">KANON</span>
+    <div class="t-sep"></div>
+    <span class="t-product">Area-Based Coordination System</span>
+  </div>
+  <div class="t-right">
+    <span class="t-ctx">HINGO FORUM ETHIOPIA · PILOT 2025</span>
+    <a href="index.html" class="t-back">← Back</a>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <button class="tab active" onclick="showTab('tracking',this)">01 — Monthly chair tracking</button>
+  <button class="tab" onclick="showTab('supervision',this)">02 — HINGO supervision view</button>
+  <button class="tab" onclick="showTab('selection',this)">03 — Chair selection protocol</button>
+</div>
+
+<div class="content">
+
+<!-- ═══ TAB 1 ═══ -->
+<div class="tab-panel active" id="panel-tracking">
+<div class="section-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">Monthly chair tracking — CCPM framework</div>
+    <h1 class="page-title">Performance of the ABC Chair<br>by zone — updated monthly.</h1>
+    <p class="page-sub">Seven indicators drawn from the IASC CCPM framework. Five early warning signals from NRC Exit Criteria. One synthesis page, every month, ready for the HCT.</p>
+  </div>
+
+  <div class="zone-selector">
+    <button class="zone-btn active" onclick="showZone('somali',this)">Somali Region</button>
+    <button class="zone-btn" onclick="showZone('tigray',this)">Tigray</button>
+    <button class="zone-btn" onclick="showZone('afar',this)">Afar</button>
+    <button class="zone-btn" onclick="showZone('oromia',this)">Oromia West</button>
+  </div>
+
+  <!-- SOMALI -->
+  <div id="zone-somali">
+    <div class="tracking-layout">
+      <div class="block">
+        <div class="block-header"><span class="block-title">// 7 CCPM performance indicators</span><span class="block-meta">November 2025</span></div>
+        <div class="ind-row"><div><div class="ind-name">Coverage of priority needs</div><div class="ind-src">Source: 4W matrix, Nutrition Cluster</div></div><span class="pill pill-amber"><span class="pill-dot"></span>PARTIAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:62%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">62%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Priority gap closure</div><div class="ind-src">Source: Gap tracking register, OCHA</div></div><span class="pill pill-red"><span class="pill-dot"></span>CRITICAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:31%;background:#ef4444"></div></div><span class="ind-pct" style="color:#dc2626">31%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Deduplication of interventions</div><div class="ind-src">Source: Partner activity mapping</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:84%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">84%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Speed of coordinated response</div><div class="ind-src">Source: Incident log, chair records</div></div><span class="pill pill-amber"><span class="pill-dot"></span>DELAYED</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:55%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">55%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Partner participation & diversity</div><div class="ind-src">Source: Meeting attendance register</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:78%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">78%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Accountability to affected populations</div><div class="ind-src">Source: Community feedback mechanism</div></div><span class="pill pill-amber"><span class="pill-dot"></span>PARTIAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:48%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">48%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Multi-sector integration</div><div class="ind-src">Source: Joint action tracker, clusters</div></div><span class="pill pill-red"><span class="pill-dot"></span>CRITICAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:24%;background:#ef4444"></div></div><span class="ind-pct" style="color:#dc2626">24%</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="block">
+          <div class="block-header"><span class="block-title">// 5 early warning signals — NRC exit criteria</span><span class="block-meta">November 2025</span></div>
+          <div class="alert-row"><div class="alert-dot" style="background:#22c55e"></div><div><div class="alert-name">Chair reputation among partners</div><div class="alert-desc">NRC, IRC, DRC report confidence in current chair. No complaints logged.</div></div></div>
+          <div class="alert-row"><div class="alert-dot" style="background:#22c55e"></div><div><div class="alert-name">Independence from agency lead</div><div class="alert-desc">Chair maintains neutral position. No co-optation signals from lead agency.</div></div></div>
+          <div class="alert-row"><div class="alert-dot" style="background:#f59e0b"></div><div><div class="alert-name">Role drift — secretariat functions</div><div class="alert-desc" style="color:#d97706">Chair spending 40%+ time on admin tasks. Coordination function at risk.</div></div></div>
+          <div class="alert-row"><div class="alert-dot" style="background:#ef4444"></div><div><div class="alert-name">Out-of-mandate activities</div><div class="alert-desc" style="color:#dc2626">Chair attending sector-specific meetings outside ABC mandate. Confirmed by 2 partners.</div></div></div>
+          <div class="alert-row"><div class="alert-dot" style="background:#22c55e"></div><div><div class="alert-name">Relationship with HC/HCT</div><div class="alert-desc">Monthly reporting maintained. Last endorsement meeting: 28 October 2025.</div></div></div>
+        </div>
+        <div class="block">
+          <div class="block-header"><span class="block-title">// current chair</span><span class="pill pill-green"><span class="pill-dot"></span>ACTIVE</span></div>
+          <div style="padding:14px 20px">
+            <div style="font-family:var(--serif);font-weight:300;font-size:16px;color:var(--navy);margin-bottom:3px">Fadumo Hassan Duale</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:12px">NRC Ethiopia · Somali Region ABC Chair</div>
+            <div class="chair-row"><span class="chair-lbl">Mandate start</span><span class="chair-val">April 2025</span></div>
+            <div class="chair-row"><span class="chair-lbl">Mandate end</span><span class="chair-val">March 2026</span></div>
+            <div class="chair-row"><span class="chair-lbl">Partners in zone</span><span class="chair-val">14 active</span></div>
+            <div class="chair-row"><span class="chair-lbl">Last report submitted</span><span class="chair-val">3 Nov 2025</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="synth">
+      <div class="synth-header"><span class="synth-title">// Monthly synthesis — ready for HCT</span><span class="synth-date">Somali Region · November 2025</span></div>
+      <div class="synth-body">
+        <div class="synth-cell"><div class="synth-cell-lbl">// overall performance</div><div class="synth-num">54%</div><div class="synth-num-lbl">Below threshold (70%)<br>Intervention required</div></div>
+        <div class="synth-cell"><div class="synth-cell-lbl">// critical findings</div><div class="synth-list"><div class="synth-li">Multi-sector integration at 24% — lowest recorded since mandate start</div><div class="synth-li">Priority gap closure stalled — Korahe Zone 3 uncovered 6 weeks</div><div class="synth-li">Chair scope creep confirmed — corrective action recommended</div></div></div>
+        <div class="synth-cell"><div class="synth-cell-lbl">// recommended actions</div><div class="synth-list"><div class="synth-li">Convene emergency inter-cluster meeting on Korahe gap</div><div class="synth-li">Clarify chair mandate boundaries with NRC country director</div><div class="synth-li">Review at December HCT — escalate if score below 60%</div></div></div>
+      </div>
+      <div class="synth-footer"><span class="synth-fn">Generated: 5 November 2025 · Next update: 5 December 2025</span><span class="synth-ft">HINGO Forum Ethiopia · ABC Pilot · Kanon Advisory</span></div>
+    </div>
+  </div>
+
+  <!-- TIGRAY -->
+  <div id="zone-tigray" style="display:none">
+    <div class="tracking-layout">
+      <div class="block">
+        <div class="block-header"><span class="block-title">// 7 CCPM performance indicators</span><span class="block-meta">November 2025</span></div>
+        <div class="ind-row"><div><div class="ind-name">Coverage of priority needs</div><div class="ind-src">Source: 4W matrix, OCHA Tigray</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:79%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">79%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Priority gap closure</div><div class="ind-src">Source: Gap tracking register, OCHA</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:71%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">71%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Deduplication of interventions</div><div class="ind-src">Source: Partner activity mapping</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:88%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">88%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Speed of coordinated response</div><div class="ind-src">Source: Incident log, chair records</div></div><span class="pill pill-amber"><span class="pill-dot"></span>DELAYED</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:61%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">61%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Partner participation & diversity</div><div class="ind-src">Source: Meeting attendance register</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:82%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">82%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Accountability to affected populations</div><div class="ind-src">Source: Community feedback mechanism</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:73%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">73%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Multi-sector integration</div><div class="ind-src">Source: Joint action tracker, clusters</div></div><span class="pill pill-amber"><span class="pill-dot"></span>PARTIAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:58%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">58%</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="block">
+          <div class="block-header"><span class="block-title">// current chair</span><span class="pill pill-green"><span class="pill-dot"></span>ACTIVE</span></div>
+          <div style="padding:14px 20px">
+            <div style="font-family:var(--serif);font-weight:300;font-size:16px;color:var(--navy);margin-bottom:3px">Teklehaimanot Gebru</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:12px">IRC Ethiopia · Tigray ABC Chair</div>
+            <div class="chair-row"><span class="chair-lbl">Mandate start</span><span class="chair-val">January 2025</span></div>
+            <div class="chair-row"><span class="chair-lbl">Partners in zone</span><span class="chair-val">18 active</span></div>
+            <div class="chair-row"><span class="chair-lbl">Overall score</span><span class="chair-val" style="color:#16a34a">73% — above threshold</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="synth">
+      <div class="synth-header"><span class="synth-title">// Monthly synthesis — ready for HCT</span><span class="synth-date">Tigray · November 2025</span></div>
+      <div class="synth-body">
+        <div class="synth-cell"><div class="synth-cell-lbl">// overall performance</div><div class="synth-num">73%</div><div class="synth-num-lbl">Above threshold (70%)<br>Monitoring continues</div></div>
+        <div class="synth-cell"><div class="synth-cell-lbl">// key findings</div><div class="synth-list"><div class="synth-li">Strong deduplication — no overlapping interventions this month</div><div class="synth-li">Response speed below target — 4.2 days vs 3-day standard</div><div class="synth-li">Multi-sector integration improving — action plan in place</div></div></div>
+        <div class="synth-cell"><div class="synth-cell-lbl">// recommended actions</div><div class="synth-list"><div class="synth-li">No escalation required — maintain current trajectory</div><div class="synth-li">Review alert cascade protocol with IRC country director</div><div class="synth-li">Next HCT update: 10 December 2025</div></div></div>
+      </div>
+      <div class="synth-footer"><span class="synth-fn">Generated: 5 November 2025 · Next update: 5 December 2025</span><span class="synth-ft">HINGO Forum Ethiopia · ABC Pilot · Kanon Advisory</span></div>
+    </div>
+  </div>
+
+  <!-- AFAR -->
+  <div id="zone-afar" style="display:none">
+    <div class="block" style="margin-bottom:20px">
+      <div class="block-header"><span class="block-title">// zone status</span><span class="pill pill-amber"><span class="pill-dot"></span>CHAIR VACANT</span></div>
+      <div style="padding:20px 24px">
+        <p style="font-family:var(--serif);font-weight:300;font-size:17px;color:var(--navy);margin-bottom:8px">Afar Region — chair selection underway.</p>
+        <p style="font-family:var(--sans);font-weight:300;font-size:13px;color:var(--muted);line-height:1.7">Previous chair (DRC Ethiopia) completed mandate October 2025. New selection process launched 1 November. Applications open until 20 November. Interim coordination maintained by OCHA Afar sub-office.</p>
+      </div>
+    </div>
+    <div style="background:rgba(245,158,11,0.05);border:0.5px solid rgba(245,158,11,0.2);padding:14px 18px;font-family:var(--sans);font-size:12px;color:#92400e;line-height:1.65">
+      Tracking resumes from December 2025 once new chair is endorsed. See Tab 03 for selection status.
+    </div>
+  </div>
+
+  <!-- OROMIA -->
+  <div id="zone-oromia" style="display:none">
+    <div class="tracking-layout">
+      <div class="block">
+        <div class="block-header"><span class="block-title">// 7 CCPM performance indicators</span><span class="block-meta">November 2025</span></div>
+        <div class="ind-row"><div><div class="ind-name">Coverage of priority needs</div><div class="ind-src">Source: 4W matrix, OCHA Oromia</div></div><span class="pill pill-amber"><span class="pill-dot"></span>PARTIAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:56%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">56%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Priority gap closure</div><div class="ind-src">Source: Gap tracking register, OCHA</div></div><span class="pill pill-amber"><span class="pill-dot"></span>PARTIAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:49%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">49%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Deduplication of interventions</div><div class="ind-src">Source: Partner activity mapping</div></div><span class="pill pill-green"><span class="pill-dot"></span>ON TRACK</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:76%;background:#22c55e"></div></div><span class="ind-pct" style="color:#16a34a">76%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Speed of coordinated response</div><div class="ind-src">Source: Incident log, chair records</div></div><span class="pill pill-red"><span class="pill-dot"></span>CRITICAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:29%;background:#ef4444"></div></div><span class="ind-pct" style="color:#dc2626">29%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Partner participation & diversity</div><div class="ind-src">Source: Meeting attendance register</div></div><span class="pill pill-amber"><span class="pill-dot"></span>PARTIAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:61%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">61%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Accountability to affected populations</div><div class="ind-src">Source: Community feedback mechanism</div></div><span class="pill pill-red"><span class="pill-dot"></span>CRITICAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:33%;background:#ef4444"></div></div><span class="ind-pct" style="color:#dc2626">33%</span></div></div>
+        <div class="ind-row"><div><div class="ind-name">Multi-sector integration</div><div class="ind-src">Source: Joint action tracker, clusters</div></div><span class="pill pill-amber"><span class="pill-dot"></span>PARTIAL</span><div class="ind-bar-wrap"><div class="ind-track"><div class="ind-fill" style="width:52%;background:#f59e0b"></div></div><span class="ind-pct" style="color:#d97706">52%</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="block">
+          <div class="block-header"><span class="block-title">// current chair</span><span class="pill pill-amber"><span class="pill-dot"></span>UNDER REVIEW</span></div>
+          <div style="padding:14px 20px">
+            <div style="font-family:var(--serif);font-weight:300;font-size:16px;color:var(--navy);margin-bottom:3px">Tadesse Bekele Girma</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:12px">Action for the Needy in Ethiopia · Oromia West</div>
+            <div class="chair-row"><span class="chair-lbl">Mandate start</span><span class="chair-val">June 2025</span></div>
+            <div class="chair-row"><span class="chair-lbl">Partners in zone</span><span class="chair-val">11 active</span></div>
+            <div class="chair-row"><span class="chair-lbl">Overall score</span><span class="chair-val" style="color:#dc2626">49% — below threshold</span></div>
+            <div class="chair-row"><span class="chair-lbl">HC notified</span><span class="chair-val">2 November 2025</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="synth">
+      <div class="synth-header"><span class="synth-title">// Monthly synthesis — ready for HCT</span><span class="synth-date">Oromia West · November 2025</span></div>
+      <div class="synth-body">
+        <div class="synth-cell"><div class="synth-cell-lbl">// overall performance</div><div class="synth-num" style="color:#ef4444">49%</div><div class="synth-num-lbl" style="color:#ef4444">Critical — 2nd consecutive<br>month below threshold</div></div>
+        <div class="synth-cell"><div class="synth-cell-lbl">// critical findings</div><div class="synth-list"><div class="synth-li">Response speed at 29% — worst score across all 4 zones</div><div class="synth-li">Accountability mechanism non-functional — Oct and Nov</div><div class="synth-li">Chair under review — HC notified 2 November 2025</div></div></div>
+        <div class="synth-cell"><div class="synth-cell-lbl">// recommended actions</div><div class="synth-list"><div class="synth-li">Escalate to HC — mandate review meeting 15 November</div><div class="synth-li">Activate early replacement process if December below 50%</div><div class="synth-li">OCHA interim support requested for accountability mechanism</div></div></div>
+      </div>
+      <div class="synth-footer"><span class="synth-fn">Generated: 5 November 2025 · Next update: 5 December 2025</span><span class="synth-ft">HINGO Forum Ethiopia · ABC Pilot · Kanon Advisory</span></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ TAB 2 ═══ -->
+<div class="tab-panel" id="panel-supervision">
+<div class="section-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">HINGO supervision view — all zones at a glance</div>
+    <h1 class="page-title">3 zones. 2 people.<br>One view.</h1>
+    <p class="page-sub">The HINGO coordination team sees the status of every ABC chair, every active alert, and every zone requiring attention — in a single view, updated monthly.</p>
+  </div>
+
+  <div class="sup-grid">
+    <div class="zcard ok">
+      <div class="zc-h"><div><div class="zc-zone">Tigray</div><div class="zc-name">Teklehaimanot Gebru — IRC</div></div><span class="pill pill-green"><span class="pill-dot"></span>73%</span></div>
+      <div class="zc-body">
+        <div class="zc-row"><span class="zc-lbl">Status</span><span class="zc-val">Above threshold</span></div>
+        <div class="zc-row"><span class="zc-lbl">Active partners</span><span class="zc-val">18</span></div>
+        <div class="zc-row"><span class="zc-lbl">Active alerts</span><span class="zc-val">0</span></div>
+        <div class="zc-alerts"><div class="zc-ok">✓ No alerts — monitoring continues</div></div>
+      </div>
+      <div class="zc-footer"><span class="zc-upd">Last update: 5 November 2025</span></div>
+    </div>
+    <div class="zcard warning">
+      <div class="zc-h"><div><div class="zc-zone">Somali Region</div><div class="zc-name">Fadumo Hassan Duale — NRC</div></div><span class="pill pill-amber"><span class="pill-dot"></span>54%</span></div>
+      <div class="zc-body">
+        <div class="zc-row"><span class="zc-lbl">Status</span><span class="zc-val" style="color:#d97706">Below threshold</span></div>
+        <div class="zc-row"><span class="zc-lbl">Active partners</span><span class="zc-val">14</span></div>
+        <div class="zc-row"><span class="zc-lbl">Active alerts</span><span class="zc-val" style="color:#dc2626">2</span></div>
+        <div class="zc-alerts">
+          <div class="zc-a">Korahe Zone 3 coverage gap — 6 weeks unresolved</div>
+          <div class="zc-w">Chair scope creep confirmed by 2 partners</div>
+        </div>
+      </div>
+      <div class="zc-footer"><span class="zc-upd">Last update: 5 November 2025</span></div>
+    </div>
+    <div class="zcard alert">
+      <div class="zc-h"><div><div class="zc-zone">Oromia West</div><div class="zc-name">Tadesse Bekele Girma — ANE</div></div><span class="pill pill-red"><span class="pill-dot"></span>49%</span></div>
+      <div class="zc-body">
+        <div class="zc-row"><span class="zc-lbl">Status</span><span class="zc-val" style="color:#dc2626">Critical — 2nd month</span></div>
+        <div class="zc-row"><span class="zc-lbl">Active partners</span><span class="zc-val">11</span></div>
+        <div class="zc-row"><span class="zc-lbl">Active alerts</span><span class="zc-val" style="color:#dc2626">3</span></div>
+        <div class="zc-alerts">
+          <div class="zc-a">Mandate review — HC notified 2 Nov</div>
+          <div class="zc-a">Accountability mechanism non-functional 2 months</div>
+          <div class="zc-w">Response speed at 29% — worst across all zones</div>
+        </div>
+      </div>
+      <div class="zc-footer"><span class="zc-upd">Last update: 5 November 2025</span></div>
+    </div>
+  </div>
+
+  <div class="sup-bar">
+    <div class="sb-stat"><div class="sb-num">3</div><div class="sb-lbl">Zones under active monitoring</div></div>
+    <div class="sb-stat"><div class="sb-num">2</div><div class="sb-lbl">Zones below performance threshold</div></div>
+    <div class="sb-stat"><div class="sb-num">5</div><div class="sb-lbl">Active alerts requiring attention</div></div>
+    <div class="sb-stat"><div class="sb-num">1</div><div class="sb-lbl">Chair mandate under review</div></div>
+  </div>
+
+  <div class="hingo-note">
+    <p>This view is maintained by the HINGO Forum coordination team (2 persons). Each zone links to the full monthly tracking report. Alerts are generated automatically when indicators fall below threshold or when NRC exit criteria are triggered. No data entry required from the HINGO team — chairs submit their monthly update directly into the system.</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══ TAB 3 ═══ -->
+<div class="tab-panel" id="panel-selection">
+<div class="section-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">Chair selection protocol — 3-step process</div>
+    <h1 class="page-title">Who becomes the ABC chair.<br>How. By whom.</h1>
+    <p class="page-sub">A documented, transparent sequence endorsed by the HC. Every selection follows the same three steps. Every step has a status. No ambiguity about who decides.</p>
+  </div>
+
+  <div class="proto-intro">
+    <div>
+      <p class="proto-text">The selection process takes 30 days from launch to endorsement. It produces a chair with full legitimacy among partners and formal sign-off from the HC/HCT.</p>
+      <p class="proto-sub">Designed for contexts where leadership legitimacy is contested and operational independence of the chair must be demonstrable to donors and the broader humanitarian system.</p>
+    </div>
+    <div class="proto-stats">
+      <div class="pstat"><div class="pstat-num">30</div><div class="pstat-lbl">Days from launch to HC endorsement</div></div>
+      <div class="pstat"><div class="pstat-num">50%</div><div class="pstat-lbl">Minimum quorum of operational partners required to vote</div></div>
+      <div class="pstat"><div class="pstat-num">1</div><div class="pstat-lbl">Mandatory HC/HCT endorsement required to activate mandate</div></div>
+    </div>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="sc-h"><div class="sc-num">01</div><div class="sc-title">Open call in zone</div></div>
+      <div class="sc-body">
+        <p class="sc-desc">A formal call for candidatures is issued to all operational partners present in the zone. Any INGO or NNGO with 6+ months of active presence may apply.</p>
+        <div class="sc-items">
+          <div class="sc-item">HINGO Forum issues call — 5-day window</div>
+          <div class="sc-item">Candidate submits 1-page expression of interest</div>
+          <div class="sc-item">Eligibility criteria: presence, neutrality, language, availability</div>
+          <div class="sc-item">OCHA sub-office validates applications</div>
+        </div>
+      </div>
+      <div class="sc-footer"><span class="pill pill-grey">Duration: 10 days</span></div>
+    </div>
+    <div class="step-card">
+      <div class="sc-h"><div class="sc-num">02</div><div class="sc-title">Partner vote</div></div>
+      <div class="sc-body">
+        <p class="sc-desc">All operational partners present in the zone vote. Quorum: 50% must participate. Simple majority selects the chair. HINGO Forum facilitates — does not vote.</p>
+        <div class="sc-items">
+          <div class="sc-item">Written ballot — no show of hands</div>
+          <div class="sc-item">One vote per organisation regardless of size</div>
+          <div class="sc-item">Result communicated within 24 hours</div>
+          <div class="sc-item">Losing candidates notified with written rationale</div>
+        </div>
+      </div>
+      <div class="sc-footer"><span class="pill pill-grey">Duration: 5 days</span></div>
+    </div>
+    <div class="step-card">
+      <div class="sc-h"><div class="sc-num">03</div><div class="sc-title">HC/HCT endorsement</div></div>
+      <div class="sc-body">
+        <p class="sc-desc">The elected candidate is formally endorsed by the Humanitarian Coordinator. This gives the chair authority to convene inter-cluster meetings and represent the zone at HCT level.</p>
+        <div class="sc-items">
+          <div class="sc-item">HINGO submits result and candidate profile to HC</div>
+          <div class="sc-item">HC endorsement letter within 5 working days</div>
+          <div class="sc-item">Mandate begins day after endorsement</div>
+          <div class="sc-item">Duration: 12 months, renewable once by partner vote</div>
+        </div>
+      </div>
+      <div class="sc-footer"><span class="pill pill-grey">Duration: 10–15 days</span></div>
+    </div>
+  </div>
+
+  <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-bottom:14px">// current process status by zone</div>
+  <div class="zones-proto">
+    <div class="zp-card">
+      <div class="zp-h"><div class="zp-name">Tigray</div><div class="zp-sub">PROCESS COMPLETE · JAN 2025</div></div>
+      <div class="zp-steps">
+        <div class="zp-srow"><span class="zp-snum">01</span><span class="zp-slbl">Open call</span><span class="pill pill-green" style="font-size:8px;padding:2px 6px">DONE</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:100%;background:#22c55e"></div></div>
+        <div class="zp-srow"><span class="zp-snum">02</span><span class="zp-slbl">Partner vote — 14/18 participated</span><span class="pill pill-green" style="font-size:8px;padding:2px 6px">DONE</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:100%;background:#22c55e"></div></div>
+        <div class="zp-srow"><span class="zp-snum">03</span><span class="zp-slbl">HC endorsement — 15 Jan 2025</span><span class="pill pill-green" style="font-size:8px;padding:2px 6px">DONE</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:100%;background:#22c55e"></div></div>
+      </div>
+    </div>
+    <div class="zp-card">
+      <div class="zp-h"><div class="zp-name">Afar</div><div class="zp-sub">IN PROGRESS · LAUNCHED 1 NOV 2025</div></div>
+      <div class="zp-steps">
+        <div class="zp-srow"><span class="zp-snum">01</span><span class="zp-slbl">Open call — closes 20 Nov</span><span class="pill pill-amber" style="font-size:8px;padding:2px 6px">OPEN</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:60%;background:#f59e0b"></div></div>
+        <div class="zp-srow"><span class="zp-snum">02</span><span class="zp-slbl">Partner vote — scheduled 25 Nov</span><span class="pill pill-grey" style="font-size:8px;padding:2px 6px">PENDING</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:0%"></div></div>
+        <div class="zp-srow"><span class="zp-snum">03</span><span class="zp-slbl">HC endorsement — target 10 Dec</span><span class="pill pill-grey" style="font-size:8px;padding:2px 6px">PENDING</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="zp-card">
+      <div class="zp-h"><div class="zp-name">Somali Region</div><div class="zp-sub">RENEWAL DUE · APRIL 2026</div></div>
+      <div class="zp-steps">
+        <div class="zp-srow"><span class="zp-snum">01</span><span class="zp-slbl">Open call — planned March 2026</span><span class="pill pill-grey" style="font-size:8px;padding:2px 6px">UPCOMING</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:0%"></div></div>
+        <div class="zp-srow"><span class="zp-snum">02</span><span class="zp-slbl">Partner vote — planned March 2026</span><span class="pill pill-grey" style="font-size:8px;padding:2px 6px">UPCOMING</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:0%"></div></div>
+        <div class="zp-srow"><span class="zp-snum">03</span><span class="zp-slbl">Current mandate ends March 2026</span><span class="pill pill-green" style="font-size:8px;padding:2px 6px">ACTIVE</span></div>
+        <div class="zp-bar"><div class="zp-fill" style="width:75%;background:#22c55e"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- end content -->
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function showZone(zone,btn){
+  ['somali','tigray','afar','oromia'].forEach(z=>{
+    const el=document.getElementById('zone-'+z);
+    if(el) el.style.display=z===zone?'block':'none';
+  });
+  document.querySelectorAll('.zone-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
