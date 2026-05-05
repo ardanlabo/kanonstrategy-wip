@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Rhizome — Actor Mapping · Kanon Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #080c11; color: #fff; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
+
+/* TOPBAR */
+.topbar { height: 48px; flex-shrink: 0; background: #0a0e15; border-bottom: 0.5px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 50; }
+.tl { display: flex; align-items: center; gap: 14px; }
+.t-logo { display: flex; align-items: center; gap: 10px; }
+.t-sep { width: 1px; height: 16px; background: rgba(201,168,76,0.25); }
+.t-brand { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.18em; color: rgba(255,255,255,0.85); }
+.t-div { width: 0.5px; height: 20px; background: rgba(255,255,255,0.08); }
+.t-product { font-family: 'IBM Plex Serif', serif; font-weight: 300; font-size: 14px; color: rgba(255,255,255,0.55); }
+.t-ctx { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.18); letter-spacing: 0.1em; }
+.tr { display: flex; align-items: center; gap: 12px; }
+.t-back { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.2); text-decoration: none; transition: color 0.2s; }
+.t-back:hover { color: rgba(201,168,76,0.65); }
+
+/* LAYOUT */
+.body-wrap { flex: 1; display: flex; overflow: hidden; position: relative; }
+.graph-wrap { flex: 1; position: relative; overflow: hidden; }
+#svg { width: 100%; height: 100%; display: block; cursor: default; }
+
+/* GUIDED TOUR BAR */
+.tour-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(10,14,21,0.96);
+  border-top: 0.5px solid rgba(255,255,255,0.07);
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 30;
+}
+.tour-left { display: flex; align-items: center; gap: 16px; }
+.tour-steps { display: flex; gap: 6px; }
+.tour-step-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer; transition: all 0.2s;
+}
+.tour-step-dot.active { background: #C9A84C; box-shadow: 0 0 5px rgba(201,168,76,0.5); }
+.tour-step-dot.done { background: rgba(201,168,76,0.4); }
+.tour-counter { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; }
+.tour-message { flex: 1; padding: 0 24px; }
+.tour-step-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: rgba(201,168,76,0.6); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.tour-step-text { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.65); }
+.tour-right { display: flex; gap: 10px; }
+.tour-btn {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.09em;
+  padding: 7px 18px; cursor: pointer; transition: all 0.2s;
+  border: 0.5px solid rgba(255,255,255,0.12);
+  background: transparent; color: rgba(255,255,255,0.35);
+}
+.tour-btn:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.25); }
+.tour-btn.primary {
+  border-color: rgba(201,168,76,0.4); color: #C9A84C; background: rgba(201,168,76,0.06);
+}
+.tour-btn.primary:hover { background: rgba(201,168,76,0.12); border-color: #C9A84C; }
+.tour-btn.done-btn { border-color: rgba(34,197,94,0.4); color: #22c55e; background: rgba(34,197,94,0.06); }
+
+/* LEGEND */
+.legend { position: absolute; top: 14px; left: 16px; pointer-events: none; display: flex; flex-direction: column; gap: 12px; z-index: 10; }
+.lg-title { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.14); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.lg-row { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; }
+.lg-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.lg-diamond { width: 7px; height: 7px; border: 1.5px solid #C9A84C; transform: rotate(45deg); flex-shrink: 0; }
+.lg-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.2); }
+.lg-line { width: 16px; height: 1px; flex-shrink: 0; }
+.lg-moon { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+/* SIDEBAR PANEL */
+.panel {
+  position: absolute; top: 0; right: 0; bottom: 52px;
+  width: 280px; background: #0a0e15;
+  border-left: 0.5px solid rgba(255,255,255,0.07);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.28s ease;
+  z-index: 20;
+}
+.panel.open { transform: translateX(0); }
+.ph { padding: 14px 16px 12px; border-bottom: 0.5px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: flex-start; flex-shrink: 0; }
+.px { font-size: 14px; color: rgba(255,255,255,0.18); cursor: pointer; transition: color 0.18s; }
+.px:hover { color: rgba(255,255,255,0.55); }
+.pb { flex: 1; overflow-y: auto; }
+.pb::-webkit-scrollbar { width: 3px; }
+.pb::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+.ptype { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 0.11em; text-transform: uppercase; margin-bottom: 4px; }
+.pname { font-family: 'IBM Plex Serif', serif; font-weight: 300; font-size: 15px; color: #fff; line-height: 1.3; }
+.pscore-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.pscore-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.2); }
+.spill { font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 500; padding: 2px 7px; }
+.psec { padding: 10px 15px; border-bottom: 0.5px solid rgba(255,255,255,0.05); }
+.psec-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 0.09em; color: rgba(201,168,76,0.36); text-transform: uppercase; margin-bottom: 6px; }
+.plinks { display: flex; flex-direction: column; gap: 5px; }
+.plrow { display: flex; align-items: center; gap: 7px; }
+.plname { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.4); }
+.pltype { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.15); }
+.pzones { display: flex; flex-direction: column; gap: 4px; }
+.pzrow { display: flex; align-items: center; gap: 6px; }
+.pzdot { width: 4px; height: 4px; border-radius: 50%; background: #C9A84C; opacity: 0.42; flex-shrink: 0; }
+.pzlbl { font-family: 'Inter', sans-serif; font-size: 11px; color: rgba(255,255,255,0.36); }
+.pnote { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.28); line-height: 1.65; }
+.pmoons { display: flex; flex-wrap: wrap; gap: 5px; }
+.pmoon-item { display: flex; align-items: center; gap: 4px; }
+.pmoon-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pmoon-lbl { font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(255,255,255,0.38); }
+.pcontacts { display: flex; flex-direction: column; gap: 8px; }
+.pcontact { display: flex; flex-direction: column; gap: 2px; }
+.pcontact-name { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.65); }
+.pcontact-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.25); }
+.pcontact-email { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: rgba(201,168,76,0.5); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tl">
+    <div class="t-logo">
+      <svg width="20" height="20" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2.5"/>
+        <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
+        <circle cx="60" cy="10" r="5" fill="#C9A84C"/>
+        <circle cx="103.3" cy="85" r="5" fill="#C9A84C"/>
+        <circle cx="16.7" cy="85" r="5" fill="#C9A84C"/>
+      </svg>
+      <div class="t-sep"></div>
+      <span class="t-brand">RHIZOME</span>
+    </div>
+    <div class="t-div"></div>
+    <span class="t-product">Actor Mapping</span>
+    <span class="t-ctx">// SOMALI REGION · ETHIOPIA · 2025</span>
+  </div>
+  <div class="tr">
+    <a href="index.html" class="t-back">← Back to site</a>
+  </div>
+</div>
+
+<div class="body-wrap">
+  <div class="graph-wrap">
+    <svg id="svg"></svg>
+
+    <div class="legend">
+      <div>
+        <div class="lg-title">Actor type</div>
+        <div class="lg-row"><div class="lg-dot" style="background:#f97316"></div><span class="lg-lbl">Government</span></div>
+        <div class="lg-row"><div class="lg-dot" style="background:#a78bfa"></div><span class="lg-lbl">UN Agency</span></div>
+        <div class="lg-row"><div class="lg-dot" style="background:#f59e0b"></div><span class="lg-lbl">Donor</span></div>
+        <div class="lg-row"><div class="lg-dot" style="background:#4a9eff"></div><span class="lg-lbl">INGO</span></div>
+        <div class="lg-row"><div class="lg-dot" style="background:#34d399"></div><span class="lg-lbl">CSO / NNGO</span></div>
+        <div class="lg-row"><div class="lg-dot" style="background:#22c55e"></div><span class="lg-lbl">Cluster</span></div>
+        <div class="lg-row"><div class="lg-diamond"></div><span class="lg-lbl" style="color:rgba(201,168,76,0.5)">ABC Zone</span></div>
+      </div>
+      <div>
+        <div class="lg-title">Links</div>
+        <div class="lg-row"><div class="lg-line" style="background:rgba(201,168,76,0.7);height:2px"></div><span class="lg-lbl">Consortium</span></div>
+        <div class="lg-row"><div class="lg-line" style="background:rgba(255,255,255,0.3)"></div><span class="lg-lbl">Coordinates</span></div>
+        <div class="lg-row"><div class="lg-line" style="border-top:1px dashed rgba(255,255,255,0.2)"></div><span class="lg-lbl">Knows</span></div>
+      </div>
+      <div>
+        <div class="lg-title">Sectors</div>
+        <div class="lg-row"><div class="lg-moon" style="background:#22c55e"></div><span class="lg-lbl">Nutrition</span></div>
+        <div class="lg-row"><div class="lg-moon" style="background:#3b82f6"></div><span class="lg-lbl">Protection</span></div>
+        <div class="lg-row"><div class="lg-moon" style="background:#06b6d4"></div><span class="lg-lbl">WASH</span></div>
+        <div class="lg-row"><div class="lg-moon" style="background:#ef4444"></div><span class="lg-lbl">Health</span></div>
+        <div class="lg-row"><div class="lg-moon" style="background:#f97316"></div><span class="lg-lbl">Shelter</span></div>
+        <div class="lg-row"><div class="lg-moon" style="background:#eab308"></div><span class="lg-lbl">Food Security</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="panel" id="panel">
+    <div class="ph">
+      <div>
+        <div class="ptype" id="ptype"></div>
+        <div class="pname" id="pname"></div>
+        <div class="pscore-row">
+          <span class="pscore-lbl">Coord. score</span>
+          <span class="spill" id="pspill"></span>
+        </div>
+      </div>
+      <div class="px" onclick="closePanel()">✕</div>
+    </div>
+    <div class="pb" id="pbody"></div>
+  </div>
+
+  <!-- GUIDED TOUR BAR -->
+  <div class="tour-bar">
+    <div class="tour-left">
+      <div class="tour-steps" id="tour-dots"></div>
+      <div class="tour-counter" id="tour-counter">1 / 5</div>
+    </div>
+    <div class="tour-message">
+      <div class="tour-step-label" id="tour-label"></div>
+      <div class="tour-step-text" id="tour-text"></div>
+    </div>
+    <div class="tour-right">
+      <button class="tour-btn" id="btn-prev" onclick="prevStep()">← Prev</button>
+      <button class="tour-btn primary" id="btn-next" onclick="nextStep()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONSTANTS ────────────────────────────────────────────────
+const SECTOR_COLOR = {
+  'Nutrition':'#22c55e','Protection':'#3b82f6','WASH':'#06b6d4',
+  'Health':'#ef4444','Shelter':'#f97316','Food Security':'#eab308',
+  'Education':'#8b5cf6','Coordination':'#9ca3af','Logistics':'#6b7280','Livelihoods':'#a16207',
+};
+const TC = {
+  government:'#f97316',un:'#a78bfa',donor:'#f59e0b',
+  ingo:'#4a9eff',nngo:'#34d399',cluster:'#22c55e',abc:'#C9A84C',
+};
+function sc(s){ return s>=80?'#22c55e':s>=55?'#f59e0b':'#ef4444'; }
+
+// ── ZONES ────────────────────────────────────────────────────
+const ZONES = {
+  government: { x0:0.00, y0:0.00, x1:0.30, y1:0.44 },
+  un:         { x0:0.30, y0:0.00, x1:0.68, y1:0.44 },
+  donor:      { x0:0.68, y0:0.00, x1:1.00, y1:0.44 },
+  ingo:       { x0:0.00, y0:0.56, x1:0.48, y1:1.00 },
+  nngo:       { x0:0.52, y0:0.56, x1:1.00, y1:1.00 },
+  cluster:    { x0:0.20, y0:0.38, x1:0.80, y1:0.62 },
+};
+
+// ── NODES ────────────────────────────────────────────────────
+const NODES = [
+  // GOVERNMENT
+  { id:'rrhb',  name:'Regional Health Bureau', type:'government', score:68, sectors:['Health'], zones:['All Zones'],
+    note:'Formal government counterpart for health cluster. Critical for program approval and health facility access. Under-connected to other clusters.',
+    contacts:[{name:'Dr. Ahmed Hassan',role:'Director General',email:'a.hassan@rrhb.gov.et'}],
+    links:[{to:'who',t:'c'},{to:'cl_hlt',t:'c'},{to:'ocha',t:'k'}] },
+  { id:'rrrda', name:'RRRDA',                  type:'government', score:65, sectors:['Protection','Shelter'], zones:['Dollo Ado','Liban','Korahe'],
+    note:'Regional displacement authority. Controls access to displacement sites. Under-connected to cluster system.',
+    contacts:[{name:'Ibrahim Farah',role:'Regional Coordinator',email:'i.farah@rrrda.gov.et'}],
+    links:[{to:'unhcr',t:'c'},{to:'ocha',t:'k'}] },
+  { id:'dppc',  name:'DPPC Somali',            type:'government', score:61, sectors:['Food Security','Coordination'], zones:['All Zones'],
+    note:'Disaster Prevention and Preparedness Commission. Government early warning counterpart. Weak operational link to INGOs.',
+    contacts:[{name:'Abdullahi Omar',role:'Head of DPPC Somali',email:'a.omar@dppc.gov.et'}],
+    links:[{to:'ocha',t:'k'},{to:'wfp',t:'c'}] },
+  // UN
+  { id:'ocha',   name:'OCHA Ethiopia',         type:'un', score:91, sectors:['Coordination'], zones:['All Zones'],
+    note:'Overall humanitarian coordination lead. Hosts cluster system. Key gateway for inter-cluster information and donor reporting. Manages pooled fund.',
+    contacts:[{name:'Sara Lindqvist',role:'Head of Office',email:'s.lindqvist@un.org'},{name:'Yohannes Tesfaye',role:'Information Management Officer',email:'y.tesfaye@un.org'}],
+    links:[{to:'unicef',t:'c'},{to:'wfp',t:'c'},{to:'who',t:'c'},{to:'unhcr',t:'c'},{to:'cl_nut',t:'c'},{to:'cl_wsh',t:'c'},{to:'cl_hlt',t:'c'},{to:'echo',t:'c'}] },
+  { id:'unicef', name:'UNICEF Ethiopia',       type:'un', score:87, sectors:['Nutrition','WASH','Protection'], zones:['Jijiga','Gode','Korahe'],
+    note:'Co-leads Nutrition and WASH clusters. Strong supply pipeline. Limited field presence in Liban zone. Key technical partner for CMAM protocol.',
+    contacts:[{name:'Miriam Osei',role:'Nutrition Specialist',email:'m.osei@unicef.org'}],
+    links:[{to:'ocha',t:'c'},{to:'acf',t:'c'},{to:'save',t:'c'},{to:'cl_nut',t:'c'},{to:'cl_wsh',t:'c'}] },
+  { id:'wfp',    name:'WFP Ethiopia',          type:'un', score:85, sectors:['Food Security','Nutrition','Logistics'], zones:['All Zones'],
+    note:'Logistics cluster lead. Controls supply corridors Jijiga→Korahe→Liban. Critical chokepoint for nutrition pipeline.',
+    contacts:[{name:'James Kariuki',role:'Country Director',email:'j.kariuki@wfp.org'}],
+    links:[{to:'ocha',t:'c'},{to:'save',t:'c'},{to:'wv',t:'c'},{to:'cl_nut',t:'c'}] },
+  { id:'who',    name:'WHO Ethiopia',          type:'un', score:82, sectors:['Health'], zones:['All Zones'],
+    note:'Co-leads Health cluster with Regional Health Bureau. Disease surveillance network across Somali Region. Weak link to Nutrition cluster on SAM/MAM referral.',
+    contacts:[{name:'Dr. Fatuma Warsame',role:'Health Cluster Co-lead',email:'f.warsame@who.int'}],
+    links:[{to:'ocha',t:'c'},{to:'rrhb',t:'c'},{to:'cl_hlt',t:'c'}] },
+  { id:'unhcr',  name:'UNHCR Ethiopia',        type:'un', score:76, sectors:['Protection','Shelter','WASH'], zones:['Dollo Ado','Liban'],
+    note:'Refugee operations Dollo Ado. Coordination with shelter and WASH actors. Link to nutrition cluster absent.',
+    contacts:[{name:'Amina Diallo',role:'Representative',email:'a.diallo@unhcr.org'}],
+    links:[{to:'ocha',t:'c'},{to:'nrc',t:'c'},{to:'rrrda',t:'c'}] },
+  // DONORS
+  { id:'echo',   name:'EU / ECHO Ethiopia',    type:'donor', score:84, sectors:['Coordination'], zones:['Jijiga','Gode'],
+    note:'Primary institutional donor. Next cycle Feb 2026. Requires inter-cluster coordination evidence for renewal. Key decision-maker: Thomas Leblanc.',
+    contacts:[{name:'Thomas Leblanc',role:'Head of Office',email:'thomas.leblanc@echo.europa.eu'}],
+    links:[{to:'ocha',t:'c'},{to:'acf',t:'c'},{to:'irc',t:'c'},{to:'save',t:'c'}] },
+  { id:'usaid',  name:'USAID / BHA',           type:'donor', score:79, sectors:['Food Security'], zones:['Korahe','Shinile'],
+    note:'Separate from EU cycle. Funds food security and health via NGO implementing partners.',
+    contacts:[{name:'Christine Nakamura',role:'Program Officer',email:'c.nakamura@usaid.gov'}],
+    links:[{to:'ocha',t:'c'},{to:'wv',t:'c'},{to:'crs',t:'c'}] },
+  { id:'phf',    name:'OCHA PHF',              type:'donor', score:72, sectors:['Coordination'], zones:['All Zones'],
+    note:'Pooled humanitarian fund. Rapid response mechanism for acute needs. Managed by OCHA.',
+    contacts:[{name:'Yohannes Tesfaye',role:'Fund Manager',email:'y.tesfaye@un.org'}],
+    links:[{to:'ocha',t:'c'},{to:'cl_nut',t:'c'}] },
+  // INGO
+  { id:'acf',    name:'Action Against Hunger', type:'ingo', score:86, sectors:['Nutrition','WASH','Food Security'], zones:['Jijiga','Gode','Korahe'],
+    note:'Largest CMAM implementing partner. 3-zone coverage. Co-funded EU/ECHO + USAID. Leads Somali Nutrition Consortium with IRC and Save the Children.',
+    contacts:[{name:'Nadia Mercier',role:'Country Director',email:'n.mercier@acf.org'},{name:'Khalid Hassan',role:'Nutrition Programme Manager',email:'k.hassan@acf.org'}],
+    links:[{to:'unicef',t:'c'},{to:'echo',t:'c'},{to:'irc',t:'cons'},{to:'save',t:'cons'},{to:'cl_nut',t:'c'}] },
+  { id:'irc',    name:'IRC Ethiopia',          type:'ingo', score:83, sectors:['Health','Nutrition','Protection'], zones:['Gode','Liban'],
+    note:'3 stabilization centers in Gode. Cross-cluster presence (nutrition + health) but no formal inter-cluster link activated. EU/ECHO implementing partner.',
+    contacts:[{name:'Dr. Leila Sharif',role:'Health Coordinator',email:'l.sharif@rescue.org'}],
+    links:[{to:'echo',t:'c'},{to:'acf',t:'cons'},{to:'cl_nut',t:'c'},{to:'cl_hlt',t:'c'}] },
+  { id:'save',   name:'Save the Children',     type:'ingo', score:84, sectors:['Nutrition','Education','Protection'], zones:['Jijiga','Korahe'],
+    note:'47 active health posts Jijiga Zone. Strong TSFP coverage. No WASH presence — coordination gap with co-located WASH needs.',
+    contacts:[{name:'Emma Ochieng',role:'Programme Director',email:'e.ochieng@savethechildren.org'}],
+    links:[{to:'unicef',t:'c'},{to:'wfp',t:'c'},{to:'acf',t:'cons'},{to:'cl_nut',t:'c'}] },
+  { id:'msf',    name:'MSF',                   type:'ingo', score:80, sectors:['Health','Nutrition'], zones:['Dollo Ado','Liban'],
+    note:'Independent — does not participate in formal cluster. Direct field coordination only. High credibility in hard-to-reach zones.',
+    contacts:[{name:'Dr. Marco Reyes',role:'Medical Coordinator',email:'m.reyes@msf.org'}],
+    links:[{to:'cl_hlt',t:'c'}] },
+  { id:'nrc',    name:'NRC Ethiopia',          type:'ingo', score:74, sectors:['Shelter','WASH','Education'], zones:['Dollo Ado','Liban'],
+    note:'WASH and shelter in refugee-hosting zones. Limited coordination with nutrition actors in same geographic areas.',
+    contacts:[{name:'Astrid Berg',role:'Country Director',email:'a.berg@nrc.no'}],
+    links:[{to:'unhcr',t:'c'},{to:'cl_wsh',t:'c'}] },
+  { id:'crs',    name:'CRS Ethiopia',          type:'ingo', score:71, sectors:['Food Security','WASH','Livelihoods'], zones:['Shinile','Afder'],
+    note:'USAID-funded livelihoods. Limited formal cluster engagement. Potential bridge actor in Shinile.',
+    contacts:[{name:'Michael Otieno',role:'Program Manager',email:'m.otieno@crs.org'}],
+    links:[{to:'usaid',t:'c'},{to:'cl_wsh',t:'c'}] },
+  { id:'wv',     name:'World Vision',          type:'ingo', score:73, sectors:['Food Security','WASH'], zones:['Shinile','Korahe'],
+    note:'Coverage declining Korahe Zone 2. No activity logged 18 days. Risk of gap formation.',
+    contacts:[{name:'Ruth Muthoni',role:'Area Manager',email:'r.muthoni@wvi.org'}],
+    links:[{to:'wfp',t:'c'},{to:'usaid',t:'c'},{to:'cl_nut',t:'c'}] },
+  // NNGO
+  { id:'ado',    name:'ADO Ethiopia',          type:'nngo', score:66, sectors:['Nutrition','Food Security'], zones:['Korahe','Afder'],
+    note:'Local NGO with strong community access in Korahe. Implementing partner for ACF. Limited reporting capacity.',
+    contacts:[{name:'Hassan Abdi',role:'Executive Director',email:'h.abdi@ado.et'}],
+    links:[{to:'acf',t:'c'},{to:'cl_nut',t:'c'}] },
+  { id:'ddo',    name:'DDO Somali',            type:'nngo', score:62, sectors:['WASH','Livelihoods'], zones:['Gode','Shinile'],
+    note:'Local NGO. WASH activities in Gode. High community trust. Potential ABC bridge actor.',
+    contacts:[{name:'Faadumo Shire',role:'Director',email:'f.shire@ddo.et'}],
+    links:[{to:'cl_wsh',t:'c'},{to:'crs',t:'c'}] },
+  { id:'hso',    name:'HSO Ethiopia',          type:'nngo', score:60, sectors:['Health','Nutrition'], zones:['Korahe','Liban'],
+    note:'Somali civil society organisation. Primary health and nutrition outreach. Under-resourced, high reach.',
+    contacts:[{name:'Dr. Maryam Jama',role:'Health Director',email:'m.jama@hso.et'}],
+    links:[{to:'cl_hlt',t:'c'},{to:'ado',t:'c'}] },
+  { id:'srcs',   name:'Somali Red Crescent',   type:'nngo', score:64, sectors:['Health','Shelter','Food Security'], zones:['All Zones'],
+    note:'National society with wide geographic reach. Auxiliary to government. Key first responder in displacement contexts.',
+    contacts:[{name:'Ahmed Warsame',role:'Secretary General',email:'a.warsame@somalircs.org'}],
+    links:[{to:'cl_hlt',t:'c'},{to:'ocha',t:'k'}] },
+  // CLUSTERS
+  { id:'cl_nut', name:'Nutrition Cluster',     type:'cluster', score:88, sectors:['Nutrition'], zones:['All Zones'],
+    note:'Convenes weekly. 14 active members. Coverage gap Korahe Zone 3 unresolved since W42. No formal link to WASH cluster on co-located sites.',
+    contacts:[{name:'Miriam Osei',role:'Cluster Lead (UNICEF)',email:'m.osei@unicef.org'}],
+    links:[{to:'ocha',t:'c'},{to:'unicef',t:'c'},{to:'acf',t:'c'},{to:'irc',t:'c'},{to:'save',t:'c'},{to:'wfp',t:'c'},{to:'wv',t:'c'},{to:'ado',t:'c'}] },
+  { id:'cl_wsh', name:'WASH Cluster',          type:'cluster', score:79, sectors:['WASH'], zones:['Jijiga','Gode','Shinile'],
+    note:'Coverage fragmented. No active coordination with Nutrition on co-located sites. Shinile Zone 4 gap unresolved.',
+    contacts:[{name:'Peter Mwangi',role:'Cluster Coordinator',email:'p.mwangi@unicef.org'}],
+    links:[{to:'ocha',t:'c'},{to:'unicef',t:'c'},{to:'nrc',t:'c'},{to:'crs',t:'c'},{to:'ddo',t:'c'}] },
+  { id:'cl_hlt', name:'Health Cluster',        type:'cluster', score:75, sectors:['Health'], zones:['Jijiga','Dollo Ado','Liban'],
+    note:'WHO co-leads with RHB. Weak SAM/MAM referral pathway to Nutrition cluster. MSF operates independently outside cluster.',
+    contacts:[{name:'Dr. Fatuma Warsame',role:'Co-lead WHO',email:'f.warsame@who.int'}],
+    links:[{to:'ocha',t:'c'},{to:'who',t:'c'},{to:'msf',t:'c'},{to:'irc',t:'c'},{to:'rrhb',t:'c'}] },
+  // ABC
+  { id:'abc_jij', name:'Jijiga Zone',    type:'abc', abc:true, score:0, sectors:['Coordination'], zones:['Jijiga'],
+    note:'ABC node Jijiga Zone. Bridges ACF, Save the Children, UNICEF WASH — all present in Jijiga with zero inter-cluster coordination.',
+    contacts:[], links:[{to:'acf',t:'a'},{to:'save',t:'a'},{to:'unicef',t:'a'},{to:'cl_nut',t:'a'},{to:'cl_wsh',t:'a'}] },
+  { id:'abc_gode',name:'Gode Zone',      type:'abc', abc:true, score:0, sectors:['Coordination'], zones:['Gode'],
+    note:'Connects IRC, WFP, WASH Cluster — three actors in Gode with zero inter-cluster mechanisms.',
+    contacts:[], links:[{to:'irc',t:'a'},{to:'wfp',t:'a'},{to:'cl_wsh',t:'a'},{to:'cl_hlt',t:'a'},{to:'ddo',t:'a'}] },
+  { id:'abc_kor', name:'Korahe Zone',    type:'abc', abc:true, score:0, sectors:['Coordination'], zones:['Korahe'],
+    note:'Highest-gap zone. 3 clusters present, 0 inter-cluster coordination mechanisms. ABC node would be the first formal bridge.',
+    contacts:[], links:[{to:'acf',t:'a'},{to:'wv',t:'a'},{to:'crs',t:'a'},{to:'rrrda',t:'a'},{to:'ado',t:'a'}] },
+  { id:'abc_dol', name:'Dollo Ado',      type:'abc', abc:true, score:0, sectors:['Coordination'], zones:['Dollo Ado','Liban'],
+    note:'MSF, NRC, UNHCR, RRRDA all present — no shared coordination forum. ABC node critical.',
+    contacts:[], links:[{to:'msf',t:'a'},{to:'nrc',t:'a'},{to:'unhcr',t:'a'},{to:'rrrda',t:'a'},{to:'cl_hlt',t:'a'}] },
+];
+
+// Build link arrays
+const BASE_LINKS=[], ABC_LINKS=[];
+const seen=new Set();
+NODES.forEach(n=>{
+  (n.links||[]).forEach(l=>{
+    const key=[n.id,l.to].sort().join('~~');
+    if(!seen.has(key)){
+      seen.add(key);
+      if(l.t==='a') ABC_LINKS.push({source:n.id,target:l.to,type:'abc'});
+      else BASE_LINKS.push({source:n.id,target:l.to,type:l.t==='cons'?'consortium':l.t==='c'?'coordinates':'knows'});
+    }
+  });
+});
+
+// ── TOUR STEPS ───────────────────────────────────────────────
+const STEPS = [
+  {
+    label:'01 — Actor mapping',
+    text:'Every humanitarian actor in Somali Region, mapped by type and placed in their coordination category.',
+    highlight: null, // all visible
+    dimAll: false,
+    showABC: false,
+    openPanel: null,
+  },
+  {
+    label:'02 — Consortium links',
+    text:'ACF leads the Somali Nutrition Consortium with IRC and Save the Children. Gold links show formal consortium relationships.',
+    highlight: ['acf','irc','save'],
+    highlightLinks: ['consortium'],
+    dimAll: true,
+    showABC: false,
+    openPanel: null,
+  },
+  {
+    label:'03 — Cluster coordination',
+    text:'The Nutrition Cluster connects 8 implementing partners. One weekly meeting — but no link to WASH or Health clusters.',
+    highlight: ['cl_nut','unicef','acf','irc','save','wfp','wv','ado','ocha'],
+    highlightLinks: ['coordinates'],
+    highlightSource: 'cl_nut',
+    dimAll: true,
+    showABC: false,
+    openPanel: null,
+  },
+  {
+    label:'04 — Actor profile',
+    text:'Click any actor to open their full profile — sectors, zones of activity, contacts, field note.',
+    highlight: ['ocha'],
+    dimAll: true,
+    showABC: false,
+    openPanel: 'ocha',
+  },
+  {
+    label:'05 — ABC Layer',
+    text:'Activate the ABC layer. Geographic zone nodes appear and bridge actors operating in the same area across cluster silos.',
+    highlight: null,
+    dimAll: false,
+    showABC: true,
+    openPanel: null,
+  },
+];
+
+// ── STATE ────────────────────────────────────────────────────
+let currentStep = 0;
+let W = 0, H = 0;
+
+// ── PANEL ────────────────────────────────────────────────────
+function closePanel(){ document.getElementById('panel').classList.remove('open'); }
+
+function openPanel(id){
+  const d = NODES.find(n=>n.id===id); if(!d) return;
+  document.getElementById('panel').classList.add('open');
+  const tc = TC[d.type]||'#fff';
+  document.getElementById('ptype').style.color = tc;
+  document.getElementById('ptype').textContent =
+    d.type==='abc'?'ABC · AREA-BASED COORDINATION':
+    d.type==='nngo'?'CSO / NNGO':
+    d.type==='cluster'?'CLUSTER':d.type.toUpperCase();
+  document.getElementById('pname').textContent = d.name;
+  const pill = document.getElementById('pspill');
+  if(d.type==='abc'){
+    pill.textContent='Geographic node';
+    pill.style.cssText='background:rgba(201,168,76,0.1);color:#C9A84C;border:1px solid rgba(201,168,76,0.22)';
+  } else {
+    const c=sc(d.score);
+    pill.textContent=d.score;
+    pill.style.cssText=`background:${c}18;color:${c};border:1px solid ${c}33`;
+  }
+  let html='';
+  if(d.sectors&&d.sectors.length){
+    html+=`<div class="psec"><div class="psec-lbl">// sectors</div><div class="pmoons">${d.sectors.map(s=>{const c=SECTOR_COLOR[s]||'#888';return`<div class="pmoon-item"><div class="pmoon-dot" style="background:${c}"></div><span class="pmoon-lbl">${s}</span></div>`;}).join('')}</div></div>`;
+  }
+  html+=`<div class="psec"><div class="psec-lbl">// zones of activity</div><div class="pzones">${(d.zones||[]).map(z=>`<div class="pzrow"><div class="pzdot"></div><span class="pzlbl">${z}</span></div>`).join('')}</div></div>`;
+  if(d.contacts&&d.contacts.length){
+    html+=`<div class="psec"><div class="psec-lbl">// contacts</div><div class="pcontacts">${d.contacts.map(c=>`<div class="pcontact"><div class="pcontact-name">${c.name}</div><div class="pcontact-role">${c.role}</div><div class="pcontact-email">${c.email}</div></div>`).join('')}</div></div>`;
+  }
+  if(d.type!=='abc'){
+    const cl=(d.links||[]).filter(l=>l.t!=='a').slice(0,5).map(l=>({n:NODES.find(x=>x.id===l.to),t:l.t==='cons'?'consortium':l.t==='c'?'coordinates':'knows'})).filter(x=>x.n);
+    if(cl.length) html+=`<div class="psec"><div class="psec-lbl">// coordination links</div><div class="plinks">${cl.map(l=>`<div class="plrow"><div style="width:6px;height:6px;border-radius:50%;background:${TC[l.n.type]||'#fff'};flex-shrink:0"></div><span class="plname">${l.n.name}</span><span class="pltype">${l.t}</span></div>`).join('')}</div></div>`;
+  } else {
+    const bridges=(d.links||[]).filter(l=>l.t==='a').map(l=>NODES.find(n=>n.id===l.to)).filter(Boolean);
+    if(bridges.length) html+=`<div class="psec"><div class="psec-lbl">// actors bridged</div><div class="plinks">${bridges.map(b=>`<div class="plrow"><div style="width:6px;height:6px;border-radius:50%;background:${TC[b.type]||'#fff'};flex-shrink:0"></div><span class="plname">${b.name}</span><span class="pltype">${b.type}</span></div>`).join('')}</div></div>`;
+  }
+  if(d.note) html+=`<div class="psec"><div class="psec-lbl">// field note</div><div class="pnote">${d.note}</div></div>`;
+  document.getElementById('pbody').innerHTML=html;
+}
+
+// ── TOUR NAV ─────────────────────────────────────────────────
+function goToStep(i){
+  currentStep = Math.max(0, Math.min(STEPS.length-1, i));
+  updateTourUI();
+  applyStep();
+}
+function nextStep(){ goToStep(currentStep+1); }
+function prevStep(){ goToStep(currentStep-1); }
+
+function updateTourUI(){
+  const step = STEPS[currentStep];
+  document.getElementById('tour-label').textContent = step.label;
+  document.getElementById('tour-text').textContent = step.text;
+  document.getElementById('tour-counter').textContent = `${currentStep+1} / ${STEPS.length}`;
+
+  // Dots
+  const dotsEl = document.getElementById('tour-dots');
+  dotsEl.innerHTML = '';
+  STEPS.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'tour-step-dot' + (i===currentStep?' active':i<currentStep?' done':'');
+    d.onclick = ()=>goToStep(i);
+    dotsEl.appendChild(d);
+  });
+
+  // Buttons
+  document.getElementById('btn-prev').style.opacity = currentStep===0?'0.3':'1';
+  document.getElementById('btn-prev').style.pointerEvents = currentStep===0?'none':'auto';
+  const nextBtn = document.getElementById('btn-next');
+  if(currentStep===STEPS.length-1){
+    nextBtn.textContent='Explore freely';
+    nextBtn.className='tour-btn done-btn';
+    nextBtn.onclick=()=>{ closePanel(); applyStep(); };
+  } else {
+    nextBtn.textContent='Next →';
+    nextBtn.className='tour-btn primary';
+    nextBtn.onclick=nextStep;
+  }
+}
+
+// ── APPLY STEP ───────────────────────────────────────────────
+function applyStep(){
+  const step = STEPS[currentStep];
+  const showABC = step.showABC;
+  const highlightIds = step.highlight ? new Set(step.highlight) : null;
+
+  // ABC links visibility
+  d3.selectAll('.abc-link')
+    .transition().duration(500)
+    .style('opacity', showABC ? 0.55 : 0);
+
+  d3.selectAll('.abc-node')
+    .transition().duration(500)
+    .style('opacity', showABC ? 1 : 0);
+
+  // Nodes
+  d3.selectAll('.node-g').each(function(d){
+    const isABC = d.abc;
+    if(isABC){ return; } // handled above
+    let opacity;
+    if(!step.dimAll || !highlightIds){
+      opacity = 1;
+    } else {
+      opacity = highlightIds.has(d.id) ? 1 : 0.12;
+    }
+    d3.select(this).transition().duration(400).style('opacity', opacity);
+  });
+
+  // Links
+  d3.selectAll('.base-link').each(function(d){
+    let opacity;
+    if(!step.dimAll || !highlightIds){
+      opacity = d.type==='consortium'?0.6:d.type==='coordinates'?0.14:0.07;
+    } else {
+      // Show only links between highlighted nodes AND of the right type
+      const srcId = typeof d.source==='string'?d.source:d.source.id;
+      const tgtId = typeof d.target==='string'?d.target:d.target.id;
+      const srcHL = highlightIds.has(srcId);
+      const tgtHL = highlightIds.has(tgtId);
+      const bothHL = srcHL && tgtHL;
+      // For step 3 (cluster): only show links FROM cl_nut
+      if(step.highlightSource){
+        const isFromSource = srcId===step.highlightSource || tgtId===step.highlightSource;
+        opacity = (bothHL && isFromSource) ? (d.type==='consortium'?0.7:0.5) : 0.04;
+      } else if(step.highlightLinks){
+        opacity = (bothHL && step.highlightLinks.includes(d.type)) ? 0.8 : 0.04;
+      } else {
+        opacity = bothHL ? 0.5 : 0.04;
+      }
+    }
+    d3.select(this).transition().duration(400).style('opacity', opacity);
+  });
+
+  // Open panel
+  if(step.openPanel){
+    setTimeout(()=>openPanel(step.openPanel), 500);
+  } else {
+    closePanel();
+  }
+}
+
+// ── GEOMETRY ─────────────────────────────────────────────────
+function nodeR(d){
+  if(d.type==='abc') return 0;
+  if(d.type==='cluster') return 20;
+  if(d.id==='ocha') return 18;
+  if(d.type==='un') return 15;
+  if(d.score>=83) return 14;
+  if(d.score>=70) return 12;
+  return 11;
+}
+
+function moonPositions(sectors, r){
+  const n=sectors.length; if(!n) return [];
+  const orbitR=r+11;
+  return sectors.map((s,i)=>{
+    const frac=n===1?0.5:i/(n-1);
+    const angle=(frac*Math.PI*1.6)-Math.PI*0.8-Math.PI/2;
+    return { x:orbitR*Math.cos(angle), y:orbitR*Math.sin(angle), r:3.5, color:SECTOR_COLOR[s]||'#888' };
+  });
+}
+
+function placeNodes(W, H){
+  const PAD=44;
+  function bounds(z){
+    return { x0:z.x0*W+PAD, y0:z.y0*H+PAD, x1:z.x1*W-PAD, y1:z.y1*H-PAD };
+  }
+  const groups={government:[],un:[],donor:[],ingo:[],nngo:[],cluster:[]};
+  NODES.filter(n=>!n.abc).forEach(n=>{ if(groups[n.type]) groups[n.type].push(n); });
+
+  Object.entries(groups).forEach(([key,nodes])=>{
+    if(!nodes.length) return;
+    const b=bounds(ZONES[key]||ZONES.cluster);
+    const zW=b.x1-b.x0, zH=b.y1-b.y0;
+    const cols=Math.max(1,Math.ceil(Math.sqrt(nodes.length*(zW/Math.max(zH,1)))));
+    const rows=Math.ceil(nodes.length/cols);
+    nodes.forEach((n,i)=>{
+      n.x=b.x0+(zW/cols)*((i%cols)+0.5);
+      n.y=b.y0+(zH/rows)*(Math.floor(i/cols)+0.5);
+    });
+  });
+
+  const abcPos=[{x:W*0.16,y:H*0.52},{x:W*0.38,y:H*0.80},{x:W*0.62,y:H*0.80},{x:W*0.84,y:H*0.52}];
+  NODES.filter(n=>n.abc).forEach((n,i)=>{ const p=abcPos[i]||{x:W/2,y:H/2}; n.x=p.x; n.y=p.y; });
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function render(){
+  const svg=d3.select('#svg');
+  svg.selectAll('*').remove();
+  W=svg.node().clientWidth||900;
+  H=svg.node().clientHeight||580;
+
+  placeNodes(W, H);
+
+  const defs=svg.append('defs');
+  [['gn','34,197,94'],['gw','74,158,255'],['gh','167,139,250'],['ga','201,168,76']].forEach(([id,rgb])=>{
+    defs.append('filter').attr('id','gf_'+id).html(`<feGaussianBlur stdDeviation="4" result="b"/><feFlood flood-color="rgba(${rgb},0.28)" result="c"/><feComposite in="c" in2="b" operator="in" result="s"/><feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge>`);
+  });
+  // Highlight glow
+  defs.append('filter').attr('id','gf_hl').html(`<feGaussianBlur stdDeviation="6" result="b"/><feFlood flood-color="rgba(201,168,76,0.5)" result="c"/><feComposite in="c" in2="b" operator="in" result="s"/><feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge>`);
+
+  const g=svg.append('g');
+  svg.call(d3.zoom().scaleExtent([0.2,3]).on('zoom',e=>g.attr('transform',e.transform)));
+  svg.on('click',()=>closePanel());
+
+  // Zone backgrounds
+  const zoneDefs=[
+    { z:ZONES.government, label:'GOVERNMENT',    stroke:'rgba(249,115,22,0.18)',  fill:'rgba(249,115,22,0.04)' },
+    { z:ZONES.un,         label:'UN AGENCIES',   stroke:'rgba(167,139,250,0.18)', fill:'rgba(167,139,250,0.04)' },
+    { z:ZONES.donor,      label:'DONORS',        stroke:'rgba(245,158,11,0.18)',  fill:'rgba(245,158,11,0.04)' },
+    { z:ZONES.ingo,       label:'INGO',          stroke:'rgba(74,158,255,0.18)',  fill:'rgba(74,158,255,0.04)' },
+    { z:ZONES.nngo,       label:'CSO / NNGO',    stroke:'rgba(52,211,153,0.18)',  fill:'rgba(52,211,153,0.04)' },
+    { z:ZONES.cluster,    label:'CLUSTERS',      stroke:'rgba(255,255,255,0.07)', fill:'rgba(255,255,255,0.02)' },
+  ];
+  const zg=g.append('g').attr('pointer-events','none');
+  zoneDefs.forEach(({z,label,stroke,fill})=>{
+    const x=z.x0*W+3, y=z.y0*H+3, w=(z.x1-z.x0)*W-6, h=(z.y1-z.y0)*H-6;
+    zg.append('rect').attr('x',x).attr('y',y).attr('width',w).attr('height',h).attr('rx',3)
+      .attr('fill',fill).attr('stroke',stroke).attr('stroke-width',0.5).attr('stroke-dasharray','5 4');
+    zg.append('text').attr('x',x+10).attr('y',y+15)
+      .attr('font-family','IBM Plex Mono, monospace').attr('font-size',9).attr('letter-spacing','0.1em')
+      .attr('fill',stroke).text(label);
+  });
+
+  const nodeById=new Map(NODES.map(n=>[n.id,n]));
+
+  // Base links
+  const lg=g.append('g');
+  lg.selectAll('line.base-link').data(BASE_LINKS).join('line')
+    .attr('class','base-link')
+    .attr('x1',d=>nodeById.get(d.source)?.x||0).attr('y1',d=>nodeById.get(d.source)?.y||0)
+    .attr('x2',d=>nodeById.get(d.target)?.x||0).attr('y2',d=>nodeById.get(d.target)?.y||0)
+    .attr('stroke',d=>d.type==='consortium'?'rgba(201,168,76,0.65)':d.type==='coordinates'?'rgba(255,255,255,0.14)':'rgba(255,255,255,0.07)')
+    .attr('stroke-width',d=>d.type==='consortium'?2:0.7)
+    .attr('stroke-dasharray',d=>d.type==='knows'?'4 3':null);
+
+  // ABC links
+  lg.selectAll('line.abc-link').data(ABC_LINKS).join('line')
+    .attr('class','abc-link')
+    .attr('x1',d=>nodeById.get(d.source)?.x||0).attr('y1',d=>nodeById.get(d.source)?.y||0)
+    .attr('x2',d=>nodeById.get(d.target)?.x||0).attr('y2',d=>nodeById.get(d.target)?.y||0)
+    .attr('stroke','#C9A84C').attr('stroke-width',1.5)
+    .style('opacity',0);
+
+  // Non-ABC nodes
+  const ng=g.append('g');
+  const nSel=ng.selectAll('g.node-g').data(NODES.filter(n=>!n.abc)).join('g')
+    .attr('class','node-g')
+    .attr('transform',d=>`translate(${d.x},${d.y})`)
+    .style('cursor','pointer')
+    .on('click',(e,d)=>{e.stopPropagation();openPanel(d.id);});
+
+  // Cluster glow ring
+  nSel.filter(d=>d.type==='cluster').append('circle')
+    .attr('r',d=>nodeR(d)+12).attr('fill','none')
+    .attr('stroke',d=>d.id==='cl_nut'?'rgba(34,197,94,0.1)':d.id==='cl_wsh'?'rgba(74,158,255,0.1)':'rgba(167,139,250,0.1)')
+    .attr('stroke-width',1).attr('pointer-events','none');
+
+  // Score ring
+  nSel.filter(d=>d.type!=='cluster').append('circle')
+    .attr('r',d=>nodeR(d)+3.5).attr('fill','none')
+    .attr('stroke',d=>sc(d.score)).attr('stroke-width',1.2).attr('opacity',0.35).attr('pointer-events','none');
+
+  // Main circle
+  nSel.append('circle')
+    .attr('r',nodeR)
+    .attr('fill',d=>d.type==='cluster'?'rgba(255,255,255,0.055)':'rgba(255,255,255,0.038)')
+    .attr('stroke',d=>TC[d.type]||'#fff')
+    .attr('stroke-width',d=>d.type==='cluster'?1.5:0.8)
+    .attr('filter',d=>d.id==='cl_nut'?'url(#gf_gn)':d.id==='cl_wsh'?'url(#gf_gw)':d.id==='cl_hlt'?'url(#gf_gh)':null);
+
+  // Moons
+  nSel.filter(d=>d.sectors&&d.sectors.length>0).each(function(d){
+    const r=nodeR(d);
+    moonPositions(d.sectors,r).forEach(m=>{
+      d3.select(this).append('circle')
+        .attr('cx',m.x).attr('cy',m.y).attr('r',m.r)
+        .attr('fill',m.color).attr('opacity',0.88).attr('pointer-events','none');
+    });
+  });
+
+  // Name
+  nSel.append('text')
+    .attr('text-anchor','middle').attr('dominant-baseline','central').attr('y',-2)
+    .attr('font-size',d=>d.type==='cluster'?9:8.5)
+    .attr('font-weight',d=>d.type==='cluster'?'500':'400')
+    .attr('font-family','Inter, sans-serif')
+    .attr('fill',d=>d.type==='cluster'?'rgba(255,255,255,0.88)':'rgba(255,255,255,0.7)')
+    .attr('pointer-events','none')
+    .text(d=>{ const w=d.name.split(' '); return d.name.length>14?w.slice(0,2).join(' '):d.name; });
+
+  // Type sublabel
+  nSel.filter(d=>d.type!=='cluster').append('text')
+    .attr('text-anchor','middle').attr('y',d=>nodeR(d)+13)
+    .attr('font-size',7).attr('font-family','IBM Plex Mono, monospace')
+    .attr('fill',d=>TC[d.type]||'#fff').attr('opacity',0.5).attr('pointer-events','none')
+    .text(d=>d.type==='nngo'?'CSO/NNGO':d.type.toUpperCase());
+
+  // Score badge
+  nSel.filter(d=>d.type!=='cluster').append('circle')
+    .attr('cx',d=>nodeR(d)*0.72).attr('cy',d=>-nodeR(d)*0.72).attr('r',7.5)
+    .attr('fill',d=>sc(d.score)).attr('stroke','#080c11').attr('stroke-width',1.5).attr('pointer-events','none');
+  nSel.filter(d=>d.type!=='cluster').append('text')
+    .attr('x',d=>nodeR(d)*0.72).attr('y',d=>-nodeR(d)*0.72)
+    .attr('text-anchor','middle').attr('dominant-baseline','central')
+    .attr('font-size',6.5).attr('font-weight','500').attr('font-family','IBM Plex Mono, monospace')
+    .attr('fill','#fff').attr('pointer-events','none').text(d=>d.score);
+
+  // ABC nodes
+  const abcG=g.append('g');
+  const abcSel=abcG.selectAll('g.abc-node').data(NODES.filter(n=>n.abc)).join('g')
+    .attr('class','abc-node')
+    .attr('transform',d=>`translate(${d.x},${d.y})`)
+    .style('cursor','pointer')
+    .style('opacity',0)
+    .on('click',(e,d)=>{e.stopPropagation();openPanel(d.id);});
+
+  abcSel.append('rect')
+    .attr('width',26).attr('height',26).attr('x',-13).attr('y',-13).attr('rx',2)
+    .attr('transform','rotate(45)')
+    .attr('fill','rgba(201,168,76,0.09)').attr('stroke','#C9A84C').attr('stroke-width',1.5)
+    .attr('filter','url(#gf_ga)');
+  abcSel.append('rect')
+    .attr('width',40).attr('height',40).attr('x',-20).attr('y',-20).attr('rx',2)
+    .attr('transform','rotate(45)').attr('fill','none')
+    .attr('stroke','rgba(201,168,76,0.15)').attr('stroke-width',1).attr('pointer-events','none');
+  abcSel.append('text')
+    .attr('text-anchor','middle').attr('dominant-baseline','central').attr('y',-1)
+    .attr('font-size',8).attr('font-family','Inter, sans-serif')
+    .attr('fill','#C9A84C').attr('pointer-events','none')
+    .text(d=>d.name);
+
+  // Fade in
+  nSel.style('opacity',0).transition().delay((_,i)=>i*14).duration(350).style('opacity',1);
+
+  // Apply initial step after render
+  setTimeout(()=>applyStep(), 400);
+}
+
+// ── INIT ────────────────────────────────────────────────────
+updateTourUI();
+render();
+window.addEventListener('resize',()=>render());
+</script>
+</body>
+</html>
