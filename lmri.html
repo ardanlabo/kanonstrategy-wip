@@ -310,12 +310,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
 
 // ADM2 zone mesh - visible woreda borders
 L.geoJSON(GEO_ADM2,{
-  style:{fillColor:'rgba(240,236,228,0.04)',color:'rgba(80,70,60,0.5)',weight:0.8,fillOpacity:1}
+  style:{fillColor:'transparent',color:'rgba(60,50,40,0.35)',weight:0.5,fillOpacity:0}
 }).addTo(map);
 
 // ADM1 region borders - bold black
 L.geoJSON(GEO_ADM1,{
-  style:{fillColor:'transparent',color:'#111',weight:3.5,fillOpacity:0,opacity:0.85}
+  style:{fillColor:'transparent',color:'#8B0000',weight:2,fillOpacity:0,opacity:0.7}
 }).addTo(map);
 
 // High-risk woreda polygons
