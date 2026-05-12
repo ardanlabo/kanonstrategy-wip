@@ -13,7 +13,7 @@
 <style>
 :root{
   --void:#0D1117;--navy:#0F2952;--gold:#C9A84C;--gold-d:#A8863A;
-  --ink:#1A1C1E;--mid:#3D4149;--muted:#6B7280;--rule:#C4C7CE;
+  --ink:#1A1C1E;--muted:#6B7280;--rule:#C4C7CE;
   --critical:#C0392B;--high:#E67E22;--green:#22c55e;
   --serif:'IBM Plex Serif',Georgia,serif;
   --sans:'Inter',system-ui,sans-serif;
@@ -23,7 +23,6 @@
 html,body{height:100%;overflow:hidden;}
 body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
 
-/* TOPBAR */
 .topbar{height:48px;flex-shrink:0;background:#0a0e15;border-bottom:0.5px solid rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1001;}
 .tl{display:flex;align-items:center;gap:14px;}
 .t-logo{display:flex;align-items:center;gap:10px;}
@@ -32,11 +31,9 @@ body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoo
 .t-div{width:0.5px;height:20px;background:rgba(255,255,255,0.08);}
 .t-product{font-family:var(--serif);font-weight:300;font-size:13px;color:rgba(255,255,255,0.55);}
 .t-ctx{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.1em;}
-.tr{display:flex;align-items:center;gap:16px;}
 .t-back{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.2s;}
 .t-back:hover{color:rgba(201,168,76,0.7);}
 
-/* REGION BAR */
 .region-bar{height:36px;flex-shrink:0;background:#0a0e15;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;padding:0 20px;gap:6px;overflow-x:auto;}
 .region-bar::-webkit-scrollbar{display:none;}
 .rb-label{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:rgba(255,255,255,0.18);text-transform:uppercase;margin-right:4px;white-space:nowrap;flex-shrink:0;}
@@ -45,124 +42,105 @@ body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoo
 .rb-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
 .rb-sep{width:1px;height:16px;background:rgba(255,255,255,0.06);flex-shrink:0;margin:0 4px;}
 
-/* BODY */
 .body-wrap{flex:1;display:flex;overflow:hidden;position:relative;}
 #map{flex:1;z-index:1;}
 
 /* SIDEBAR */
-.sidebar{
-  width:300px;flex-shrink:0;
-  background:#0a0e15;
-  border-left:0.5px solid rgba(255,255,255,0.07);
-  display:flex;flex-direction:column;overflow:hidden;
-  z-index:1000;
-}
-.sb-section{padding:12px 14px;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.sidebar{width:300px;flex-shrink:0;background:#0a0e15;border-left:0.5px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;overflow:hidden;z-index:1000;}
+.sb-top{padding:12px 14px;border-bottom:0.5px solid rgba(255,255,255,0.06);}
 .sb-label{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:rgba(201,168,76,0.4);text-transform:uppercase;margin-bottom:8px;}
-
-/* KPI */
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.05);}
-.kpi-cell{background:#0a0e15;padding:10px 12px;}
-.kpi-num{font-family:var(--mono);font-size:20px;font-weight:500;line-height:1;margin-bottom:3px;}
+.kpi-cell{background:#0a0e15;padding:9px 11px;}
+.kpi-num{font-family:var(--mono);font-size:20px;font-weight:500;line-height:1;margin-bottom:2px;}
 .kpi-lbl{font-family:var(--sans);font-size:9px;color:rgba(255,255,255,0.25);line-height:1.3;}
 
-/* WOREDA LIST */
+.wl-header{padding:7px 14px;font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(255,255,255,0.2);text-transform:uppercase;background:#080c12;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;}
+.wl-count{color:rgba(201,168,76,0.5);}
 .woreda-list{flex:1;overflow-y:auto;}
 .woreda-list::-webkit-scrollbar{width:3px;}
 .woreda-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
-.wl-header{padding:8px 14px;font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(255,255,255,0.2);text-transform:uppercase;background:#080c12;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;}
-.wl-count{color:rgba(201,168,76,0.5);}
-.wl-item{padding:10px 14px;border-bottom:0.5px solid rgba(255,255,255,0.05);cursor:pointer;transition:background 0.12s;display:flex;align-items:center;gap:10px;}
+.wl-item{padding:9px 14px;border-bottom:0.5px solid rgba(255,255,255,0.05);cursor:pointer;transition:background 0.12s;display:flex;align-items:center;gap:9px;}
 .wl-item:hover{background:rgba(255,255,255,0.03);}
 .wl-item.selected{background:rgba(201,168,76,0.06);border-left:2px solid var(--gold);}
 .wl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .wl-info{flex:1;min-width:0;}
 .wl-name{font-family:var(--sans);font-size:11px;font-weight:500;color:rgba(255,255,255,0.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.wl-region{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px;}
+.wl-sub{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.22);margin-top:1px;}
 .wl-score{font-family:var(--mono);font-size:11px;font-weight:500;flex-shrink:0;}
 
-/* DETAIL DRAWER */
-.detail-drawer{
-  position:absolute;bottom:48px;left:0;right:300px;
-  background:#0c111a;
-  border-top:2px solid var(--gold);
-  transform:translateY(100%);
-  transition:transform 0.25s ease;
-  z-index:999;
-  max-height:45%;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.4);
-}
-.detail-drawer.open{transform:translateY(0);}
-.dd-header{padding:10px 18px;border-bottom:0.5px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;}
-.dd-title{font-family:var(--serif);font-weight:300;font-size:15px;color:#fff;}
-.dd-meta{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px;}
-.dd-close{font-size:14px;color:rgba(255,255,255,0.2);cursor:pointer;padding:2px 6px;transition:color 0.15s;}
-.dd-close:hover{color:#fff;}
-.dd-body{padding:14px 18px;overflow-y:auto;max-height:calc(45vh - 48px);display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.dd-score-block{display:flex;flex-direction:column;gap:4px;}
-.dd-score-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(201,168,76,0.4);text-transform:uppercase;}
-.dd-score-val{font-family:var(--mono);font-size:28px;font-weight:500;line-height:1;}
-.dd-score-sub{font-family:var(--sans);font-size:10px;color:rgba(255,255,255,0.3);}
-.dd-chain{display:flex;flex-direction:column;gap:6px;}
-.dd-chain-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(201,168,76,0.4);text-transform:uppercase;margin-bottom:4px;}
-.dd-chain-node{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;background:rgba(255,255,255,0.03);border-left:1.5px solid rgba(255,255,255,0.08);}
-.dd-chain-node.active-chain{border-left-color:var(--gold);background:rgba(201,168,76,0.05);}
-.dd-chain-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:3px;}
-.dd-chain-org{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.7);}
-.dd-chain-role{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px;}
-.dd-chain-arrow{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.12);padding:2px 12px;}
-.dd-action{grid-column:1/-1;background:rgba(201,168,76,0.04);border:0.5px solid rgba(201,168,76,0.15);border-left:2px solid var(--gold);padding:10px 14px;}
-.dd-action-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:rgba(201,168,76,0.6);text-transform:uppercase;margin-bottom:5px;}
-.dd-action-text{font-family:var(--sans);font-size:11px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;}
+/* DETAIL PANEL */
+.detail-panel{position:absolute;bottom:48px;left:0;right:300px;background:#0c111a;border-top:2px solid var(--gold);transform:translateY(100%);transition:transform 0.25s ease;z-index:999;max-height:50%;box-shadow:0 -4px 20px rgba(0,0,0,0.5);display:flex;flex-direction:column;}
+.detail-panel.open{transform:translateY(0);}
+.dp-header{padding:10px 18px;border-bottom:0.5px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0;}
+.dp-title{font-family:var(--serif);font-weight:300;font-size:15px;color:#fff;}
+.dp-meta{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px;}
+.dp-close{font-size:14px;color:rgba(255,255,255,0.2);cursor:pointer;padding:2px 6px;margin-left:12px;}
+.dp-close:hover{color:#fff;}
+.dp-body{overflow-y:auto;flex:1;display:grid;grid-template-columns:200px 1fr 1fr;gap:0;}
+.dp-col{padding:14px 16px;border-right:0.5px solid rgba(255,255,255,0.05);}
+.dp-col:last-child{border-right:none;}
+.dp-col-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(201,168,76,0.4);text-transform:uppercase;margin-bottom:10px;}
+
+/* LMRI score display */
+.dp-score-big{font-family:var(--mono);font-size:36px;font-weight:500;line-height:1;margin-bottom:4px;}
+.dp-score-risk{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;margin-bottom:12px;}
+.dp-metric{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);}
+.dp-metric:last-child{border-bottom:none;}
+.dp-metric-lbl{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3);}
+.dp-metric-val{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.7);}
+
+/* Facility list */
+.fac-item{padding:7px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;gap:8px;}
+.fac-item:last-child{border-bottom:none;}
+.fac-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.fac-name{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.7);flex:1;min-width:0;}
+.fac-days{font-family:var(--mono);font-size:9px;flex-shrink:0;}
+.fac-tag{font-family:var(--mono);font-size:8px;padding:1px 5px;margin-left:4px;}
+
+/* Chain */
+.chain-node{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);}
+.chain-node:last-child{border-bottom:none;}
+.chain-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.chain-org{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.7);}
+.chain-role{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px;}
+.chain-arrow{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.12);padding:2px 10px 2px 14px;}
+
+/* Action box */
+.action-box{margin:10px 0 0;background:rgba(201,168,76,0.04);border:0.5px solid rgba(201,168,76,0.15);border-left:2px solid var(--gold);padding:9px 12px;}
+.action-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(201,168,76,0.6);text-transform:uppercase;margin-bottom:4px;}
+.action-txt{font-family:var(--sans);font-size:11px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;}
 
 /* TOUR */
-.tour-bar{
-  position:absolute;bottom:0;left:0;right:300px;
-  background:rgba(10,14,21,0.97);
-  border-top:0.5px solid rgba(255,255,255,0.07);
-  padding:9px 18px;
-  display:flex;align-items:center;justify-content:space-between;
-  z-index:998;height:48px;
-}
-.tour-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.tour-bar{position:absolute;bottom:0;left:0;right:300px;background:rgba(10,14,21,0.97);border-top:0.5px solid rgba(255,255,255,0.07);padding:8px 18px;display:flex;align-items:center;justify-content:space-between;z-index:998;height:48px;}
 .tdots{display:flex;gap:5px;}
 .tdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer;transition:all 0.2s;}
 .tdot.active{background:var(--gold);}
 .tdot.done{background:rgba(201,168,76,0.35);}
 .t-ctr{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.18);}
-.tour-msg{flex:1;padding:0 16px;}
+.tour-msg{flex:1;padding:0 14px;}
 .t-lbl{font-family:var(--mono);font-size:9px;color:rgba(201,168,76,0.6);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1px;}
 .t-txt{font-family:var(--sans);font-size:11px;font-weight:300;color:rgba(255,255,255,0.5);}
 .tour-btns{display:flex;gap:7px;flex-shrink:0;}
 .tbtn{font-family:var(--mono);font-size:10px;letter-spacing:0.07em;padding:4px 12px;cursor:pointer;transition:all 0.2s;border:0.5px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.3);}
-.tbtn:hover{color:rgba(255,255,255,0.6);}
 .tbtn.primary{border-color:rgba(201,168,76,0.4);color:var(--gold);background:rgba(201,168,76,0.05);}
 .tbtn.done{border-color:rgba(34,197,94,0.4);color:#22c55e;}
 
-/* MAP LEGEND */
-.map-legend{
-  position:absolute;bottom:60px;left:12px;
-  background:rgba(255,255,255,0.95);
-  border:1px solid #ddd;
-  padding:10px 12px;
-  z-index:999;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);
-  pointer-events:none;
-}
-.ml-title{font-family:var(--mono);font-size:8px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
-.ml-row{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
-.ml-swatch{width:14px;height:10px;border:0.5px solid rgba(0,0,0,0.2);}
+/* Map legend */
+.map-legend{position:absolute;bottom:60px;left:12px;background:rgba(255,255,255,0.96);border:1px solid #ddd;padding:10px 12px;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,0.15);pointer-events:none;}
+.ml-title{font-family:var(--mono);font-size:8px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:7px;}
+.ml-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.ml-swatch{width:16px;height:12px;border:0.5px solid rgba(0,0,0,0.15);}
 .ml-lbl{font-family:var(--mono);font-size:9px;color:#444;}
 
-/* Leaflet popup override */
+/* Popup */
 .leaflet-popup-content-wrapper{background:#0c111a;border:0.5px solid rgba(201,168,76,0.25);border-radius:0;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
 .leaflet-popup-tip{background:#0c111a;}
 .leaflet-popup-content{color:#fff;font-family:'Inter',sans-serif;font-size:12px;margin:10px 14px;}
-.lp-name{font-family:'IBM Plex Serif',serif;font-size:14px;font-weight:300;margin-bottom:4px;}
-.lp-region{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);margin-bottom:8px;}
-.lp-score{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:500;}
-.lp-risk{font-family:'IBM Plex Mono',monospace;font-size:9px;margin-top:3px;}
-.lp-fac{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-top:6px;}
+.lp-name{font-family:'IBM Plex Serif',serif;font-size:14px;font-weight:300;margin-bottom:3px;}
+.lp-sub{font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,255,255,0.3);margin-bottom:7px;letter-spacing:0.08em;}
+.lp-score{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;}
+.lp-risk{font-family:'IBM Plex Mono',monospace;font-size:9px;margin-top:2px;letter-spacing:0.08em;}
+.lp-hint{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,0.3);margin-top:7px;}
 </style>
 </head>
 <body>
@@ -186,12 +164,11 @@ body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoo
     <span class="t-product">Last Mile Risk Index</span>
     <span class="t-ctx">// ETHIOPIA · LMRI T2 · MARCH 2026</span>
   </div>
-  <div class="tr">
+  <div style="display:flex;align-items:center;gap:12px">
     <a href="index.html" class="t-back">← Back</a>
   </div>
 </div>
 
-<!-- REGION BAR -->
 <div class="region-bar">
   <span class="rb-label">Region</span>
   <button class="rb-btn active" data-region="all">All Ethiopia</button>
@@ -207,48 +184,43 @@ body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoo
 <div class="body-wrap">
   <div id="map"></div>
 
-  <!-- LEGEND -->
   <div class="map-legend">
     <div class="ml-title">LMRI Score</div>
     <div class="ml-row"><div class="ml-swatch" style="background:rgba(192,57,43,0.85)"></div><span class="ml-lbl">Critical ≥ 0.75</span></div>
-    <div class="ml-row"><div class="ml-swatch" style="background:rgba(230,126,34,0.8)"></div><span class="ml-lbl">High 0.50–0.74</span></div>
-    <div class="ml-row"><div class="ml-swatch" style="background:rgba(200,200,200,0.4)"></div><span class="ml-lbl">Below threshold</span></div>
+    <div class="ml-row"><div class="ml-swatch" style="background:rgba(230,126,34,0.75)"></div><span class="ml-lbl">High 0.50–0.74</span></div>
+    <div class="ml-row"><div class="ml-swatch" style="background:rgba(180,180,180,0.25)"></div><span class="ml-lbl">Below threshold</span></div>
   </div>
 
-  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sb-section">
-      <div class="sb-label">// Summary — LMRI &gt; 0.5</div>
+    <div class="sb-top">
+      <div class="sb-label">// LMRI &gt; 0.5 · Real data</div>
       <div class="kpi-grid">
-        <div class="kpi-cell"><div class="kpi-num" id="kpi-total" style="color:var(--gold)">17</div><div class="kpi-lbl">Woredas at risk</div></div>
-        <div class="kpi-cell"><div class="kpi-num" id="kpi-critical" style="color:var(--critical)">8</div><div class="kpi-lbl">Critical ≥ 0.75</div></div>
-        <div class="kpi-cell"><div class="kpi-num" id="kpi-no-ngo" style="color:#ef4444">14</div><div class="kpi-lbl">No NGO support</div></div>
-        <div class="kpi-cell"><div class="kpi-num" id="kpi-fac" style="color:rgba(255,255,255,0.6)">201</div><div class="kpi-lbl">Facilities uncovered</div></div>
+        <div class="kpi-cell"><div class="kpi-num" id="k-total" style="color:var(--gold)">—</div><div class="kpi-lbl">Woredas at risk</div></div>
+        <div class="kpi-cell"><div class="kpi-num" id="k-crit" style="color:var(--critical)">—</div><div class="kpi-lbl">Critical ≥ 0.75</div></div>
+        <div class="kpi-cell"><div class="kpi-num" id="k-nongo" style="color:#ef4444">—</div><div class="kpi-lbl">No NGO support</div></div>
+        <div class="kpi-cell"><div class="kpi-num" id="k-fac" style="color:rgba(255,255,255,0.55)">—</div><div class="kpi-lbl">Facilities uncovered</div></div>
       </div>
     </div>
-
     <div class="wl-header">
       <span>Woredas at risk</span>
-      <span class="wl-count" id="wl-count">17</span>
+      <span class="wl-count" id="wl-count">—</span>
     </div>
     <div class="woreda-list" id="woreda-list"></div>
   </div>
 
-  <!-- DETAIL DRAWER -->
-  <div class="detail-drawer" id="detail-drawer">
-    <div class="dd-header">
+  <div class="detail-panel" id="detail-panel">
+    <div class="dp-header">
       <div>
-        <div class="dd-title" id="dd-title">—</div>
-        <div class="dd-meta" id="dd-meta">—</div>
+        <div class="dp-title" id="dp-title">—</div>
+        <div class="dp-meta" id="dp-meta">—</div>
       </div>
-      <div class="dd-close" onclick="closeDetail()">✕</div>
+      <div class="dp-close" onclick="closeDetail()">✕</div>
     </div>
-    <div class="dd-body" id="dd-body"></div>
+    <div class="dp-body" id="dp-body"></div>
   </div>
 
-  <!-- TOUR -->
-  <div class="tour-bar" id="tour-bar">
-    <div class="tour-left">
+  <div class="tour-bar">
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
       <div class="tdots" id="tdots"></div>
       <div class="t-ctr" id="t-ctr">1 / 5</div>
     </div>
@@ -264,41 +236,21 @@ body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoo
 </div>
 
 <script>
-// ── DATA ─────────────────────────────────────────────────────
-const LMRI = [
-  {woreda:"Axum Town",      zone:"Central",     region:"Tigray",            lmri:1.00, facilities:2,  hr:2,  risk:"critical", lat:13.9032, lon:38.8822, has_support:false, facilities_support:0},
-  {woreda:"Bare",           zone:"Afder",       region:"Somali",            lmri:1.00, facilities:1,  hr:1,  risk:"critical", lat:5.4176,  lon:42.2557, has_support:false, facilities_support:0},
-  {woreda:"Gubalafto",      zone:"North Wollo", region:"Amhara",            lmri:1.00, facilities:1,  hr:1,  risk:"critical", lat:11.8389, lon:38.9502, has_support:true,  facilities_support:1},
-  {woreda:"Guto Gida",      zone:"East Wollega",region:"Oromia",            lmri:1.00, facilities:4,  hr:4,  risk:"critical", lat:9.4455,  lon:36.6103, has_support:true,  facilities_support:3},
-  {woreda:"West Imi",       zone:"Afder",       region:"Somali",            lmri:1.00, facilities:12, hr:12, risk:"critical", lat:5.4176,  lon:42.1500, has_support:false, facilities_support:0},
-  {woreda:"Erar",           zone:"Sitti",       region:"Somali",            lmri:0.91, facilities:11, hr:10, risk:"critical", lat:10.2079, lon:41.872,  has_support:false, facilities_support:0},
-  {woreda:"Hintalo",        zone:"South Eastern",region:"Tigray",           lmri:0.88, facilities:17, hr:15, risk:"critical", lat:13.3411, lon:39.3966, has_support:false, facilities_support:0},
-  {woreda:"Dekasuftu",      zone:"Liben",       region:"Somali",            lmri:0.75, facilities:8,  hr:6,  risk:"critical", lat:5.3197,  lon:40.6358, has_support:false, facilities_support:0},
-  {woreda:"Gidan",          zone:"North Wollo", region:"Amhara",            lmri:0.75, facilities:8,  hr:6,  risk:"critical", lat:11.8500, lon:38.9000, has_support:false, facilities_support:0},
-  {woreda:"Raya Kobo",      zone:"North Wollo", region:"Amhara",            lmri:0.73, facilities:11, hr:8,  risk:"high",     lat:12.1500, lon:39.5500, has_support:false, facilities_support:0},
-  {woreda:"Lataa Sibuu",    zone:"West Wollega",region:"Oromia",            lmri:0.71, facilities:14, hr:10, risk:"high",     lat:9.3341,  lon:35.3739, has_support:true,  facilities_support:1},
-  {woreda:"Bambasi",        zone:"Assosa",      region:"Benishangul Gumuz", lmri:0.70, facilities:46, hr:32, risk:"high",     lat:10.2241, lon:34.7796, has_support:false, facilities_support:0},
-  {woreda:"Harshin",        zone:"Fafan",       region:"Somali",            lmri:0.70, facilities:33, hr:23, risk:"high",     lat:9.2045,  lon:43.1909, has_support:false, facilities_support:0},
-  {woreda:"Mena Sibu",      zone:"West Wollega",region:"Oromia",            lmri:0.68, facilities:19, hr:13, risk:"high",     lat:9.4000,  lon:35.2000, has_support:false, facilities_support:0},
-  {woreda:"Hamer",          zone:"South Omo",   region:"South Ethiopia",    lmri:0.67, facilities:3,  hr:2,  risk:"high",     lat:5.4513,  lon:36.4104, has_support:false, facilities_support:0},
-  {woreda:"Elkari",         zone:"Afder",       region:"Somali",            lmri:0.57, facilities:7,  hr:4,  risk:"high",     lat:5.5000,  lon:42.3000, has_support:false, facilities_support:0},
-  {woreda:"Bercano",        zone:"Shebele",     region:"Somali",            lmri:0.52, facilities:23, hr:12, risk:"high",     lat:5.8739,  lon:43.4872, has_support:false, facilities_support:0},
-];
+// ── INLINE DATA ───────────────────────────────────────────────
+const LMRI_DATA = [{"woreda":"Axum Town","zone":"Central","region":"Tigray","pcode":"ET010213","lmri":1.0,"facilities":2,"hr":2,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":true,"risk":"critical","facilities_detail":[{"name":"Axum Health center","lmri_t2":"69.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"57"},{"name":"Millenium","lmri_t2":"75.0","lmri_t1":"21.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"29"}]},{"woreda":"Bare","zone":"Afder","region":"Somali","pcode":"ET050807","lmri":1.0,"facilities":1,"hr":1,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":true,"risk":"critical","facilities_detail":[{"name":"Bare","lmri_t2":"180.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"35"}]},{"woreda":"Gubalafto","zone":"North Wollo","region":"Amhara","pcode":"ET030307","lmri":1.0,"facilities":1,"hr":1,"has_support":true,"fac_support":1,"lmri_support":0.0,"delta":-1.0,"low_n":true,"risk":"critical","facilities_detail":[{"name":"Hara","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"28"},{"name":"Jarsa","lmri_t2":"99.0","lmri_t1":"99.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"}]},{"woreda":"Guto Gida","zone":"East Wollega","region":"Oromia","pcode":"ET040213","lmri":1.0,"facilities":4,"hr":4,"has_support":true,"fac_support":3,"lmri_support":0.0,"delta":-1.0,"low_n":true,"risk":"critical","facilities_detail":[{"name":"Loko","lmri_t2":"7.0","lmri_t1":"14.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"4"},{"name":"Lugo","lmri_t2":"30.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"49"},{"name":"Uke Health center","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"14"},{"name":"Kajjela health post","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Eba HC","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Horo Alaltu","lmri_t2":"120.0","lmri_t1":"120.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"72"},{"name":"Gadisa Oda","lmri_t2":"120.0","lmri_t1":"120.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"62"}]},{"woreda":"West Imi","zone":"Afder","region":"Somali","pcode":"ET050805","lmri":1.0,"facilities":12,"hr":12,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"critical","facilities_detail":[{"name":"Bulsho HP","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"21"},{"name":"Sufley Hp","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"17"},{"name":"Bula Hp","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"28"},{"name":"Dawan","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"13"},{"name":"Jik HC","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"43"},{"name":"Bilow","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"16"},{"name":"Imey Town Health Center","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"28"},{"name":"Bardahor","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"36"},{"name":"Finjawe","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"26"},{"name":"Abakarow HC","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"30"},{"name":"Golbarwaqo","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"31"},{"name":"Darusalam","lmri_t2":"90.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"16"}]},{"woreda":"Erar","zone":"Sitti","region":"Somali","pcode":"ET050104","lmri":0.91,"facilities":11,"hr":10,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"critical","facilities_detail":[{"name":"Erer Health Center","lmri_t2":"35.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"92"},{"name":"Kendaras Health post","lmri_t2":"67.0","lmri_t1":"65.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"24"},{"name":"Bila Health Post","lmri_t2":"47.0","lmri_t1":"65.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"19"},{"name":"Hurso Health Center","lmri_t2":"60.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"31"},{"name":"Aydora Health center","lmri_t2":"30.0","lmri_t1":"50.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"24"},{"name":"Megala ad Health post","lmri_t2":"65.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"10"},{"name":"Halsho Health Post","lmri_t2":"180.0","lmri_t1":"5.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"},{"name":"Tabci Health Post","lmri_t2":"180.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"},{"name":"Asbuli Health center","lmri_t2":"35.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"52"},{"name":"Urdala Health Post","lmri_t2":"120.0","lmri_t1":"45.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"9"},{"name":"Gadwayn Health post","lmri_t2":"90.0","lmri_t1":"120.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"}]},{"woreda":"Hintalo","zone":"South Eastern","region":"Tigray","pcode":"ET010603","lmri":0.88,"facilities":17,"hr":15,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"critical","facilities_detail":[{"name":"Hintalo","lmri_t2":"2.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"45"},{"name":"Hagereselam","lmri_t2":"60.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"19"},{"name":"Araasegeda","lmri_t2":"60.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"93"},{"name":"Fkrealem","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"54"},{"name":"Mesanu","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"55"},{"name":"Hiwane","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"41"},{"name":"Muja","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"},{"name":"Freweyni","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"21"},{"name":"Waza","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"26"},{"name":"Maynebri","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"36"},{"name":"Betmera","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"11"},{"name":"Tekliwoyane","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"35"},{"name":"Hareko","lmri_t2":"0.0","lmri_t1":"3.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"35"},{"name":"Debrehayla","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"19"},{"name":"Maychbrk","lmri_t2":"60.0","lmri_t1":"25.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"6"},{"name":"Dongolat","lmri_t2":"60.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"24"},{"name":"Sihet","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"30"}]},{"woreda":"Dekasuftu","zone":"Liben","region":"Somali","pcode":"ET050991","lmri":0.75,"facilities":8,"hr":6,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"critical","facilities_detail":[{"name":"Haysufto hc","lmri_t2":"20.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"27"},{"name":"Sora hp","lmri_t2":"45.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"},{"name":"Kuracbul hp","lmri_t2":"90.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"16"},{"name":"Aligaiye hp","lmri_t2":"90.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"9"},{"name":"Gunway hp","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"21"},{"name":"Adey hp","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"ND"},{"name":"Higli hp","lmri_t2":"160.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"11"},{"name":"Sero hp","lmri_t2":"120.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"}]},{"woreda":"Gidan","zone":"North Wollo","region":"Amhara","pcode":"ET030303","lmri":0.75,"facilities":8,"hr":6,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"critical","facilities_detail":[{"name":"Densa health center","lmri_t2":"30.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"9"},{"name":"Densa merged health post","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Eyela health","lmri_t2":"90.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"2"},{"name":"Eyela heslth post","lmri_t2":"90.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"},{"name":"Merora health post","lmri_t2":"90.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"14"},{"name":"Gulit health post","lmri_t2":"90.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"2"},{"name":"Gesta health post","lmri_t2":"90.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"26"},{"name":"Emetie mesk health post","lmri_t2":"21.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"20"}]},{"woreda":"Raya Kobo","zone":"North Wollo","region":"Amhara","pcode":"ET030302","lmri":0.73,"facilities":11,"hr":8,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Kalim health center","lmri_t2":"150.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"17"},{"name":"Kalim health post","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Yaya health post","lmri_t2":"0.0","lmri_t1":"0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"5"},{"name":"Workie merged health post","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Workie health center","lmri_t2":"0.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"5"},{"name":"Gobiye health center","lmri_t2":"15.0","lmri_t1":"25.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"51"},{"name":"Robit","lmri_t2":"99.0","lmri_t1":"99.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"216"}]},{"woreda":"Kersadula","zone":"Liben","region":"Somali","pcode":"","lmri":0.71,"facilities":7,"hr":5,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[]},{"woreda":"Lataa sibuu","zone":"West Wollega","region":"Oromia","pcode":"ET040197","lmri":0.71,"facilities":14,"hr":10,"has_support":true,"fac_support":1,"lmri_support":0.0,"delta":-0.71,"low_n":false,"risk":"high","facilities_detail":[{"name":"Wara Jiru HC","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"34"},{"name":"Gori HC","lmri_t2":"90.0","lmri_t1":"9.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"34"},{"name":"Abba Eebba","lmri_t2":"0.0","lmri_t1":"0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"18"},{"name":"Amuma Gorgis","lmri_t2":"0.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"5"},{"name":"Sombo sadan Gitan","lmri_t2":"120.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Buke Gori","lmri_t2":"90.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Amuma Alaltu","lmri_t2":"100.0","lmri_t1":"120.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"},{"name":"Mura wanki","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Gida Bundi","lmri_t2":"60.0","lmri_t1":"80.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"4"},{"name":"Ganka Gitan","lmri_t2":"90.0","lmri_t1":"40.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"},{"name":"Waligalte warajiru","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"10"},{"name":"Gida Dale","lmri_t2":"65.0","lmri_t1":"50.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"4"},{"name":"Gori 02","lmri_t2":"120.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Lomicha dulo","lmri_t2":"20.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"7"},{"name":"Wara Jiru 01","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"}]},{"woreda":"Bambasi","zone":"Assosa","region":"Benishangul Gumuz","pcode":"ET060305","lmri":0.7,"facilities":46,"hr":32,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Selama","lmri_t2":"30.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"8"},{"name":"Shobora","lmri_t2":"30.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"1"},{"name":"Jematsa Health center","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"3"},{"name":"Mutsa showara","lmri_t2":"20.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"2"},{"name":"Mutsa sirna","lmri_t2":"30.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"9"},{"name":"Eshen Almetema","lmri_t2":"30.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"2"},{"name":"Bambasi health center","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"7"},{"name":"Mander 44 health post","lmri_t2":"150.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"1"},{"name":"Mander 46 health center","lmri_t2":"30.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"2"},{"name":"Sonka Health post","lmri_t2":"30.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"3"},{"name":"Ida dabus","lmri_t2":"0.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"3"},{"name":"Buda salga HP","lmri_t2":"120.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"2"},{"name":"sisa 2 HP","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Ayanto HP","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Golema HP","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Shio HP","lmri_t2":"60.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"9"},{"name":"Bergosh HP","lmri_t2":"0.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"ND"},{"name":"Boshima kerkege HP","lmri_t2":"0.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"3"},{"name":"Boshima maekel Hp","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"}]},{"woreda":"Harshin","zone":"Fafan","region":"Somali","pcode":"ET050207","lmri":0.7,"facilities":33,"hr":23,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Harshin HC","lmri_t2":"45.0","lmri_t1":"18.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"12"},{"name":"Madwyn","lmri_t2":"38.0","lmri_t1":"12.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"7"},{"name":"gara bidhan","lmri_t2":"0.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"3"},{"name":"Qudhac ramale","lmri_t2":"60.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"10"},{"name":"Maglo Xali","lmri_t2":"0.0","lmri_t1":"35.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"10"},{"name":"Farax liban","lmri_t2":"22.0","lmri_t1":"19.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"11"},{"name":"Kurtumaly","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"17"},{"name":"Cadadle","lmri_t2":"30.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"12"},{"name":"Lafo islamod","lmri_t2":"34.0","lmri_t1":"12.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"11"},{"name":"Dabyil wayine","lmri_t2":"30.0","lmri_t1":"18.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"15"},{"name":"Kaboqoray","lmri_t2":"38.0","lmri_t1":"34.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"11"},{"name":"Xabrir","lmri_t2":"45.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"15"},{"name":"Darbiga","lmri_t2":"40.0","lmri_t1":"14.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"15"},{"name":"Bali case","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"14"},{"name":"Gaboble","lmri_t2":"42.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"9"},{"name":"Cilmi xir","lmri_t2":"46.0","lmri_t1":"14.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"17"},{"name":"Dhan cade","lmri_t2":"30.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"10"},{"name":"Masjidka","lmri_t2":"41.0","lmri_t1":"18.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"12"},{"name":"Carare","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"9"},{"name":"Lankayir","lmri_t2":"35.0","lmri_t1":"12.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"29"},{"name":"Candhodhaxe","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"4"},{"name":"Masle","lmri_t2":"45.0","lmri_t1":"14.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"14"},{"name":"Cafufely","lmri_t2":"40.0","lmri_t1":"17.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"10"},{"name":"Kam hashin","lmri_t2":"38.0","lmri_t1":"12.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"16"},{"name":"Abuker ahmed","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"21"},{"name":"Bali Gubadle","lmri_t2":"40.0","lmri_t1":"17.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"3"},{"name":"Bali aman","lmri_t2":"40.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"15"},{"name":"Barwaqo","lmri_t2":"49.0","lmri_t1":"12.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"13"},{"name":"Dawacley","lmri_t2":"50.0","lmri_t1":"15.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"6"},{"name":"Qaydar","lmri_t2":"38.0","lmri_t1":"12.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"}]},{"woreda":"Mena Sibu","zone":"West Wollega","region":"Oromia","pcode":"ET040101","lmri":0.68,"facilities":19,"hr":13,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Mendi Health center","lmri_t2":"45.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"16"},{"name":"Gombo Qiltu jale HP","lmri_t2":"100.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"1"},{"name":"Harawe Health center","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"19"},{"name":"Wama Health center","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"15"},{"name":"Kara wayu Afa Jabbi HP","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"3"},{"name":"Chala dabus HP","lmri_t2":"60.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"7"},{"name":"Guyo xayiba HP","lmri_t2":"90.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"3"},{"name":"Wajeiti kiltu lubo HP","lmri_t2":"90.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"4"}]},{"woreda":"Hamer Woreda","zone":"South Omo","region":"South Ethiopia","pcode":"ET070704","lmri":0.67,"facilities":3,"hr":2,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":true,"risk":"high","facilities_detail":[{"name":"Arbore Health Center","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"8"},{"name":"Karadus Health Center","lmri_t2":"35.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"},{"name":"Shanko Health Center","lmri_t2":"60.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"7"},{"name":"Dimeka Health Center","lmri_t2":"20.0","lmri_t1":"0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"4"}]},{"woreda":"Elkari","zone":"Afder","region":"Somali","pcode":"ET050804","lmri":0.57,"facilities":7,"hr":4,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Elakari health center","lmri_t2":"10.0","lmri_t1":"7.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"42"},{"name":"Shakisa health center","lmri_t2":"20.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"34"},{"name":"Unko health center","lmri_t2":"60.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"25"},{"name":"Adamo health post","lmri_t2":"30.0","lmri_t1":"45.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"36"},{"name":"Masle health post","lmri_t2":"50.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"},{"name":"Badaw health post","lmri_t2":"60.0","lmri_t1":"50.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"15"},{"name":"Galolow health post","lmri_t2":"50.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"25"}]},{"woreda":"Bercano","zone":"Shebele","region":"Somali","pcode":"ET050608","lmri":0.52,"facilities":23,"hr":12,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Raranle","lmri_t2":"30.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"26"},{"name":"Dudun","lmri_t2":"30.0","lmri_t1":"26.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"29"},{"name":"Hoomey","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"34"},{"name":"Dibudajin","lmri_t2":"25.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"35"},{"name":"Dabaaldag","lmri_t2":"28.0","lmri_t1":"25.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"35"},{"name":"Bardiqorax","lmri_t2":"29.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"41"},{"name":"Sankabar","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"43"},{"name":"Biyolow","lmri_t2":"0.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"43"},{"name":"Garboxaradho","lmri_t2":"30.0","lmri_t1":"26.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"21"},{"name":"Lab health  center","lmri_t2":"25.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"47"},{"name":"Berano","lmri_t2":"84.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"40"},{"name":"Dudun","lmri_t2":"60.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"},{"name":"Homey","lmri_t2":"84.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"11"},{"name":"Dabaldag","lmri_t2":"84.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"7"},{"name":"Bardakorah","lmri_t2":"28.0","lmri_t1":"42.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"11"},{"name":"Hilonagod","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"3"},{"name":"Damerey","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"13"},{"name":"Birta dheer","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"},{"name":"Dibudajin","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"21"},{"name":"Qorahda","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"19"},{"name":"Sankabar","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"19"},{"name":"Biyolow","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"24"},{"name":"Libahful","lmri_t2":"42.0","lmri_t1":"28.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"5"}]},{"woreda":"Abaala","zone":"Zone 2","region":"Afar","pcode":"ET020203","lmri":0.5,"facilities":8,"hr":4,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Abala primary Hospital","lmri_t2":"7.0","lmri_t1":"7.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"56"},{"name":"Gelaeso Health center","lmri_t2":"45.0","lmri_t1":"45.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"43"},{"name":"Abala Health center","lmri_t2":"60.0","lmri_t1":"50.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"77"},{"name":"Gorara Health post","lmri_t2":"60.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"12"},{"name":"Meraile Health post","lmri_t2":"60.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"12"},{"name":"Simbilale health center","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"45"},{"name":"Haridan health center","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"20"},{"name":"Mudad Health post","lmri_t2":"30.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"17"}]},{"woreda":"Adidaero","zone":"North Western","region":"Tigray","pcode":"ET010111","lmri":0.5,"facilities":2,"hr":1,"has_support":true,"fac_support":7,"lmri_support":0.0,"delta":-0.5,"low_n":true,"risk":"high","facilities_detail":[{"name":"My besa","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"12"},{"name":"Tsahayo","lmri_t2":"1.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"33"},{"name":"A bladay","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"68"},{"name":"Hadegti","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"16"},{"name":"Selam","lmri_t2":"180.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Adi dearo","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"50"},{"name":"A/abagie","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"25"},{"name":"Hibret","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"13"},{"name":"A/ngsti","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"1.0","critical":"0.0","low_data":"0","admitted_t2":"5"}]},{"woreda":"Assaita","zone":"Zone 1","region":"Afar","pcode":"ET020103","lmri":0.5,"facilities":4,"hr":2,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":true,"risk":"high","facilities_detail":[{"name":"Barga HP","lmri_t2":"40.0","lmri_t1":"40.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"34"},{"name":"Barga Health Center","lmri_t2":"60.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"17"},{"name":"Assa'ita Primary Hoaspital","lmri_t2":"7.0","lmri_t1":"14.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"160"},{"name":"Wanis Health Post","lmri_t2":"0.0","lmri_t1":"0.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"ND"}]},{"woreda":"Gimbi","zone":"West Wollega","region":"Oromia","pcode":"ET040103","lmri":0.5,"facilities":12,"hr":6,"has_support":false,"fac_support":0,"lmri_support":null,"delta":null,"low_n":false,"risk":"high","facilities_detail":[{"name":"Chuta Gochi","lmri_t2":"21.0","lmri_t1":"120.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"31"},{"name":"Inango Danbal","lmri_t2":"33.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"11"},{"name":"Tole health post","lmri_t2":"60.0","lmri_t1":"30.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"},{"name":"Bikiltu Tokuma","lmri_t2":"120.0","lmri_t1":"90.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"22"},{"name":"Jogir Health center","lmri_t2":"21.0","lmri_t1":"10.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"13"},{"name":"Lalisa Yesus","lmri_t2":"10.0","lmri_t1":"60.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"3"},{"name":"Cuta gorgis","lmri_t2":"180.0","lmri_t1":"180.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"ND"},{"name":"Aba sena","lmri_t2":"90.0","lmri_t1":"45.0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"7"},{"name":"Wadesa warka","lmri_t2":"0.0","lmri_t1":"27.0","supply_t2":"0.0","critical":"0.0","low_data":"0","admitted_t2":"2"},{"name":"Gambela 01","lmri_t2":"45.0","lmri_t1":"0","supply_t2":"0.0","critical":"1.0","low_data":"0","admitted_t2":"8"}]}];
+const GEO_HR    = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"pcode":"ET010111","name":"Adi Daero","adm1":"Tigray","clat":14.3183,"clon":38.1667},"geometry":{"type":"Polygon","coordinates":[[[38.2286,14.3407],[38.2076,14.3437],[38.2006,14.3529],[38.1818,14.3489],[38.1714,14.3713],[38.1518,14.3639],[38.1342,14.3624],[38.1245,14.3755],[38.0989,14.3706],[38.109,14.3444],[38.1279,14.3442],[38.1455,14.327],[38.1292,14.3151],[38.128,14.3029],[38.0967,14.3005],[38.0799,14.2877],[38.0812,14.2679],[38.0985,14.2678],[38.1133,14.2609],[38.1319,14.2659],[38.1367,14.2745],[38.1535,14.2823],[38.1596,14.2917],[38.1778,14.2981],[38.1962,14.2708],[38.2153,14.2828],[38.2005,14.2974],[38.2022,14.3102],[38.2129,14.33],[38.2286,14.3407]]]}},{"type":"Feature","properties":{"pcode":"ET010213","name":"Axum town","adm1":"Tigray","clat":14.1231,"clon":38.7275},"geometry":{"type":"Polygon","coordinates":[[[38.7274,14.142],[38.7109,14.1409],[38.7029,14.1334],[38.7005,14.1161],[38.7342,14.1036],[38.7518,14.1045],[38.7534,14.1246],[38.7274,14.142]]]}},{"type":"Feature","properties":{"pcode":"ET010603","name":"Hintalo","adm1":"Tigray","clat":13.1738,"clon":39.4601},"geometry":{"type":"Polygon","coordinates":[[[39.4998,13.2709],[39.5043,13.2885],[39.4967,13.304],[39.5077,13.3138],[39.519,13.3384],[39.4832,13.3626],[39.4703,13.3434],[39.4547,13.3411],[39.4444,13.3297],[39.4236,13.3228],[39.4141,13.326],[39.393,13.3164],[39.3765,13.3036],[39.3656,13.2706],[39.3553,13.2635],[39.328,13.2591],[39.3208,13.2395],[39.3119,13.2307],[39.3421,13.1577],[39.3303,13.1544],[39.3157,13.1302],[39.3217,13.1194],[39.3512,13.1072],[39.3794,13.0912],[39.3856,13.083],[39.3985,13.0649],[39.4117,13.0566],[39.4146,13.0423],[39.437,13.0268],[39.4442,13.028],[39.4535,13.0108],[39.4518,12.9978],[39.4687,12.9879],[39.4897,12.9845],[39.4972,12.99],[39.4749,13.0359],[39.4959,13.0353],[39.5135,13.0462],[39.5336,13.0415],[39.5347,13.0251],[39.5542,13.0063],[39.5636,12.9922],[39.5789,13.0254],[39.5562,13.0475],[39.5809,13.059],[39.5907,13.0929],[39.5917,13.1141],[39.5851,13.1301],[39.5697,13.1281],[39.5511,13.1552],[39.5696,13.1713],[39.615,13.1785],[39.6281,13.168],[39.654,13.1798],[39.6862,13.1811],[39.707,13.1902],[39.7203,13.207],[39.7412,13.2067],[39.7821,13.2005],[39.8069,13.2024],[39.8085,13.2172],[39.8002,13.2212],[39.7643,13.2247],[39.7324,13.2382],[39.7037,13.2359],[39.6566,13.2528],[39.6386,13.2531],[39.6277,13.2605],[39.6005,13.2607],[39.5751,13.2692],[39.5519,13.2598],[39.5462,13.2647],[39.5284,13.2448],[39.5193,13.2273],[39.5033,13.226],[39.4885,13.2332],[39.4826,13.248],[39.4998,13.2709]]]}},{"type":"Feature","properties":{"pcode":"ET020103","name":"Asayita","adm1":"Afar","clat":11.4701,"clon":41.4961},"geometry":{"type":"Polygon","coordinates":[[[41.6263,11.6726],[41.6086,11.7098],[41.5989,11.7229],[41.5693,11.7528],[41.5528,11.759],[41.5346,11.7964],[41.4413,11.9001],[41.419,11.9281],[41.4105,11.9244],[41.4274,11.884],[41.4096,11.854],[41.3742,11.8534],[41.3002,11.8466],[41.3086,11.7838],[41.3115,11.7419],[41.2958,11.7082],[41.2752,11.6896],[41.2729,11.6723],[41.261,11.6467],[41.2849,11.649],[41.2957,11.6131],[41.3111,11.5955],[41.3104,11.58],[41.3919,11.554],[41.4199,11.5187],[41.4395,11.4845],[41.4493,11.4723],[41.4242,11.4479],[41.4559,11.3457],[41.4817,11.2897],[41.4865,11.2475],[41.5083,11.085],[41.6081,11.0115],[41.6033,11.0168],[41.5929,11.0688],[41.5893,11.1254],[41.5922,11.1971],[41.5873,11.2448],[41.579,11.283],[41.5823,11.3218],[41.562,11.3221],[41.5525,11.3423],[41.5598,11.3776],[41.5525,11.4016],[41.5587,11.4155],[41.5538,11.4435],[41.5537,11.4671],[41.5432,11.4709],[41.5301,11.5003],[41.5303,11.5407],[41.5428,11.5482],[41.5604,11.5511],[41.5644,11.5412],[41.6018,11.5365],[41.61,11.5468],[41.6155,11.5656],[41.6212,11.606],[41.626,11.6231],[41.6288,11.6573],[41.6263,11.6726]],[[41.4305,11.5935],[41.429,11.5867],[41.4446,11.5709],[41.4534,11.5424],[41.4395,11.5461],[41.4302,11.5646],[41.4181,11.5738],[41.395,11.5823],[41.3773,11.6067],[41.4001,11.6255],[41.3999,11.6449],[41.4146,11.6828],[41.4269,11.6706],[41.4318,11.6578],[41.4338,11.6103],[41.4305,11.5935]]]}},{"type":"Feature","properties":{"pcode":"ET020203","name":"Abaala","adm1":"Afar","clat":13.363,"clon":39.8946},"geometry":{"type":"Polygon","coordinates":[[[40.0374,13.5613],[40.007,13.5563],[39.9919,13.5574],[39.9812,13.5653],[39.9675,13.5557],[39.9285,13.571],[39.9208,13.5818],[39.9203,13.6005],[39.9281,13.615],[39.9225,13.6374],[39.8828,13.6409],[39.8668,13.626],[39.865,13.6027],[39.8676,13.5838],[39.8639,13.5482],[39.8533,13.5541],[39.8163,13.5578],[39.8038,13.5537],[39.763,13.5713],[39.7464,13.5708],[39.7395,13.5631],[39.7397,13.5473],[39.7234,13.5092],[39.7195,13.4757],[39.726,13.4344],[39.763,13.4245],[39.7742,13.4324],[39.7893,13.4172],[39.8148,13.4315],[39.8478,13.4166],[39.8657,13.4003],[39.8735,13.3641],[39.8636,13.3544],[39.8277,13.3547],[39.8279,13.3313],[39.8369,13.323],[39.8221,13.295],[39.8151,13.2893],[39.7722,13.2802],[39.7857,13.2627],[39.7872,13.2456],[39.8002,13.2212],[39.8085,13.2172],[39.8069,13.2024],[39.8038,13.1897],[39.8119,13.1552],[39.8277,13.1226],[39.8621,13.116],[39.889,13.1194],[39.9502,13.0989],[39.9784,13.0849],[39.9893,13.1222],[39.974,13.1489],[39.9884,13.1813],[39.9765,13.2],[39.956,13.2659],[39.9577,13.2921],[39.9647,13.3125],[39.9642,13.3404],[39.9084,13.3217],[39.9132,13.3818],[39.9059,13.4096],[39.9156,13.4207],[39.944,13.4197],[39.9599,13.4466],[39.9613,13.47],[39.9535,13.4998],[40.0325,13.5353],[40.0374,13.5613]]]}},{"type":"Feature","properties":{"pcode":"ET030302","name":"Raya Kobo","adm1":"Amhara","clat":12.1002,"clon":39.629},"geometry":{"type":"Polygon","coordinates":[[[39.6247,12.3027],[39.6251,12.288],[39.605,12.2706],[39.5919,12.271],[39.5725,12.2559],[39.5552,12.2555],[39.5433,12.265],[39.5385,12.2919],[39.5227,12.3264],[39.5074,12.3329],[39.4705,12.3214],[39.4556,12.325],[39.4195,12.2966],[39.4029,12.2953],[39.3747,12.3012],[39.376,12.2944],[39.3641,12.2683],[39.3628,12.2561],[39.3835,12.2578],[39.4096,12.2301],[39.3911,12.2208],[39.3933,12.1961],[39.404,12.189],[39.4024,12.1767],[39.4177,12.1571],[39.4062,12.1297],[39.426,12.1258],[39.4295,12.1012],[39.4561,12.0578],[39.4889,12.0647],[39.4994,12.0713],[39.5327,12.0712],[39.5221,12.0499],[39.5206,12.022],[39.5126,12.0121],[39.5137,11.9818],[39.5106,11.9603],[39.5023,11.9382],[39.5109,11.9049],[39.5221,11.8836],[39.5447,11.8824],[39.5768,11.8678],[39.5894,11.8763],[39.6052,11.8782],[39.6191,11.8703],[39.6396,11.8752],[39.6587,11.8889],[39.6999,11.9003],[39.7141,11.898],[39.7364,11.9037],[39.7493,11.9138],[39.7622,11.9161],[39.7775,11.9262],[39.7985,11.9139],[39.8084,11.9022],[39.8232,11.9042],[39.8519,11.8847],[39.855,11.8898],[39.8785,11.884],[39.8871,11.9057],[39.8765,11.9744],[39.8546,12.028],[39.8413,12.0535],[39.8435,12.0653],[39.8617,12.0884],[39.8286,12.0998],[39.8192,12.1234],[39.8128,12.1566],[39.7999,12.195],[39.8036,12.2297],[39.8075,12.2389],[39.8276,12.2405],[39.8237,12.2916],[39.8247,12.3177],[39.8176,12.324],[39.7771,12.3109],[39.7615,12.3033],[39.7586,12.32],[39.7391,12.3128],[39.7063,12.3062],[39.6323,12.3077],[39.6247,12.3027]],[[39.6249,12.1552],[39.642,12.1663],[39.6426,12.1415],[39.6329,12.1366],[39.6219,12.1438],[39.6249,12.1552]]]}},{"type":"Feature","properties":{"pcode":"ET030303","name":"Gidan","adm1":"Amhara","clat":12.086,"clon":39.3204},"geometry":{"type":"Polygon","coordinates":[[[39.3747,12.3012],[39.3502,12.2984],[39.3217,12.3049],[39.2936,12.2965],[39.282,12.2836],[39.2812,12.2538],[39.2641,12.2249],[39.2491,12.1546],[39.2404,12.136],[39.2407,12.1197],[39.2167,12.1134],[39.2101,12.0969],[39.1874,12.0594],[39.18,12.012],[39.1541,11.985],[39.1537,11.9705],[39.1624,11.9602],[39.1658,11.9386],[39.1503,11.9364],[39.1036,11.9178],[39.1284,11.9138],[39.1369,11.9064],[39.1773,11.8874],[39.1907,11.8837],[39.2076,11.8918],[39.2257,11.893],[39.2489,11.9017],[39.2825,11.8841],[39.2983,11.8973],[39.3111,11.8863],[39.3426,11.8816],[39.3449,11.8672],[39.3541,11.8768],[39.3564,11.9013],[39.3712,11.9071],[39.3898,11.9369],[39.4085,11.9509],[39.4069,11.9647],[39.4303,11.9817],[39.4451,11.9704],[39.4618,11.9487],[39.4814,11.9409],[39.5023,11.9382],[39.5106,11.9603],[39.5137,11.9818],[39.5126,12.0121],[39.5206,12.022],[39.5221,12.0499],[39.5327,12.0712],[39.4994,12.0713],[39.4889,12.0647],[39.4561,12.0578],[39.4295,12.1012],[39.426,12.1258],[39.4062,12.1297],[39.4177,12.1571],[39.4024,12.1767],[39.404,12.189],[39.3933,12.1961],[39.3911,12.2208],[39.4096,12.2301],[39.3835,12.2578],[39.3628,12.2561],[39.3641,12.2683],[39.376,12.2944],[39.3747,12.3012]]]}},{"type":"Feature","properties":{"pcode":"ET030307","name":"Guba Lafto","adm1":"Amhara","clat":11.8338,"clon":39.6753},"geometry":{"type":"MultiPolygon","coordinates":[[[[39.5023,11.9382],[39.4814,11.9409],[39.4618,11.9487],[39.4451,11.9704],[39.4303,11.9817],[39.4069,11.9647],[39.4085,11.9509],[39.3898,11.9369],[39.3712,11.9071],[39.3564,11.9013],[39.3541,11.8768],[39.3449,11.8672],[39.3478,11.8476],[39.3586,11.8483],[39.3735,11.8306],[39.3965,11.8269],[39.413,11.8291],[39.4319,11.8237],[39.4285,11.7973],[39.4416,11.7809],[39.4301,11.7689],[39.4516,11.7501],[39.4639,11.7503],[39.4603,11.7297],[39.4394,11.7149],[39.4314,11.6989],[39.4095,11.6952],[39.3957,11.6874],[39.3817,11.6706],[39.3589,11.6596],[39.334,11.5968],[39.3426,11.6015],[39.3597,11.5945],[39.3959,11.5883],[39.4237,11.5904],[39.4458,11.5884],[39.4687,11.5948],[39.4857,11.607],[39.4944,11.642],[39.5117,11.6659],[39.5376,11.6706],[39.5466,11.6762],[39.5509,11.713],[39.5525,11.7245],[39.5379,11.7419],[39.5512,11.7554],[39.5631,11.7781],[39.55,11.7861],[39.5558,11.8027],[39.5548,11.8257],[39.5768,11.8678],[39.5447,11.8824],[39.5221,11.8836],[39.5109,11.9049],[39.5023,11.9382]]],[[[39.7421,11.8549],[39.736,11.8714],[39.7364,11.9037],[39.7141,11.898],[39.6999,11.9003],[39.6587,11.8889],[39.6396,11.8752],[39.6452,11.868],[39.6281,11.8436],[39.6073,11.8271],[39.6275,11.8082],[39.6126,11.7955],[39.6291,11.7696],[39.6676,11.7701],[39.6897,11.7646],[39.7176,11.784],[39.7298,11.7766],[39.7619,11.7692],[39.7656,11.7963],[39.7641,11.8128],[39.7483,11.8324],[39.7365,11.8258],[39.7302,11.8469],[39.7421,11.8549]]]]}},{"type":"Feature","properties":{"pcode":"ET040101","name":"Mana Sibu","adm1":"Oromia","clat":9.7394,"clon":34.9999},"geometry":{"type":"Polygon","coordinates":[[[35.3251,9.8845],[35.311,9.9112],[35.2975,9.9225],[35.2785,9.9071],[35.2307,9.8933],[35.2208,9.9254],[35.1596,9.9484],[35.0883,9.9505],[35.0808,9.939],[35.081,9.9219],[35.0485,9.9177],[35.0197,9.9288],[35.015,9.9952],[34.9882,9.9968],[34.943,9.9336],[34.9277,9.9353],[34.9076,9.953],[34.8878,9.9082],[34.8668,9.9023],[34.8977,9.8818],[34.8922,9.8646],[34.8771,9.8454],[34.8697,9.8207],[34.8545,9.8167],[34.8317,9.8031],[34.8073,9.7611],[34.7961,9.7362],[34.81,9.7022],[34.8109,9.6301],[34.7921,9.6033],[34.7854,9.5665],[34.7954,9.567],[34.811,9.5559],[34.817,9.5411],[34.8267,9.5352],[34.8432,9.5459],[34.8473,9.5585],[34.8614,9.5713],[34.8716,9.5625],[34.8952,9.5614],[34.9162,9.5771],[34.9148,9.5518],[34.9251,9.5492],[34.9335,9.5304],[34.9269,9.5058],[34.9373,9.4829],[34.9543,9.4981],[34.9637,9.5281],[34.9759,9.5386],[34.9866,9.556],[34.9971,9.5455],[35.0095,9.5582],[35.027,9.5549],[35.0415,9.5679],[35.061,9.5746],[35.0651,9.5869],[35.0769,9.5886],[35.0911,9.5782],[35.1032,9.595],[35.1397,9.613],[35.1529,9.6136],[35.157,9.6737],[35.1764,9.6933],[35.2093,9.7016],[35.202,9.7389],[35.2208,9.758],[35.2111,9.7705],[35.227,9.7772],[35.2564,9.7761],[35.2569,9.7955],[35.2785,9.8078],[35.2857,9.8018],[35.2995,9.8085],[35.3024,9.8241],[35.3226,9.842],[35.3427,9.8455],[35.3566,9.8404],[35.3498,9.8661],[35.3251,9.8845]],[[35.082,9.8233],[35.1049,9.8324],[35.12,9.8261],[35.1407,9.802],[35.1157,9.7818],[35.1139,9.7727],[35.0913,9.7686],[35.0753,9.7817],[35.073,9.7997],[35.082,9.8233]]]}},{"type":"Feature","properties":{"pcode":"ET040103","name":"Gimbi","adm1":"Oromia","clat":9.1331,"clon":35.9021},"geometry":{"type":"Polygon","coordinates":[[[36.0533,9.1215],[36.044,9.1951],[36.0316,9.2334],[35.9754,9.2429],[35.9493,9.2492],[35.9307,9.2672],[35.9179,9.2856],[35.9111,9.316],[35.8599,9.325],[35.8085,9.3089],[35.7972,9.3086],[35.7769,9.3224],[35.7657,9.3136],[35.7521,9.3122],[35.741,9.2954],[35.7279,9.2906],[35.7238,9.2744],[35.7238,9.2428],[35.7304,9.2248],[35.7462,9.2121],[35.7298,9.2081],[35.7261,9.1851],[35.7296,9.1696],[35.7235,9.1589],[35.7404,9.1511],[35.7609,9.1635],[35.7627,9.1501],[35.7506,9.1376],[35.7548,9.1278],[35.7429,9.1122],[35.7437,9.1005],[35.7542,9.082],[35.7748,9.0849],[35.785,9.1057],[35.8064,9.1097],[35.817,9.0797],[35.8347,9.0596],[35.8454,9.0829],[35.8878,9.0771],[35.9043,9.0668],[35.9045,9.0408],[35.9282,9.0348],[35.9239,9.0145],[35.9355,8.9822],[35.9556,8.9587],[35.965,8.9683],[35.9972,8.9657],[36.01,8.9573],[36.0218,8.9413],[36.0236,8.9528],[36.0414,8.9704],[36.0428,9.0062],[36.0511,9.017],[36.0281,9.056],[36.034,9.1074],[36.0533,9.1215]],[[35.8043,9.2038],[35.8262,9.2013],[35.8422,9.1935],[35.8452,9.1723],[35.8538,9.1743],[35.858,9.1542],[35.8446,9.146],[35.8316,9.1489],[35.817,9.1652],[35.7933,9.1715],[35.7886,9.1809],[35.7937,9.1984],[35.8043,9.2038]]]}},{"type":"Feature","properties":{"pcode":"ET040197","name":"Leta Sibu","adm1":"Oromia","clat":9.6308,"clon":35.3578},"geometry":{"type":"Polygon","coordinates":[[[35.4681,9.6704],[35.4554,9.6722],[35.4108,9.7137],[35.3894,9.72],[35.3684,9.7193],[35.3659,9.7293],[35.3563,9.7114],[35.3548,9.6937],[35.3627,9.6834],[35.3729,9.6956],[35.383,9.6831],[35.3738,9.6751],[35.3806,9.6564],[35.3564,9.6499],[35.332,9.656],[35.3093,9.6473],[35.2954,9.6495],[35.2797,9.6426],[35.2619,9.6277],[35.2585,9.6189],[35.2252,9.6238],[35.2275,9.5924],[35.2248,9.579],[35.2155,9.57],[35.2252,9.5563],[35.2442,9.5547],[35.2573,9.5368],[35.2707,9.5335],[35.2844,9.5393],[35.2912,9.5504],[35.3193,9.565],[35.3356,9.5645],[35.349,9.5415],[35.3874,9.5486],[35.393,9.5863],[35.4176,9.5875],[35.4249,9.6046],[35.4574,9.6203],[35.4482,9.6338],[35.4628,9.6451],[35.4681,9.6704]]]}},{"type":"Feature","properties":{"pcode":"ET040213","name":"Guto Gida","adm1":"Oromia","clat":9.2391,"clon":36.6153},"geometry":{"type":"Polygon","coordinates":[[[36.6615,9.5102],[36.6428,9.5166],[36.6198,9.4977],[36.5927,9.5114],[36.574,9.4839],[36.5656,9.455],[36.5538,9.4533],[36.5458,9.4349],[36.521,9.4325],[36.5113,9.4323],[36.5073,9.4193],[36.4836,9.4052],[36.4752,9.3946],[36.4841,9.3679],[36.4658,9.3592],[36.4665,9.3315],[36.4955,9.3029],[36.5019,9.282],[36.5116,9.2781],[36.5216,9.2575],[36.5652,9.2491],[36.5512,9.2407],[36.5475,9.2269],[36.5354,9.2134],[36.5273,9.192],[36.5398,9.1808],[36.5383,9.1663],[36.5233,9.1382],[36.5104,9.148],[36.4822,9.1375],[36.4842,9.1098],[36.4664,9.1034],[36.448,9.1064],[36.4407,9.0861],[36.4504,9.0794],[36.46,9.0597],[36.4714,9.0618],[36.4845,9.076],[36.5089,9.07],[36.5155,9.0902],[36.5281,9.1039],[36.5702,9.1078],[36.5848,9.0933],[36.5654,9.0626],[36.5551,9.0649],[36.5431,9.0515],[36.5489,9.041],[36.5388,9.034],[36.5309,9.043],[36.513,9.0278],[36.5091,9.0192],[36.5202,8.9875],[36.5078,8.9808],[36.5299,8.9716],[36.5602,8.969],[36.5657,8.9613],[36.5774,9.0036],[36.5883,9.0051],[36.586,9.023],[36.5958,9.0319],[36.5797,9.0421],[36.6084,9.0936],[36.6201,9.0861],[36.6336,9.0912],[36.6342,9.1079],[36.6533,9.107],[36.6645,9.1166],[36.6773,9.1485],[36.6883,9.1514],[36.712,9.1694],[36.7134,9.2007],[36.7053,9.2166],[36.6972,9.2123],[36.6828,9.2215],[36.682,9.237],[36.6728,9.2472],[36.6694,9.2627],[36.6424,9.278],[36.6379,9.2921],[36.6248,9.283],[36.6005,9.282],[36.6119,9.3128],[36.6112,9.3408],[36.6289,9.3358],[36.6348,9.3249],[36.6504,9.3313],[36.6565,9.3207],[36.6712,9.316],[36.6804,9.3026],[36.7068,9.2926],[36.7128,9.3026],[36.7034,9.3263],[36.7062,9.3483],[36.7244,9.3459],[36.7359,9.3754],[36.7236,9.3792],[36.7217,9.3944],[36.7117,9.4119],[36.7137,9.4271],[36.7075,9.4432],[36.7047,9.4568],[36.6867,9.4663],[36.6708,9.4988],[36.6615,9.5102]]]}},{"type":"Feature","properties":{"pcode":"ET050104","name":"Erer (SM)","adm1":"Somali","clat":9.9054,"clon":41.3772},"geometry":{"type":"Polygon","coordinates":[[[41.7489,9.6158],[41.6504,9.7123],[41.6142,9.8713],[41.5796,9.936],[41.5895,9.9868],[41.5561,10.1759],[41.5382,10.2774],[41.1929,10.3471],[41.082,10.2017],[41.1328,9.9867],[41.1204,9.9496],[41.1514,9.9185],[41.1686,9.8864],[41.2135,9.8937],[41.2434,9.8254],[41.2641,9.7426],[41.2954,9.6299],[41.3163,9.6088],[41.3163,9.6022],[41.3314,9.582],[41.3401,9.5787],[41.3653,9.5534],[41.3633,9.5404],[41.3856,9.4954],[41.3854,9.4867],[41.4326,9.4759],[41.4633,9.4654],[41.491,9.4574],[41.5406,9.4996],[41.5642,9.5069],[41.6426,9.5151],[41.6542,9.4812],[41.6702,9.4706],[41.7023,9.4667],[41.724,9.4682],[41.7346,9.4715],[41.728,9.489],[41.7317,9.5085],[41.7491,9.6006],[41.7489,9.6158]]]}},{"type":"Feature","properties":{"pcode":"ET050207","name":"Harshin","adm1":"Somali","clat":8.9382,"clon":43.774},"geometry":{"type":"Polygon","coordinates":[[[44.1151,8.9726],[44.0106,9.0072],[43.8607,9.1426],[43.7278,9.2628],[43.6272,9.3544],[43.5831,9.3361],[43.5448,9.3548],[43.5261,9.3427],[43.4966,9.1899],[43.4298,8.8984],[43.4411,8.834],[43.5662,8.7131],[43.6345,8.6472],[43.6686,8.6337],[43.7074,8.6047],[43.9785,8.5036],[44.162,8.7466],[44.1225,8.8409],[44.1058,8.9117],[44.1119,8.9612],[44.1151,8.9726]]]}},{"type":"Feature","properties":{"pcode":"ET050608","name":"Berocano","adm1":"Somali","clat":6.1461,"clon":43.1328},"geometry":{"type":"Polygon","coordinates":[[[43.4122,5.9518],[43.4139,5.9576],[43.4933,6.3094],[43.5112,6.3551],[43.4065,6.3404],[43.3608,6.334],[42.9451,6.3098],[42.8833,6.2614],[42.8108,6.2139],[42.7983,6.1961],[42.8117,6.1855],[42.8114,6.1567],[42.8066,6.1428],[42.8303,6.1344],[42.8455,6.136],[42.855,6.1435],[42.8627,6.1332],[42.8807,6.1295],[42.8891,6.1158],[42.9031,6.116],[42.9157,6.101],[42.9294,6.0929],[42.9482,6.0938],[42.9544,6.0746],[42.9715,6.0702],[42.9949,6.0758],[43.0244,6.0474],[43.0467,6.0444],[43.0569,6.0342],[43.0668,6.0401],[43.0843,6.0325],[43.0866,6.0186],[43.1028,6.0226],[43.1152,6.0144],[43.1365,6.0129],[43.1494,6.0043],[43.185,5.9693],[43.194,5.9704],[43.2254,5.9574],[43.2255,5.9482],[43.24,5.9394],[43.2565,5.9483],[43.2759,5.9396],[43.3075,5.9469],[43.3311,5.938],[43.3519,5.9394],[43.3872,5.9481],[43.3985,5.9452],[43.4122,5.9518]]]}},{"type":"Feature","properties":{"pcode":"ET050804","name":"Elkare /Serer","adm1":"Somali","clat":6.0595,"clon":42.0202},"geometry":{"type":"Polygon","coordinates":[[[41.6197,6.3618],[41.528,6.4649],[41.5199,6.472],[41.4815,6.4465],[41.5663,6.0417],[41.6235,5.937],[41.6199,5.8778],[41.7273,5.8501],[41.7658,5.6598],[41.7748,5.6199],[41.9691,5.6213],[42.2401,5.7159],[42.6996,5.6839],[42.8129,5.8269],[42.8114,5.9429],[42.7902,5.9279],[42.6511,5.9209],[42.558,5.9709],[42.511,6.0019],[42.461,6.089],[42.397,6.1364],[42.1289,6.1558],[41.8018,6.2502],[41.6197,6.3618]]]}},{"type":"Feature","properties":{"pcode":"ET050805","name":"West Imi","adm1":"Somali","clat":6.2429,"clon":42.2844},"geometry":{"type":"Polygon","coordinates":[[[42.4787,6.2987],[42.4637,6.3042],[42.4134,6.3038],[42.4032,6.3239],[42.3866,6.3281],[42.374,6.3183],[42.3481,6.3351],[42.3365,6.332],[42.3235,6.3371],[42.3147,6.3262],[42.3011,6.3276],[42.2792,6.3558],[42.2679,6.355],[42.269,6.3725],[42.2645,6.3849],[42.2503,6.3801],[42.2481,6.3934],[42.22,6.4148],[42.2177,6.4286],[42.2026,6.4266],[42.1958,6.4347],[42.1805,6.4288],[42.1821,6.4481],[42.1662,6.4468],[42.1459,6.4561],[42.1328,6.4707],[42.1304,6.4932],[42.1406,6.5048],[42.1279,6.5099],[42.1179,6.536],[42.091,6.5503],[42.0796,6.5638],[42.0675,6.5663],[42.057,6.5573],[42.0408,6.5344],[41.9903,6.5011],[41.919,6.4792],[41.8577,6.4751],[41.8184,6.4704],[41.732,6.5062],[41.7045,6.4524],[41.6903,6.4294],[41.6561,6.4092],[41.6333,6.3914],[41.6197,6.3618],[41.8018,6.2502],[42.1289,6.1558],[42.397,6.1364],[42.461,6.089],[42.511,6.0019],[42.558,5.9709],[42.6511,5.9209],[42.7902,5.9279],[42.8114,5.9429],[42.8663,5.9949],[42.9013,6.067],[42.9157,6.101],[42.9031,6.116],[42.8891,6.1158],[42.8807,6.1295],[42.8627,6.1332],[42.855,6.1435],[42.8455,6.136],[42.8303,6.1344],[42.8066,6.1428],[42.8114,6.1567],[42.8117,6.1855],[42.7983,6.1961],[42.788,6.1944],[42.7543,6.2185],[42.7511,6.2346],[42.732,6.2596],[42.7147,6.2668],[42.6883,6.2632],[42.6785,6.2704],[42.6665,6.2577],[42.6404,6.2667],[42.6307,6.2526],[42.6175,6.2593],[42.6199,6.2699],[42.5812,6.2779],[42.5487,6.2911],[42.5358,6.2893],[42.5148,6.2957],[42.4787,6.2987]]]}},{"type":"Feature","properties":{"pcode":"ET050807","name":"Barey","adm1":"Somali","clat":4.7419,"clon":42.6615},"geometry":{"type":"Polygon","coordinates":[[[42.5638,4.2469],[42.6223,4.2604],[42.6561,4.2647],[42.7408,4.2728],[42.7686,4.2783],[42.8317,4.2953],[42.8557,4.3047],[42.8767,4.3183],[42.92,4.364],[42.9336,4.3888],[42.9465,4.4461],[42.9572,4.4811],[42.9689,4.5043],[42.9857,4.5254],[43.0758,4.6],[43.0378,4.6613],[43.0254,4.6965],[43.0197,4.7631],[43.0254,4.8069],[43.0385,4.8353],[42.9987,4.9011],[42.9902,4.9354],[42.9797,5.0068],[42.9788,5.0896],[42.9978,5.1581],[42.9607,5.2038],[42.9065,5.2355],[42.8618,5.2146],[42.8275,5.1936],[42.8132,5.167],[42.7894,5.1375],[42.7752,5.1308],[42.739,5.1013],[42.7019,5.0766],[42.6667,5.0642],[42.6267,5.0623],[42.5334,5.0328],[42.4944,5.0252],[42.4582,5.008],[42.4392,4.9776],[42.4392,4.9433],[42.4462,4.8707],[42.3828,4.7896],[42.2382,4.7047],[42.3238,4.6319],[42.312,4.5932],[42.3692,4.4871],[42.4174,4.3865],[42.4447,4.3346],[42.5638,4.2469]]]}},{"type":"Feature","properties":{"pcode":"ET050991","name":"Deka Suftu","adm1":"Somali","clat":5.0542,"clon":40.1256},"geometry":{"type":"Polygon","coordinates":[[[40.4093,5.3921],[40.3104,5.3763],[40.2767,5.3682],[40.2406,5.3661],[40.2084,5.3555],[40.1744,5.3534],[40.1346,5.3579],[40.098,5.3649],[40.0634,5.3785],[40.0337,5.3968],[39.9423,5.285],[39.9073,5.2196],[39.8784,5.1403],[39.8395,5.0468],[39.8336,5.0328],[39.8129,5.0021],[39.8044,4.9515],[39.784,4.8906],[39.7651,4.8468],[39.7585,4.8011],[39.7436,4.7235],[39.7441,4.7097],[39.7755,4.7454],[39.8058,4.747],[39.8108,4.7405],[39.8376,4.7361],[39.8591,4.7278],[39.9145,4.7115],[39.9345,4.7246],[39.9423,4.7347],[39.9944,4.737],[40.0362,4.7611],[40.0837,4.7713],[40.0945,4.7674],[40.0977,4.7524],[40.1128,4.7485],[40.1312,4.7601],[40.1694,4.7754],[40.1749,4.7858],[40.178,4.8246],[40.1886,4.8451],[40.2015,4.8517],[40.2312,4.8309],[40.2755,4.8297],[40.3028,4.8215],[40.329,4.8205],[40.3494,4.8115],[40.3633,4.7928],[40.4025,4.7727],[40.4125,4.7757],[40.4076,5.1369],[40.416,5.2436],[40.4073,5.3572],[40.4014,5.3803],[40.4093,5.3921]]]}},{"type":"Feature","properties":{"pcode":"ET060305","name":"Bambasi","adm1":"Benishangul Gumz","clat":9.8136,"clon":34.7017},"geometry":{"type":"Polygon","coordinates":[[[34.8339,10.075],[34.8201,10.0728],[34.8027,10.0619],[34.7885,10.046],[34.7814,10.0082],[34.7589,10.0115],[34.7485,9.9985],[34.7355,9.9999],[34.7336,9.9841],[34.7083,9.9679],[34.6335,9.9555],[34.6277,9.9625],[34.6408,9.9817],[34.6317,9.9883],[34.6168,9.9754],[34.592,9.9632],[34.6047,9.9467],[34.6246,9.945],[34.6318,9.9214],[34.6415,9.9044],[34.645,9.8714],[34.6342,9.8618],[34.6289,9.8464],[34.6072,9.8521],[34.5849,9.8397],[34.5318,9.7954],[34.5057,9.7655],[34.508,9.749],[34.5292,9.73],[34.5173,9.7085],[34.5046,9.6952],[34.4781,9.7039],[34.4632,9.6949],[34.4404,9.6905],[34.4107,9.6702],[34.4235,9.661],[34.431,9.63],[34.4439,9.6241],[34.4639,9.633],[34.4753,9.6232],[34.4925,9.6227],[34.4982,9.6341],[34.5149,9.6461],[34.5364,9.6414],[34.5461,9.6487],[34.5583,9.6445],[34.5675,9.63],[34.5854,9.6304],[34.632,9.588],[34.6421,9.5836],[34.6859,9.5637],[34.7351,9.5453],[34.783,9.5533],[34.7854,9.5665],[34.7921,9.6033],[34.8109,9.6301],[34.81,9.7022],[34.7961,9.7362],[34.8073,9.7611],[34.8317,9.8031],[34.8545,9.8167],[34.8697,9.8207],[34.8771,9.8454],[34.8922,9.8646],[34.8977,9.8818],[34.8668,9.9023],[34.8878,9.9082],[34.9076,9.953],[34.9093,9.9695],[34.8809,9.992],[34.8698,10.0135],[34.8507,10.0194],[34.8339,10.0672],[34.8339,10.075]]]}},{"type":"Feature","properties":{"pcode":"ET070704","name":"Hamer","adm1":"SNNP","clat":4.9525,"clon":36.513},"geometry":{"type":"Polygon","coordinates":[[[36.8706,5.0244],[36.8612,5.0198],[36.8403,5.0307],[36.838,5.0677],[36.849,5.0771],[36.855,5.1131],[36.8787,5.1547],[36.8564,5.1676],[36.8506,5.1599],[36.8243,5.1672],[36.8196,5.1745],[36.8283,5.2248],[36.8053,5.2302],[36.7791,5.2294],[36.7643,5.2165],[36.7456,5.2128],[36.727,5.2285],[36.7217,5.2457],[36.7095,5.2575],[36.6927,5.2592],[36.6891,5.2664],[36.6578,5.304],[36.6321,5.2915],[36.6114,5.2724],[36.5766,5.2641],[36.5055,5.2908],[36.482,5.3149],[36.4778,5.3354],[36.4684,5.3459],[36.4559,5.3439],[36.4396,5.3267],[36.4264,5.3283],[36.4179,5.3386],[36.4012,5.3357],[36.3914,5.3688],[36.3681,5.4148],[36.3536,5.4076],[36.3309,5.4219],[36.3258,5.4444],[36.3014,5.4549],[36.2884,5.4672],[36.2675,5.4663],[36.2413,5.4724],[36.218,5.4575],[36.2159,5.4545],[36.2313,5.4362],[36.2258,5.4226],[36.2147,5.4144],[36.225,5.3928],[36.2086,5.386],[36.2025,5.3772],[36.207,5.3598],[36.1912,5.3577],[36.1877,5.3472],[36.2116,5.3262],[36.2122,5.3076],[36.2056,5.2911],[36.2091,5.275],[36.2008,5.2638],[36.1945,5.2322],[36.198,5.216],[36.2154,5.2092],[36.2084,5.1918],[36.1965,5.2032],[36.1788,5.1813],[36.1916,5.1659],[36.1766,5.159],[36.1712,5.1731],[36.1602,5.1685],[36.1664,5.1551],[36.1578,5.1403],[36.164,5.0328],[36.1628,4.9963],[36.1582,4.9871],[36.1582,4.9633],[36.1638,4.9378],[36.1586,4.9219],[36.1629,4.8982],[36.1574,4.8792],[36.1605,4.858],[36.1682,4.8307],[36.1901,4.7678],[36.2171,4.7674],[36.2382,4.7568],[36.2628,4.7527],[36.3882,4.7273],[36.4041,4.706],[36.4123,4.6828],[36.4095,4.6622],[36.3835,4.6368],[36.3707,4.6117],[36.3687,4.5707],[36.397,4.5319],[36.4479,4.4471],[36.4477,4.442],[36.6475,4.4467],[36.7143,4.4339],[36.6915,4.4955],[36.6575,4.5804],[36.6808,4.6043],[36.6464,4.7108],[36.8285,4.7092],[36.8547,4.7361],[36.8635,4.793],[36.8608,4.9351],[36.8648,4.9442],[36.8607,4.9788],[36.8706,5.0244]]]}}]};
+const GEO_ADM1  = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Addis Ababa"},"geometry":{"type":"Polygon","coordinates":[[[38.78084354900011,9.090418864000128],[38.63940538700007,8.97403583300013],[38.79758392800011,8.833485285000165],[38.90605375800004,8.99753201700014],[38.78084354900011,9.090418864000128]]]}},{"type":"Feature","properties":{"name":"Afar"},"geometry":{"type":"Polygon","coordinates":[[[40.17298916200002,14.490280210000037],[39.772049039000194,14.37385066600018],[39.64996278300015,14.188612418000105],[39.83762477300007,14.154198463000057],[39.88593699400019,14.012203097000167],[39.80165798799999,13.945601886000077],[39.86390717400013,13.548160815000188],[39.719517477000124,13.475681038000062],[39.97798291700008,12.792190897000012],[39.806736717000035,12.596283054000082],[39.87487162200017,11.778754453000147],[40.21243796400017,11.108908145000044],[40.10261093300011,10.755046174000086],[40.15814575200005,10.090278628000078],[39.92727482200013,10.089962566],[40.07069285200015,9.857416648000026],[40.00936977700019,9.732856664000167],[39.84977405800015,9.74835898800012],[39.87864585500006,9.40041061100004],[39.749826330000076,9.36921501800009],[40.05118866900011,8.84062929800018],[40.47102194900009,9.354757718000087],[40.67554303400004,9.417517067000063],[41.01956620100003,9.948825373000147],[40.93655611200012,10.035245519],[41.07726892300008,10.681154098000093],[41.268160800000146,10.957852979000108],[41.81170458500014,10.983851437000055],[41.82902000000013,11.740970000000118],[42.39972,12.469720000000166],[41.07730185700012,13.878547704000084],[40.17298916200002,14.490280210000037]]]}},{"type":"Feature","properties":{"name":"Amhara"},"geometry":{"type":"Polygon","coordinates":[[[36.52607865600004,13.584281180000175],[36.45352451600007,13.762965645000065],[36.2486,13.368060000000185],[36.14254000000017,12.71485],[35.701080000000104,12.66612],[35.28388,11.983330000000137],[35.29593253400003,11.799151356000152],[35.51694609800006,11.71801119000014],[35.96581619800003,11.98458392599997],[36.14482701300011,11.685617417000117],[36.329066074000025,11.796687280000185],[36.40994764700008,11.41391171600003],[36.56388981300012,11.37134905500011],[36.46760784100013,11.155408725000086],[36.578017499,11.110522327000183],[36.28225389700003,10.803867243000184],[36.377216858000054,10.785756431000038],[36.31821832500003,10.528003484000124],[36.668325410000136,10.313818870000091],[37.18181111400014,10.241264534000095],[37.21331582300013,10.08790783100011],[37.70065207900012,9.83671438400006],[38.397499998000114,10.144277914999975],[38.47667664400018,10.36325995500016],[38.845728709000014,10.361023596000166],[38.852601261000075,10.118053046000057],[38.65723511500005,10.051451997000186],[38.828900269000144,9.769105514000046],[39.34671641300014,9.725141557000143],[39.294095184000184,9.491740781000146],[39.44770576600013,9.432491261],[39.17774371100006,9.271073862000094],[39.35701227100009,9.062080326],[39.27044801400007,8.724513068000135],[39.733277203000114,8.826240115000076],[39.88598905400005,9.269359401999964],[39.749826330000076,9.36921501800009],[39.87864585500006,9.40041061100004],[39.83912755000017,9.723559838000085],[40.00936977700019,9.732856664000167],[40.08884250700004,9.93480546100011],[39.92727482200013,10.089962566],[40.15814575200005,10.090278628000078],[40.10261093300011,10.755046174000086],[40.21243796400017,11.108908145000044],[39.87487162200017,11.778754453000147],[39.82473688200014,12.317740811000078],[39.28478473200005,12.29968814300014],[39.17440127700013,12.643480483000133],[39.306827890000136,12.866310379000026],[39.00021910600003,13.003443776000097],[38.95174191800004,13.237514728000122],[38.731588079000176,13.26227564400017],[38.66215026800006,13.531181440000125],[37.90410147300008,13.447048974000154],[37.77606695100013,13.633502867000061],[37.637097256000175,13.413895488000094],[37.20470911800004,13.255712392000135],[36.82478994000019,13.448246112000106],[36.609496445000104,13.375213016000146],[36.52607865600004,13.584281180000175]]]}},{"type":"Feature","properties":{"name":"Benishangul Gumz"},"geometry":{"type":"MultiPolygon","coordinates":[[[[35.97231432600017,11.97024769900014],[35.51694609800006,11.71801119000014],[35.26108444900018,11.927687256000013],[35.11625,11.85083],[34.97527000000014,10.864440000000116],[34.8005500000001,10.72333],[34.59444,10.88778],[34.28611,10.55416],[34.34833,10.238470000000177],[34.08583,9.55305],[34.13440686100006,8.9625607750001],[34.50370799100017,9.004134039000178],[34.34087704800015,9.168779030000167],[34.45180644800007,9.44911063000012],[34.548466702999974,9.629662940000117],[34.782986711000035,9.55333113000006],[34.98818221300013,9.996766925000031],[35.29745400500008,9.922483253000166],[35.36839702500015,9.719289413000183],[35.653437895000025,9.634928304000027],[35.756747975999986,9.323638114000062],[36.03157719600017,9.23342605900001],[36.04215539300009,9.015047793000065],[36.246477824000124,9.040962060000084],[36.205892528000106,9.35473969200018],[36.484109647000025,9.367867244000081],[36.4944298580001,9.509365743000046],[36.23177701600008,9.570323043000087],[36.10528661300003,9.773323643000083],[36.18456706800009,10.049661314000048],[36.69219150500015,10.296289130000048],[36.281647513000166,10.604559028000097],[36.30914227900007,10.862546867000049],[36.577120387000036,11.10552285500006],[36.460191950000194,11.226432699999975],[36.56388981300012,11.37134905500011],[36.40994764700008,11.41391171600003],[36.329066074000025,11.796687280000185],[36.14482701300011,11.685617417000117],[35.97231432600017,11.97024769900014]]],[[[36.23861703600005,8.965110055000025],[36.24229369100004,8.968437296000047],[36.24401679699997,8.969996645000037],[36.24792182100015,8.973530551000067],[36.23861703600005,8.965110055000025]]]]}},{"type":"Feature","properties":{"name":"Dire Dawa"},"geometry":{"type":"Polygon","coordinates":[[[42.26265044799999,9.656901718000029],[42.339772808000134,9.719617623000147],[42.213350694000155,9.783741669000165],[42.03080939300003,9.618482565000079],[41.77382847000001,9.653703360000065],[41.72802773800015,9.489033754000047],[42.074771083000144,9.473716646000128],[42.26265044799999,9.656901718000029]]]}},{"type":"Feature","properties":{"name":"Gambela"},"geometry":{"type":"Polygon","coordinates":[[[34.31242902300011,8.682099813000093],[33.77133,8.36775],[33.26354,8.46153],[32.9968300000001,7.88722],[33.88555,7.525420000000167],[34.23569,7.01972],[34.756990000000144,6.613780000000133],[34.85292277500008,6.33204939899997],[35.011289767000164,6.28025950600005],[35.19946552100009,6.410903987999973],[35.197662145000095,6.680216191999989],[34.933660998000164,6.796293009000124],[34.89809304100004,7.184790768000028],[35.37176748400003,7.116981183000178],[35.39229841000002,7.396183099000098],[35.12240210599998,7.478600811000092],[35.166305223000165,7.61487082900004],[34.93197755600016,7.728168627000173],[34.95068663400002,7.890286446000175],[35.14102409500009,7.989027562000047],[35.13813145800009,8.181827079000016],[34.52268710100003,8.475544933000037],[34.31329640800004,8.389928504000125],[34.31242902300011,8.682099813000093]]]}},{"type":"Feature","properties":{"name":"Harari"},"geometry":{"type":"Polygon","coordinates":[[[42.186329519000026,9.361750109000127],[42.061332213000185,9.226459058999978],[42.24602879800017,9.187002520000021],[42.186329519000026,9.361750109000127]]]}},{"type":"Feature","properties":{"name":"Oromia"},"geometry":{"type":"Polygon","coordinates":[[[38.75293030900019,10.379552492000073],[38.47667664400018,10.36325995500016],[38.397499998000114,10.144277914999975],[37.70065207900012,9.83671438400006],[36.97992079900007,10.314026481000099],[36.76175988600005,10.367309494000096],[36.445350893000125,10.245844166000154],[36.13989836400009,10.009705090000068],[36.10528661300003,9.773323643000083],[36.51491109100016,9.444134004000091],[36.205892528000106,9.35473969200018],[36.246477824000124,9.040962060000084],[36.086545823000165,9.012616791000028],[36.03157719600017,9.23342605900001],[35.750557958000115,9.331128127000113],[35.653437895000025,9.634928304000027],[35.36839702500015,9.719289413000183],[35.29745400500008,9.922483253000166],[34.98818221300013,9.996766925000031],[34.782986711000035,9.55333113000006],[34.548466702999974,9.629662940000117],[34.34087704800015,9.168779030000167],[34.50370799100017,9.004134039000178],[34.13440686100006,8.9625607750001],[34.12424570300004,8.651479982000126],[34.31242902300011,8.682099813000093],[34.31329640800004,8.389928504000125],[34.52268710100003,8.475544933000037],[35.13813145800009,8.181827079000016],[35.14102409500009,7.989027562000047],[34.95068663400002,7.890286446000175],[34.93197755600016,7.728168627000173],[35.21232413900003,7.651496985000051],[35.42873494500009,7.880825225000081],[35.73953928500015,7.866625353000074],[35.72800373500013,8.039569454000173],[35.86086865400017,8.077234741000098],[35.84861863200001,7.838964073],[36.03532741700019,7.572582032000071],[36.9646451700001,7.224732706000111],[37.390284942,7.402422383000101],[37.391790293000156,7.992900512],[37.60282978400011,7.964857662000043],[37.512209156000154,8.416968900000086],[37.816257282000095,8.331804870000042],[38.26631466500015,8.406637793000186],[38.347344031000034,8.254240952000032],[38.47788344000003,8.447359394000046],[38.63964164900011,8.412097670000094],[38.67925869300012,8.095811832000152],[38.54925865300004,8.26268337099998],[38.62770176400011,8.03359527900011],[38.42674865100014,7.514721252000072],[38.06415474100004,7.043386989000112],[38.146584174000054,6.977463948000036],[38.34219310100019,7.164452227000027],[38.630341248000036,7.110849564999967],[38.714380616000085,6.991414114000179],[38.635670932000096,6.771714267],[39.059308084,6.608786533999989],[39.13185995300006,6.158786172000134],[38.96059829700016,6.159270747000164],[38.75795676400014,6.40906830400013],[38.47528660000012,6.430375209000147],[38.27171014100014,5.986579348000021],[38.396085707000054,5.920052383000041],[38.20799123799998,5.840191838000123],[38.07986341200012,6.116986871000108],[38.28240350100015,6.437769978000119],[37.89277595400017,6.596070541000074],[37.78317581900018,6.010600270000111],[37.96857460200016,5.956017667000083],[38.088883692000024,5.745607964000158],[37.93017464400009,5.616672147000088],[37.900819335000165,5.244854087000135],[36.94896665400017,5.19468654700006],[36.85473946500008,4.736059609000165],[36.64640914100016,4.710757126000146],[36.714253964000136,4.433850543000176],[37.0397200000001,4.375550000000146],[38.12111000000016,3.61167],[38.913610000000176,3.513890000000117],[39.28469638700011,3.623078557000156],[39.39961698500019,3.79565871799997],[40.03368142099998,5.396789590000139],[40.532893277000085,5.410648792000018],[40.922295132000045,5.683378211000104],[40.86035635200017,6.436198390000129],[41.015537354,6.644558033000067],[41.13102787300011,6.691257775999986],[41.619688883000094,6.361716810000019],[41.757879747000175,6.540536444000168],[41.999540669000055,6.589845874000105],[42.20985301500019,7.264004914],[41.89360232500013,7.41868560000006],[41.94840464200007,8.200894719000132],[42.23966702600012,8.639883325000142],[42.52013754100011,8.478712686],[42.65140693300003,8.129672756000161],[42.89884863900005,8.409101609000118],[42.86532986700013,8.825111068000183],[42.59934556800005,9.106174348000081],[42.537453342000106,9.372981780000146],[42.97984719400017,9.607134029000065],[42.66379457400012,9.776549058000057],[42.18038008200011,9.644342017000099],[42.074771083000144,9.473716646000128],[41.23931572900011,9.498795281000127],[40.844103443000165,9.3047967010001],[40.78882344700003,9.386896769000145],[40.917524111000034,9.421836350000149],[40.69856323100004,9.44764696599998],[40.47102194900009,9.354757718000087],[40.06695374800006,8.843969253000068],[39.807734578000066,9.135445119000167],[39.733277203000114,8.826240115000076],[39.28581489000004,8.71779125300003],[39.35701227100009,9.062080326],[39.17774371100006,9.271073862000094],[39.452242354000134,9.393915445000175],[39.294095184000184,9.491740781000146],[39.37011478900007,9.699377299000048],[38.828900269000144,9.769105514000046],[38.65723511500005,10.051451997000186],[38.852601261000075,10.118053046000057],[38.845728709000014,10.361023596000166],[38.75293030900019,10.379552492000073]],[[38.750059228,9.090301069000077],[38.905000952000194,9.009499839000057],[38.79758392800011,8.833485285000165],[38.63940538700007,8.97403583300013],[38.750059228,9.090301069000077]],[[36.24766410700016,8.973674416000108],[36.24792182100015,8.973530551000067],[36.24401679699997,8.969996645000037],[36.24229369100004,8.968437296000047],[36.24766410700016,8.973674416000108]],[[42.25299947600013,9.383802192000132],[42.25944886800016,9.19227247300006],[42.061332213000185,9.226459058999978],[42.12914901400012,9.388672600000064],[42.25299947600013,9.383802192000132]]]}},{"type":"Feature","properties":{"name":"Sidama"},"geometry":{"type":"Polygon","coordinates":[[[38.394920407000086,7.123569420000024],[38.130154270000105,6.974009886000033],[38.01646857000003,6.575178275000042],[38.40273642500006,6.355070756000089],[38.75795676400014,6.40906830400013],[38.96059829700016,6.159270747000164],[39.13185995300006,6.158786172000134],[39.059308084,6.608786533999989],[38.635670932000096,6.771714267],[38.714380616000085,6.991414114000179],[38.630341248000036,7.110849564999967],[38.394920407000086,7.123569420000024]]]}},{"type":"Feature","properties":{"name":"SNNP"},"geometry":{"type":"MultiPolygon","coordinates":[[[[38.575784188,8.444891630000143],[38.347344031000034,8.254240952000032],[38.26631466500015,8.406637793000186],[37.816257282000095,8.331804870000042],[37.512209156000154,8.416968900000086],[37.47202332000012,8.266089422000164],[37.623886783000046,8.200043598000093],[37.60282978400011,7.964857662000043],[37.38773482800008,7.974383455000122],[37.35453450500012,7.286864775000083],[37.53089046800005,7.198335059000101],[37.423853570000176,6.876842609000107],[37.009195236000096,6.589766373000032],[36.96846544300013,6.693222842000068],[36.69349450500016,6.705677586000093],[36.26611879600006,6.391658065000172],[36.13227335500005,6.435751549000031],[35.956721498000036,6.225570251000079],[35.964752868000176,5.669370752000077],[35.75384274400017,5.600657981000097],[35.77444000000014,4.79861000000011],[36.04530000000011,4.44708],[36.714253964000136,4.433850543000176],[36.64640914100016,4.710757126000146],[36.85473946500008,4.736059609000165],[36.94896665400017,5.19468654700006],[37.900819335000165,5.244854087000135],[37.93017464400009,5.616672147000088],[38.088883692000024,5.745607964000158],[37.96857460200016,5.956017667000083],[37.78317581900018,6.010600270000111],[37.7999260040001,6.478181572000153],[38.018994360000136,6.577091720000169],[38.13659192200004,6.939727871000116],[38.07801476100019,7.180263146000073],[38.42674865100014,7.514721252000072],[38.62770176400011,8.03359527900011],[38.54925865300004,8.26268337099998],[38.67925869300012,8.095811832000152],[38.575784188,8.444891630000143]]],[[[38.28598895400006,6.435242889000051],[38.07986341200012,6.116986871000108],[38.20799123799998,5.840191838000123],[38.396085707000054,5.920052383000041],[38.27171014100014,5.986579348000021],[38.438971759000026,6.216879246000133],[38.28598895400006,6.435242889000051]]]]}},{"type":"Feature","properties":{"name":"Somali"},"geometry":{"type":"Polygon","coordinates":[[[42.86263239800013,10.984293875000049],[42.64041,11.09708],[42.01972,10.944720000000189],[41.30028097600018,10.964062852000097],[41.07726892300008,10.681154098000093],[40.93655611200012,10.035245519],[41.01956620100003,9.948825373000147],[40.696138915000176,9.446065145000091],[40.88999406900001,9.448646402000065],[40.844103443000165,9.3047967010001],[41.23931572900011,9.498795281000127],[41.72194764100004,9.467533805000073],[41.77382847000001,9.653703360000065],[42.03080939300003,9.618482565000079],[42.213350694000155,9.783741669000165],[42.950900710000155,9.672497336000049],[42.537453342000106,9.372981780000146],[42.59934556800005,9.106174348000081],[42.86532986700013,8.825111068000183],[42.89884863900005,8.409101609000118],[42.65140693300003,8.129672756000161],[42.50255751800012,8.492082721000031],[42.23966702600012,8.639883325000142],[42.06972595000008,8.493974029000185],[41.867102525000064,7.53277558000002],[42.20984292200018,7.226904942999965],[41.999540669000055,6.589845874000105],[41.757879747000175,6.540536444000168],[41.619688883000094,6.361716810000019],[41.13102787300011,6.691257775999986],[41.015537354,6.644558033000067],[40.86035635200017,6.436198390000129],[40.922295132000045,5.683378211000104],[40.532893277000085,5.410648792000018],[40.03368142099998,5.396789590000139],[39.499677537000025,3.96572886000007],[39.13000000000011,3.510830000000112],[39.560270000000116,3.40667000000019],[39.86666,3.86944],[40.773384137000164,4.282452356000022],[41.169265747000054,3.942579985000066],[41.83348846400003,3.945880889000023],[42.0876693730001,4.179365158000053],[42.85569,4.30472],[43.158190000000104,4.66639],[43.50854576000012,4.829276613000047],[43.98194000000012,4.96305],[44.95083000000017,4.9025],[47.98722,8.00111],[47.01194000000015,8.00111],[44.01055000000014,9.007220000000132],[43.44166,9.41764],[43.20409,9.892290000000173],[42.85069,10.21944000000019],[42.66479,10.632910000000152],[42.86263239800013,10.984293875000049]]]}},{"type":"Feature","properties":{"name":"South West Ethiopia"},"geometry":{"type":"Polygon","coordinates":[[[37.3494798860001,7.35773547600013],[37.12859063800005,7.228445968000017],[36.87915457500014,7.329694398000072],[36.791112613000166,7.252283413000157],[36.0450673580001,7.565481707000117],[35.84861863200001,7.838964073],[35.86086865400017,8.077234741000098],[35.72800373500013,8.039569454000173],[35.73953928500015,7.866625353000074],[35.433531098000174,7.882756181000161],[35.11603360700019,7.645092153000178],[35.12240210599998,7.478600811000092],[35.39229841000002,7.396183099000098],[35.380350540000165,7.122820944000068],[34.89809304100004,7.184790768000028],[34.933660998000164,6.796293009000124],[35.179559546000064,6.727364908000027],[35.19946552100009,6.410903987999973],[35.011289767000164,6.28025950600005],[34.85292277500008,6.33204939899997],[35.30305,5.377360000000124],[35.757041116000096,5.345433895999975],[35.75384274400017,5.600657981000097],[35.968193095000174,5.682272794000028],[35.956721498000036,6.225570251000079],[36.13227335500005,6.435751549000031],[36.26611879600006,6.391658065000172],[36.708785880000164,6.710652776000188],[36.96846544300013,6.693222842000068],[37.003502849000085,6.58960011500011],[37.24052570400005,6.655994410000119],[37.53042137300008,7.189943259000131],[37.3494798860001,7.35773547600013]]]}},{"type":"Feature","properties":{"name":"Tigray"},"geometry":{"type":"Polygon","coordinates":[[[37.943705885000156,14.841414523000083],[37.57253101599997,14.455381370000168],[37.21200163500009,14.436939019000022],[37.0175166840001,14.250591909000036],[36.55273739800009,14.278901204000135],[36.45352451600007,13.762965645000065],[36.59265187200003,13.389015686000164],[36.82478994000019,13.448246112000106],[37.20470911800004,13.255712392000135],[37.637097256000175,13.413895488000094],[37.77606695100013,13.633502867000061],[37.90410147300008,13.447048974000154],[38.66215026800006,13.531181440000125],[38.731588079000176,13.26227564400017],[38.95174191800004,13.237514728000122],[39.00021910600003,13.003443776000097],[39.306827890000136,12.866310379000026],[39.17440127700013,12.643480483000133],[39.28478473200005,12.29968814300014],[39.81761133000015,12.324029795000172],[39.826104312000155,12.693741426000031],[39.97798291700008,12.792190897000012],[39.719517477000124,13.475681038000062],[39.86390717400013,13.548160815000188],[39.80165798799999,13.945601886000077],[39.88593699400019,14.012203097000167],[39.83762477300007,14.154198463000057],[39.64996278300015,14.188612418000105],[39.98085004700016,14.440779718000101],[39.50267493900003,14.67701014100004],[39.49325313200018,14.509462223000128],[39.368698579000124,14.53831389700008],[39.26072509400012,14.393100468000057],[39.23863151300003,14.565882257000055],[39.08073694700016,14.63651403300014],[38.44741137800014,14.410416756000188],[37.943705885000156,14.841414523000083]]]}}]};
 
 const REGIONAL = {
-  'Tigray':           {boh:'Dr. Gebremichael', capital:'Mekelle',    ngo:'IRC Ethiopia',     contact:'James Obi',       role:'Field Coordinator'},
-  'Amhara':           {boh:'Dr. Alemu Tadesse',capital:'Bahir Dar',  ngo:'Save the Children',contact:'Hana Tesfaye',    role:'Area Manager'},
-  'Oromia':           {boh:'Dr. Bekele Worku', capital:'Addis Ababa',ngo:'GOAL Ethiopia',    contact:'Patrick Walsh',   role:'Nutrition Program Manager'},
-  'Somali':           {boh:'Dr. Hussein Abdi', capital:'Jigjiga',    ngo:'ACF Ethiopia',     contact:'Marie Dubois',    role:'Field Coordinator Somali'},
-  'Benishangul Gumuz':{boh:'Dr. Tadesse Bekele',capital:'Assosa',   ngo:'ACF Ethiopia',     contact:'Marie Dubois',    role:'Field Coordinator BG'},
-  'South Ethiopia':   {boh:'Dr. Fikru Legesse',capital:'Arba Minch', ngo:'Save the Children',contact:'Hana Tesfaye',    role:'South Ethiopia Coord.'},
+  'Tigray':           {boh:'Dr. Gebremichael', capital:'Mekelle',    ngo:'IRC Ethiopia',     contact:'James Obi',    role:'Field Coordinator'},
+  'Amhara':           {boh:'Dr. Alemu Tadesse',capital:'Bahir Dar',  ngo:'Save the Children',contact:'Hana Tesfaye', role:'Area Manager'},
+  'Oromia':           {boh:'Dr. Bekele Worku', capital:'Addis Ababa',ngo:'GOAL Ethiopia',    contact:'Patrick Walsh', role:'Nutrition Program Manager'},
+  'Somali':           {boh:'Dr. Hussein Abdi', capital:'Jigjiga',    ngo:'ACF Ethiopia',     contact:'Marie Dubois', role:'Field Coordinator Somali'},
+  'Benishangul Gumuz':{boh:'Dr. Tadesse Bekele',capital:'Assosa',   ngo:'ACF Ethiopia',     contact:'Marie Dubois', role:'Field Coordinator BG'},
+  'South Ethiopia':   {boh:'Dr. Fikru Legesse',capital:'Arba Minch',ngo:'Save the Children',contact:'Hana Tesfaye', role:'South Ethiopia Coord.'},
+  'Afar':             {boh:'Dr. Ahmed Hassan', capital:'Semera',     ngo:'WFP Sub-Office',   contact:'Fatima Al-Hassan',role:'Logistics Officer'},
 };
-
-const NGO_COLOR = {
-  'IRC Ethiopia':'#E67E22','Save the Children':'#27AE60',
-  'GOAL Ethiopia':'#9B59B6','ACF Ethiopia':'#5B8DB8','WFP Sub-Office':'#C9A84C',
-};
-
+const NGO_COLOR = {'IRC Ethiopia':'#E67E22','Save the Children':'#27AE60','GOAL Ethiopia':'#9B59B6','ACF Ethiopia':'#5B8DB8','WFP Sub-Office':'#C9A84C'};
 const REGION_BOUNDS = {
   'Amhara':           [[8.7,35.3],[13.8,40.2]],
   'Benishangul Gumuz':[[9.0,34.1],[12.0,36.7]],
@@ -306,44 +258,50 @@ const REGION_BOUNDS = {
   'Somali':           [[3.4,39.1],[11.1,48.0]],
   'South Ethiopia':   [[3.5,35.0],[7.5,38.5]],
   'Tigray':           [[12.3,36.5],[15.0,40.0]],
+  'Afar':             [[8.8,39.6],[14.5,42.4]],
 };
 
 // ── MAP ───────────────────────────────────────────────────────
-const map = L.map('map', {zoomControl:true}).setView([8.5, 39.5], 6);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution:'&copy; OpenStreetMap contributors', maxZoom:14
+const map = L.map('map',{zoomControl:true}).setView([8.5,39.5],6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  attribution:'&copy; OpenStreetMap contributors',maxZoom:14
 }).addTo(map);
 
-// Add circle markers for LMRI woredas
-const markers = {};
-LMRI.forEach(w => {
-  const color = w.risk === 'critical' ? '#C0392B' : '#E67E22';
-  const r = w.risk === 'critical' ? 12 : 9;
+// ADM1 background
+L.geoJSON(GEO_ADM1,{
+  style:{fillColor:'rgba(200,200,200,0.06)',color:'rgba(255,255,255,0.12)',weight:0.8,fillOpacity:1}
+}).addTo(map);
 
-  const circle = L.circleMarker([w.lat, w.lon], {
-    radius: r,
-    fillColor: color,
-    color: color,
-    weight: 1.5,
-    opacity: 0.9,
-    fillOpacity: 0.75,
-  }).addTo(map);
-
-  circle.bindPopup(`
-    <div class="lp-name">${w.woreda}</div>
-    <div class="lp-region">${w.zone} · ${w.region}</div>
-    <div class="lp-score" style="color:${color}">${w.lmri.toFixed(2)}</div>
-    <div class="lp-risk" style="color:${color}">${w.risk === 'critical' ? 'CRITICAL' : 'HIGH RISK'}</div>
-    <div class="lp-fac">${w.facilities} facilities uncovered · ${w.has_support ? (w.facilities_support + ' under NGO umbrella') : 'No NGO support'}</div>
-  `);
-
-  circle.on('click', () => selectWoreda(w));
-  markers[w.woreda] = circle;
-});
-
-// Add grey polygon overlay for Ethiopia using GeoJSON regions
-// Simple grey background for context
-const ETHIOPIA_CENTER = L.latLng(9.0, 40.0);
+// High-risk woreda polygons
+const woredaLayers = {};
+L.geoJSON(GEO_HR,{
+  style: f => {
+    const w = LMRI_DATA.find(d => d.pcode === f.properties.pcode);
+    if(!w) return {fillColor:'rgba(180,180,180,0.2)',color:'rgba(255,255,255,0.15)',weight:0.8,fillOpacity:1};
+    const c = w.risk==='critical' ? 'rgba(192,57,43,0.75)' : 'rgba(230,126,34,0.65)';
+    const sc = w.risk==='critical' ? '#C0392B' : '#E67E22';
+    return {fillColor:c,color:sc,weight:1.5,fillOpacity:1};
+  },
+  onEachFeature: (f, layer) => {
+    const w = LMRI_DATA.find(d => d.pcode === f.properties.pcode);
+    if(!w) return;
+    const color = w.risk==='critical' ? '#C0392B' : '#E67E22';
+    layer.bindPopup(`
+      <div class="lp-name">${w.woreda}</div>
+      <div class="lp-sub">${w.zone} · ${w.region}</div>
+      <div class="lp-score" style="color:${color}">${w.lmri.toFixed(2)}</div>
+      <div class="lp-risk" style="color:${color}">${w.risk==='critical'?'CRITICAL':'HIGH RISK'}</div>
+      <div class="lp-hint">${w.facilities} facilities · ${w.hr} health workers · click to analyse</div>
+    `);
+    layer.on('click', ()=>selectWoreda(w));
+    layer.on('mouseover', ()=>layer.setStyle({weight:2.5,fillOpacity:0.9}));
+    layer.on('mouseout', ()=>{
+      const isSel = selectedWoreda && selectedWoreda.pcode===w.pcode;
+      layer.setStyle({weight:isSel?2.5:1.5,fillOpacity:isSel?0.95:w.risk==='critical'?0.75:0.65});
+    });
+    woredaLayers[w.pcode] = layer;
+  }
+}).addTo(map);
 
 // ── STATE ─────────────────────────────────────────────────────
 let selectedWoreda = null;
@@ -351,141 +309,167 @@ let activeRegion = 'all';
 let step = 0;
 
 // ── REGION FILTER ─────────────────────────────────────────────
-document.querySelectorAll('.rb-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.rb-btn').forEach(b => b.classList.remove('active'));
+document.querySelectorAll('.rb-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.rb-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     activeRegion = btn.dataset.region;
-    zoomToRegion(activeRegion);
+    if(activeRegion==='all') map.setView([8.5,39.5],6,{animate:true});
+    else { const b=REGION_BOUNDS[activeRegion]; if(b) map.fitBounds(b,{padding:[40,40],animate:true}); }
     renderList();
     updateKPIs();
   });
 });
 
-function zoomToRegion(region) {
-  if (region === 'all') { map.setView([8.5, 39.5], 6); return; }
-  const bounds = REGION_BOUNDS[region];
-  if (bounds) map.fitBounds(bounds, {padding:[40,40]});
+function getFiltered(){
+  return activeRegion==='all' ? LMRI_DATA : LMRI_DATA.filter(w=>w.region===activeRegion);
 }
 
-// ── KPIs ──────────────────────────────────────────────────────
-function getFiltered() {
-  if (activeRegion === 'all') return LMRI;
-  return LMRI.filter(w => w.region === activeRegion);
+function updateKPIs(){
+  const d = getFiltered();
+  document.getElementById('k-total').textContent = d.length;
+  document.getElementById('k-crit').textContent = d.filter(w=>w.risk==='critical').length;
+  document.getElementById('k-nongo').textContent = d.filter(w=>!w.has_support).length;
+  document.getElementById('k-fac').textContent = d.reduce((s,w)=>s+w.facilities,0);
 }
 
-function updateKPIs() {
-  const data = getFiltered();
-  document.getElementById('kpi-total').textContent = data.length;
-  document.getElementById('kpi-critical').textContent = data.filter(w => w.risk === 'critical').length;
-  document.getElementById('kpi-no-ngo').textContent = data.filter(w => !w.has_support).length;
-  document.getElementById('kpi-fac').textContent = data.reduce((s,w) => s + w.facilities, 0);
-}
-
-// ── WOREDA LIST ───────────────────────────────────────────────
-function renderList() {
-  const data = getFiltered().sort((a,b) => b.lmri - a.lmri);
+function renderList(){
+  const data = getFiltered().slice().sort((a,b)=>b.lmri-a.lmri);
   document.getElementById('wl-count').textContent = data.length;
-  document.getElementById('woreda-list').innerHTML = data.map(w => {
-    const color = w.risk === 'critical' ? '#C0392B' : '#E67E22';
-    const isSelected = selectedWoreda && selectedWoreda.woreda === w.woreda;
-    return `<div class="wl-item${isSelected?' selected':''}" onclick="selectWoreda(${JSON.stringify(w).replace(/"/g,'&quot;')})">
-      <div class="wl-dot" style="background:${color}"></div>
+  document.getElementById('woreda-list').innerHTML = data.map(w=>{
+    const c = w.risk==='critical'?'#C0392B':'#E67E22';
+    const isSel = selectedWoreda && selectedWoreda.pcode===w.pcode;
+    return `<div class="wl-item${isSel?' selected':''}" onclick="selectWoreda(LMRI_DATA.find(x=>x.pcode==='${w.pcode}'))">
+      <div class="wl-dot" style="background:${c}"></div>
       <div class="wl-info">
         <div class="wl-name">${w.woreda}</div>
-        <div class="wl-region">${w.region} · ${w.zone}</div>
+        <div class="wl-sub">${w.region} · ${w.facilities} facilities</div>
       </div>
-      <div class="wl-score" style="color:${color}">${w.lmri.toFixed(2)}</div>
+      <div class="wl-score" style="color:${c}">${w.lmri.toFixed(2)}</div>
     </div>`;
   }).join('');
 }
 
 // ── SELECT WOREDA ─────────────────────────────────────────────
-function selectWoreda(w) {
-  if (typeof w === 'string') w = JSON.parse(w);
+function selectWoreda(w){
+  if(!w) return;
   selectedWoreda = w;
   renderList();
-  map.setView([w.lat, w.lon], 9, {animate:true});
-  if (markers[w.woreda]) markers[w.woreda].openPopup();
+  const layer = woredaLayers[w.pcode];
+  if(layer){
+    const bounds = layer.getBounds();
+    map.fitBounds(bounds,{padding:[60,60],maxZoom:11,animate:true});
+    layer.setStyle({weight:2.5,fillOpacity:0.95});
+    layer.openPopup();
+  }
   openDetail(w);
 }
 
-// ── DETAIL DRAWER ─────────────────────────────────────────────
-function openDetail(w) {
-  const reg = REGIONAL[w.region] || {boh:'Unknown',capital:'—',ngo:'—',contact:'—',role:'—'};
-  const color = w.risk === 'critical' ? '#C0392B' : '#E67E22';
-  const ngoColor = NGO_COLOR[reg.ngo] || '#5B8DB8';
+// ── DETAIL PANEL ─────────────────────────────────────────────
+function openDetail(w){
+  const reg = REGIONAL[w.region]||{boh:'—',capital:'—',ngo:'—',contact:'—',role:'—'};
+  const color = w.risk==='critical'?'#C0392B':'#E67E22';
+  const ngoColor = NGO_COLOR[reg.ngo]||'#5B8DB8';
 
-  document.getElementById('dd-title').textContent = w.woreda;
-  document.getElementById('dd-meta').textContent = w.zone + ' · ' + w.region + ' · LMRI ' + w.lmri.toFixed(2);
-  document.getElementById('detail-drawer').classList.add('open');
+  document.getElementById('dp-title').textContent = w.woreda;
+  document.getElementById('dp-meta').textContent = w.zone+' · '+w.region+' · pcode: '+w.pcode;
+  document.getElementById('detail-panel').classList.add('open');
 
+  // LMRI explanation
+  const lmriExplain = `LMRI = proportion of OTP-active facilities with RUTF stockout > 30 days during T2 (Oct–Mar 2025/26). Score 0–1. Threshold: 0.5.`;
+  const delta = w.delta !== null ? (w.delta > 0 ? '+'+w.delta.toFixed(2)+' vs T1 (worsening)' : w.delta.toFixed(2)+' vs T1 (improving)') : 'No T1 comparison';
+
+  // Facility rows
+  const facs = w.facilities_detail || [];
+  const facRows = facs.length > 0 ? facs.map(f=>{
+    const days = parseFloat(f.lmri_t2)||0;
+    const isCrit = f.critical==='1.0'||f.critical===1;
+    const fc = isCrit?'#C0392B':'rgba(255,255,255,0.4)';
+    const noSupply = f.supply_t2==='0.0'||f.supply_t2===0;
+    return `<div class="fac-item">
+      <div class="fac-dot" style="background:${fc}"></div>
+      <div>
+        <div class="fac-name">${f.name}${noSupply?'<span class="fac-tag" style="background:rgba(192,57,43,0.15);color:#C0392B">No RUTF</span>':''}</div>
+        <div style="display:flex;gap:12px;margin-top:3px">
+          <span style="font-family:var(--mono);font-size:9px;color:${fc}">${days>0?days+' days stockout':'No stockout'}</span>
+          ${f.admitted_t2?'<span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.25)">'+f.admitted_t2+' admissions</span>':''}
+        </div>
+      </div>
+    </div>`;
+  }).join('') : '<div style="font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.25);padding:8px 0">No facility detail available</div>';
+
+  // Response chain
   const firstContact = w.has_support
-    ? `Contact ${reg.contact} (${reg.ngo}) first — active in this territory. Coordinate with ${reg.boh} at ${reg.capital} BoH for access.`
-    : `No NGO present. Contact ${reg.boh} at ${reg.capital} BoH directly. Escalate to UNICEF Addis if no response within 48h.`;
+    ? `Contact ${reg.contact} (${reg.ngo}) first — present in territory. Then coordinate with ${reg.boh} at ${reg.capital} BoH.`
+    : `No NGO present. Contact ${reg.boh} (${reg.capital} BoH) directly. Escalate to UNICEF Addis if no response in 48h.`;
 
-  document.getElementById('dd-body').innerHTML = `
-    <div class="dd-score-block">
-      <div class="dd-score-lbl">// LMRI score</div>
-      <div class="dd-score-val" style="color:${color}">${w.lmri.toFixed(2)}</div>
-      <div class="dd-score-sub">${w.risk === 'critical' ? 'Critical ≥ 0.75' : 'High 0.50–0.74'}</div>
-      <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px;">
-        <div style="display:flex;justify-content:space-between"><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3)">Facilities uncovered</span><span style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.7)">${w.facilities}</span></div>
-        <div style="display:flex;justify-content:space-between"><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3)">HW unreached</span><span style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.7)">${w.hr}</span></div>
-        <div style="display:flex;justify-content:space-between"><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3)">Under NGO umbrella</span><span style="font-family:var(--mono);font-size:11px;color:${w.has_support?'#22c55e':'#ef4444'}">${w.facilities_support || 0}</span></div>
-      </div>
+  document.getElementById('dp-body').innerHTML = `
+    <div class="dp-col">
+      <div class="dp-col-lbl">// LMRI score</div>
+      <div class="dp-score-big" style="color:${color}">${w.lmri.toFixed(2)}</div>
+      <div class="dp-score-risk" style="color:${color}">${w.risk==='critical'?'CRITICAL':'HIGH RISK'}</div>
+      <div class="dp-metric"><span class="dp-metric-lbl">Facilities at risk</span><span class="dp-metric-val">${w.facilities}</span></div>
+      <div class="dp-metric"><span class="dp-metric-lbl">HW unreached</span><span class="dp-metric-val">${w.hr}</span></div>
+      <div class="dp-metric"><span class="dp-metric-lbl">NGO coverage</span><span class="dp-metric-val" style="color:${w.has_support?'#22c55e':'#ef4444'}">${w.has_support?w.fac_support+' facilities':'None'}</span></div>
+      <div class="dp-metric"><span class="dp-metric-lbl">T1→T2 trend</span><span class="dp-metric-val" style="font-size:9px;color:${w.delta>0?'#ef4444':w.delta<0?'#22c55e':'rgba(255,255,255,0.4)'}">${delta}</span></div>
+      ${w.low_n?'<div style="margin-top:10px;font-family:var(--mono);font-size:8px;color:rgba(245,158,11,0.7);padding:5px 8px;border:0.5px solid rgba(245,158,11,0.2);background:rgba(245,158,11,0.05)">⚠ Low N flag — interpret with caution</div>':''}
+      <div style="margin-top:12px;font-family:var(--sans);font-size:10px;color:rgba(255,255,255,0.2);line-height:1.5">${lmriExplain}</div>
     </div>
 
-    <div class="dd-chain">
-      <div class="dd-chain-lbl">// Response chain</div>
-      ${w.has_support ? `
-        <div class="dd-chain-node active-chain">
-          <div class="dd-chain-dot" style="background:${ngoColor}"></div>
-          <div><div class="dd-chain-org">${reg.ngo}</div><div class="dd-chain-role">${reg.contact} · ${reg.role}</div></div>
-        </div>
-        <div class="dd-chain-arrow">↑ report to</div>
-      ` : `
-        <div class="dd-chain-node" style="border-left-color:rgba(192,57,43,0.5)">
-          <div class="dd-chain-dot" style="background:rgba(192,57,43,0.4);border:1px dashed #C0392B"></div>
-          <div><div class="dd-chain-org" style="color:rgba(255,255,255,0.3)">No NGO present</div><div class="dd-chain-role" style="color:#C0392B">Coverage gap</div></div>
-        </div>
-        <div class="dd-chain-arrow">↑ escalate directly</div>
-      `}
-      <div class="dd-chain-node">
-        <div class="dd-chain-dot" style="background:#9B7FCC"></div>
-        <div><div class="dd-chain-org">${w.region} Regional BoH</div><div class="dd-chain-role">${reg.boh} · ${reg.capital}</div></div>
-      </div>
-      <div class="dd-chain-arrow">↑ escalate</div>
-      <div class="dd-chain-node">
-        <div class="dd-chain-dot" style="background:#C9A84C"></div>
-        <div><div class="dd-chain-org">UNICEF Ethiopia</div><div class="dd-chain-role">Sarah Okonkwo · Head of Nutrition Cluster · Addis Ababa</div></div>
-      </div>
+    <div class="dp-col">
+      <div class="dp-col-lbl">// Health facilities (${facs.length} OTP-active)</div>
+      ${facRows}
     </div>
 
-    <div class="dd-action">
-      <div class="dd-action-lbl">// Action this week</div>
-      <div class="dd-action-text">${firstContact}</div>
+    <div class="dp-col">
+      <div class="dp-col-lbl">// Response chain</div>
+      ${w.has_support?
+        `<div class="chain-node" style="border-left:1.5px solid ${ngoColor}20">
+          <div class="chain-dot" style="background:${ngoColor}"></div>
+          <div><div class="chain-org">${reg.ngo}</div><div class="chain-role">${reg.contact} · ${reg.role}</div></div>
+        </div>
+        <div class="chain-arrow">↑ report to</div>`
+        :
+        `<div class="chain-node" style="border-left:1.5px solid rgba(192,57,43,0.3)">
+          <div class="chain-dot" style="background:rgba(192,57,43,0.4);border:1px dashed #C0392B"></div>
+          <div><div class="chain-org" style="color:rgba(255,255,255,0.3)">No NGO present</div><div class="chain-role" style="color:#C0392B">Coverage gap — deploy needed</div></div>
+        </div>
+        <div class="chain-arrow">↑ escalate directly</div>`
+      }
+      <div class="chain-node">
+        <div class="chain-dot" style="background:#9B7FCC"></div>
+        <div><div class="chain-org">${w.region} Regional BoH</div><div class="chain-role">${reg.boh} · ${reg.capital}</div></div>
+      </div>
+      <div class="chain-arrow">↑ escalate</div>
+      <div class="chain-node">
+        <div class="chain-dot" style="background:#C9A84C"></div>
+        <div><div class="chain-org">UNICEF Ethiopia</div><div class="chain-role">Sarah Okonkwo · Head of Nutrition Cluster · Addis Ababa</div></div>
+      </div>
+      <div class="action-box">
+        <div class="action-lbl">// Action this week</div>
+        <div class="action-txt">${firstContact}</div>
+      </div>
     </div>
   `;
 }
 
-function closeDetail() {
-  document.getElementById('detail-drawer').classList.remove('open');
+function closeDetail(){
+  document.getElementById('detail-panel').classList.remove('open');
   selectedWoreda = null;
   renderList();
 }
 
-// ── GUIDED TOUR ───────────────────────────────────────────────
+// ── TOUR ──────────────────────────────────────────────────────
 const STEPS = [
-  {lbl:'01 — What is LMRI',  txt:'The Last Mile Risk Index scores each woreda 0–1 based on RUTF stockout intensity. Scores above 0.5 require immediate attention.'},
-  {lbl:'02 — 17 woredas',    txt:'17 woredas across 6 regions are above threshold. 8 are critical (≥ 0.75). The map shows their geographic distribution.', zoom:true},
-  {lbl:'03 — No NGO support', txt:'14 of 17 woredas have zero NGO support. These are the most urgent — no field actor to relay supply or information.'},
-  {lbl:'04 — Response chain', txt:'Click any woreda to see the full response chain — who to call first, who escalates to UNICEF, and whether an NGO is present.', open:'Hintalo'},
-  {lbl:'05 — Region filter',  txt:'Use the region bar to zoom in and filter by region. Each woreda has a full profile ready for Monday morning briefings.'},
+  {lbl:'01 — What is the LMRI',  txt:'The Last Mile Risk Index scores each woreda 0–1. Score = share of OTP facilities with RUTF stockout > 30 days during T2 (Oct 2025–Mar 2026). Real data — 22 woredas above threshold.'},
+  {lbl:'02 — Woreda polygons',   txt:'Each coloured polygon is a real administrative unit at risk. Red = critical (≥0.75), orange = high (0.50–0.74). Click any polygon to drill down.'},
+  {lbl:'03 — Region zoom',       txt:'Use the region bar to zoom in. Try Somali — 7 woredas at risk, most with zero NGO support.', region:'Somali'},
+  {lbl:'04 — Facility drill-down',txt:'Click a woreda to see every OTP-active health facility, its stockout days, RUTF supply status, and admissions. This is the operational layer.', open:'Harshin'},
+  {lbl:'05 — Response chain',    txt:'Each woreda profile shows the full response chain — which NGO to call, which BoH, and when to escalate to UNICEF. No NGO present = direct escalation.'},
 ];
 
-function goToStep(i) {
-  step = Math.max(0, Math.min(STEPS.length-1, i));
+function goToStep(i){
+  step = Math.max(0,Math.min(STEPS.length-1,i));
   const s = STEPS[step];
   document.getElementById('t-lbl').textContent = s.lbl;
   document.getElementById('t-txt').textContent = s.txt;
@@ -493,7 +477,7 @@ function goToStep(i) {
 
   const dots = document.getElementById('tdots');
   dots.innerHTML = '';
-  STEPS.forEach((_,idx) => {
+  STEPS.forEach((_,idx)=>{
     const d = document.createElement('div');
     d.className = 'tdot'+(idx===step?' active':idx<step?' done':'');
     d.onclick = ()=>goToStep(idx);
@@ -503,42 +487,43 @@ function goToStep(i) {
   const prev = document.getElementById('btn-prev');
   prev.style.opacity = step===0?'0.3':'1';
   prev.style.pointerEvents = step===0?'none':'auto';
-
   const next = document.getElementById('btn-next');
-  if(step===STEPS.length-1){
-    next.textContent='Explore freely';
-    next.className='tbtn done';
-    next.onclick=()=>{};
-  } else {
-    next.textContent='Next →';
-    next.className='tbtn primary';
-    next.onclick=nextStep;
+  if(step===STEPS.length-1){next.textContent='Explore freely';next.className='tbtn done';next.onclick=()=>{};}
+  else{next.textContent='Next →';next.className='tbtn primary';next.onclick=nextStep;}
+
+  if(s.region){
+    document.querySelectorAll('.rb-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector(`[data-region="${s.region}"]`).classList.add('active');
+    activeRegion = s.region;
+    const b=REGION_BOUNDS[s.region];
+    if(b) map.fitBounds(b,{padding:[40,40],animate:true});
+    renderList();updateKPIs();
+  } else if(step===0){
+    document.querySelectorAll('.rb-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('[data-region="all"]').classList.add('active');
+    activeRegion='all';
+    map.setView([8.5,39.5],6,{animate:true});
+    renderList();updateKPIs();
   }
 
-  if(s.open) {
+  if(s.open){
     setTimeout(()=>{
-      const w = LMRI.find(x=>x.woreda===s.open);
+      const w = LMRI_DATA.find(x=>x.woreda===s.open);
       if(w) selectWoreda(w);
-    }, 300);
-  } else if(step!==3) {
+    },400);
+  } else if(step!==4){
     closeDetail();
-  }
-
-  if(s.zoom) {
-    map.setView([8.5, 39.5], 6, {animate:true});
   }
 }
 
 function nextStep(){goToStep(step+1);}
 function prevStep(){goToStep(step-1);}
 
-// ── INIT ──────────────────────────────────────────────────────
+// ── INIT ─────────────────────────────────────────────────────
 updateKPIs();
 renderList();
 goToStep(0);
-
-// Click on map background closes detail
-map.on('click', () => closeDetail());
+map.on('click',()=>closeDetail());
 </script>
 </body>
 </html>
