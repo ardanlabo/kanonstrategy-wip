@@ -67,53 +67,45 @@
   .hero-scroll span{font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.2);writing-mode:vertical-rl;}
   .hero-scroll-line{width:0.5px;height:40px;background:rgba(201,168,76,0.25);animation:scrollPulse 2s infinite;}
 
-  /* OUTPUTS */
-  .outputs{background:var(--void2);padding:120px 64px;}
+  /* OUTPUTS + RIBBON */
+  .outputs{background:var(--void2);padding:80px 0 80px;}
+  .outputs-header{padding:0 64px;margin-bottom:48px;}
   .section-eyebrow{font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-d);margin-bottom:16px;}
-  .section-headline{font-family:var(--serif);font-weight:300;font-size:clamp(28px,3.5vw,44px);line-height:1.2;color:#fff;max-width:640px;margin-bottom:64px;}
+  .section-headline{font-family:var(--serif);font-weight:300;font-size:clamp(26px,3vw,40px);line-height:1.2;color:#fff;max-width:560px;}
 
-  /* GRID — 3 cols main + 1 CTA = 4 cols, then 2 cols coming soon */
-  .outputs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.06);}
-  .outputs-grid-2{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.04);margin-top:1px;}
+  .ribbon-wrap{position:relative;}
+  .ribbon{display:flex;gap:1px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding:0 64px;background:rgba(255,255,255,0.04);}
+  .ribbon::-webkit-scrollbar{display:none;}
 
-  .output-card{background:var(--void2);padding:36px 32px;transition:background 0.25s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
-  .output-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.35s ease;}
-  .output-card:hover{background:#0d1520;}
-  .output-card:hover::after{transform:scaleX(1);}
-  .output-card.clickable{cursor:pointer;}
-  .output-card.coming-soon{cursor:default;opacity:0.6;}
-  .output-card.coming-soon:hover{background:var(--void2);}
-  .output-card.coming-soon::after{display:none;}
+  .ribbon-card{flex:0 0 320px;background:var(--void2);padding:32px 28px;display:flex;flex-direction:column;text-decoration:none;transition:background 0.22s;position:relative;overflow:hidden;border-right:1px solid rgba(255,255,255,0.05);}
+  .ribbon-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s ease;}
+  .ribbon-card:hover{background:#0d1520;}
+  .ribbon-card:hover::after{transform:scaleX(1);}
+  .ribbon-card--soon{cursor:default;background:rgba(13,17,23,0.6);}
+  .ribbon-card--soon:hover{background:rgba(13,17,23,0.6);}
+  .ribbon-card--soon::after{display:none;}
+  .ribbon-card--cta{cursor:pointer;background:rgba(201,168,76,0.03);border:0.5px dashed rgba(201,168,76,0.15);}
+  .ribbon-card--cta:hover{background:rgba(201,168,76,0.06);}
 
-  .output-tag{font-family:var(--sans);font-weight:500;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-d);margin-bottom:16px;}
-  .output-cs-tag{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.15);padding:3px 8px;border:0.5px solid rgba(255,255,255,0.1);display:inline-block;margin-bottom:16px;}
+  .rc-num{font-family:var(--mono);font-size:11px;color:var(--gold-d);margin-bottom:12px;letter-spacing:0.1em;}
+  .rc-tag{font-family:var(--sans);font-weight:500;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-d);margin-bottom:16px;}
+  .rc-preview{width:100%;height:96px;background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.06);margin-bottom:20px;display:flex;align-items:center;justify-content:center;position:relative;}
+  .rc-preview--dim{border-color:rgba(255,255,255,0.03);}
+  .rc-preview--cta{border-color:rgba(201,168,76,0.1);background:rgba(201,168,76,0.02);}
+  .rc-title{font-family:var(--serif);font-weight:300;font-size:16px;line-height:1.3;color:#fff;margin-bottom:10px;}
+  .rc-desc{font-family:var(--sans);font-weight:300;font-size:11px;line-height:1.65;color:rgba(255,255,255,0.32);flex:1;margin-bottom:16px;}
+  .rc-link{font-family:var(--sans);font-weight:400;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);opacity:0.6;transition:opacity 0.2s;margin-top:auto;}
+  .ribbon-card:hover .rc-link{opacity:1;}
 
-  /* Tool preview area */
-  .output-preview{width:100%;aspect-ratio:16/9;background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.07);margin-bottom:24px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-  .output-preview-inner{display:flex;flex-direction:column;align-items:center;gap:8px;}
-  .output-preview-icon{opacity:0.12;}
-  .output-preview-label{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.08em;}
-
-  /* Live tool badge */
-  .live-badge{position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#22c55e;background:rgba(34,197,94,0.1);border:0.5px solid rgba(34,197,94,0.25);padding:2px 7px;display:flex;align-items:center;gap:5px;}
+  .live-badge{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:#22c55e;background:rgba(34,197,94,0.1);border:0.5px solid rgba(34,197,94,0.2);padding:2px 6px;display:flex;align-items:center;gap:4px;}
   .live-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;}
 
-  .output-title{font-family:var(--serif);font-weight:300;font-size:17px;line-height:1.35;color:#fff;margin-bottom:10px;}
-  .output-desc{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.65;color:rgba(255,255,255,0.35);margin-bottom:20px;flex:1;}
-  .output-link{font-family:var(--sans);font-weight:400;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);opacity:0.7;transition:opacity 0.2s;display:flex;align-items:center;gap:6px;margin-top:auto;}
-  .output-card:hover .output-link{opacity:1;}
-  .output-link-arrow{transition:transform 0.2s;}
-  .output-card:hover .output-link-arrow{transform:translateX(4px);}
-
-  /* CTA card */
-  .output-card-cta{background:transparent;cursor:pointer;}
-  .output-cta-inner{height:100%;display:flex;flex-direction:column;justify-content:center;padding:36px 32px;border:0.5px dashed rgba(201,168,76,0.2);transition:border-color 0.25s;}
-  .output-card-cta:hover .output-cta-inner{border-color:rgba(201,168,76,0.5);}
-  .output-cta-label{font-family:var(--sans);font-weight:500;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-d);margin-bottom:16px;}
-  .output-cta-title{font-family:var(--serif);font-weight:300;font-size:18px;line-height:1.35;color:rgba(255,255,255,0.45);margin-bottom:16px;}
-  .output-cta-desc{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.65;color:rgba(255,255,255,0.2);margin-bottom:20px;}
-  .output-cta-arrow{font-family:var(--sans);font-size:20px;color:var(--gold);opacity:0.4;transition:opacity 0.2s,transform 0.2s;}
-  .output-card-cta:hover .output-cta-arrow{opacity:1;transform:translateX(6px);}
+  .ribbon-nav{display:flex;align-items:center;justify-content:center;gap:16px;padding:20px 64px 0;}
+  .ribbon-btn{font-family:var(--mono);font-size:14px;background:transparent;border:0.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);width:32px;height:32px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+  .ribbon-btn:hover{border-color:rgba(201,168,76,0.4);color:var(--gold);}
+  .ribbon-dots{display:flex;gap:6px;}
+  .ribbon-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.15);cursor:pointer;transition:all 0.2s;}
+  .ribbon-dot.active{background:var(--gold);}
 
   /* APPROACH */
   .approach-strip{background:var(--parch);padding:120px 64px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
@@ -242,125 +234,109 @@
 
 <!-- OUTPUTS -->
 <section class="outputs" id="outputs">
-  <p class="section-eyebrow reveal">Live tools</p>
-  <h2 class="section-headline reveal">Four decision-support systems. Each one built from real operational data.</h2>
-
-  <!-- ROW 1 — 4 live tools -->
-  <div class="outputs-grid">
-
-    <!-- LMRI -->
-    <a href="lmri.html" class="output-card clickable reveal">
-      <p class="output-tag">Nutrition coalition · Ethiopia</p>
-      <div class="output-preview">
-        <div class="live-badge"><div class="live-dot"></div>Live demo</div>
-        <div class="output-preview-inner">
-          <div class="output-preview-icon">
-            <svg width="48" height="48" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" stroke="#C0392B" stroke-width="2"/><circle cx="60" cy="60" r="30" stroke="#E67E22" stroke-width="1.5"/><circle cx="60" cy="60" r="10" stroke="#C9A84C" stroke-width="1.5"/><circle cx="60" cy="60" r="4" fill="#C9A84C"/></svg>
-          </div>
-          <span class="output-preview-label">LMRI · Woreda-level risk</span>
-        </div>
-      </div>
-      <h3 class="output-title">Last Mile Risk Index</h3>
-      <p class="output-desc">22 woredas above threshold. 18 with zero NGO coverage. Real RUTF stockout data from 1,302 OTP-active facilities — turned into an early warning map with facility-level drill-down and response chains.</p>
-      <span class="output-link">Open tool <span class="output-link-arrow">→</span></span>
-    </a>
-
-    <!-- COORDINATION -->
-    <a href="coordination.html" class="output-card clickable reveal">
-      <p class="output-tag">ABC Coordination · Benishangul-Gumuz</p>
-      <div class="output-preview">
-        <div class="live-badge"><div class="live-dot"></div>Live demo</div>
-        <div class="output-preview-inner">
-          <div class="output-preview-icon">
-            <svg width="48" height="48" viewBox="0 0 120 120" fill="none"><rect x="10" y="10" width="100" height="100" stroke="#0077b6" stroke-width="1.5" fill="none"/><rect x="25" y="25" width="70" height="70" stroke="#22c55e" stroke-width="1.5" fill="none"/><rect x="40" y="40" width="40" height="40" stroke="#C9A84C" stroke-width="1.5" fill="none"/><circle cx="60" cy="60" r="6" fill="#C9A84C"/></svg>
-          </div>
-          <span class="output-preview-label">Sector coverage · 24 woredas</span>
-        </div>
-      </div>
-      <h3 class="output-title">ABC Coordination Dashboard</h3>
-      <p class="output-desc">Transectoral coverage across Nutrition, WASH, Health, Protection and Food Security. 24 woredas, 4 zones — who is present, what sectors are missing, which gaps require immediate coordination action.</p>
-      <span class="output-link">Open tool <span class="output-link-arrow">→</span></span>
-    </a>
-
-    <!-- ABC SYSTEM -->
-    <a href="intelligence.html" class="output-card clickable reveal">
-      <p class="output-tag">HINGO Forum Ethiopia · ABC System</p>
-      <div class="output-preview">
-        <div class="live-badge"><div class="live-dot"></div>Live demo</div>
-        <div class="output-preview-inner">
-          <div class="output-preview-icon">
-            <svg width="48" height="48" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2"/><circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="1.5"/><circle cx="60" cy="60" r="4" fill="#C9A84C"/><line x1="60" y1="10" x2="60" y2="28" stroke="#C9A84C" stroke-width="1.5"/><line x1="103" y1="85" x2="88" y2="77" stroke="#C9A84C" stroke-width="1.5"/><line x1="17" y1="85" x2="32" y2="77" stroke="#C9A84C" stroke-width="1.5"/></svg>
-          </div>
-          <span class="output-preview-label">Chair tracking · 4 zones</span>
-        </div>
-      </div>
-      <h3 class="output-title">Area-Based Coordination System</h3>
-      <p class="output-desc">Monthly chair performance tracking against CCPM indicators and NRC exit criteria. One synthesis page, ready for the HCT. Selection protocol. HINGO supervision view. Built for the pilot — ready to scale.</p>
-      <span class="output-link">Open tool <span class="output-link-arrow">→</span></span>
-    </a>
-
-    <!-- RHIZOME -->
-    <a href="rhizome.html" class="output-card clickable reveal">
-      <p class="output-tag">Coalition intelligence · Horn of Africa</p>
-      <div class="output-preview">
-        <div class="live-badge"><div class="live-dot"></div>Live demo</div>
-        <div class="output-preview-inner">
-          <div class="output-preview-icon">
-            <svg width="48" height="48" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="20" r="8" fill="#9B59B6"/><circle cx="20" cy="80" r="8" fill="#5B8DB8"/><circle cx="100" cy="80" r="8" fill="#E67E22"/><circle cx="60" cy="60" r="6" fill="#C9A84C"/><line x1="60" y1="20" x2="60" y2="60" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><line x1="20" y1="80" x2="60" y2="60" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/><line x1="100" y1="80" x2="60" y2="60" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/></svg>
-          </div>
-          <span class="output-preview-label">Actor mapping · D3 network</span>
-        </div>
-      </div>
-      <h3 class="output-title">Rhizome — Relationship Intelligence</h3>
-      <p class="output-desc">In a multi-actor response, the coordination gap is rarely the data — it's visibility. Who has access to whom. Where relationships are duplicated. Where critical nodes are isolated. Rhizome maps it live.</p>
-      <span class="output-link">Open tool <span class="output-link-arrow">→</span></span>
-    </a>
-
+  <div class="outputs-header reveal">
+    <p class="section-eyebrow">Live tools</p>
+    <h2 class="section-headline">Decision-support systems built from real operational data.</h2>
   </div>
 
-  <!-- ROW 2 — Coming soon + CTA -->
-  <div class="outputs-grid-2">
+  <!-- RIBBON -->
+  <div class="ribbon-wrap">
+    <div class="ribbon" id="ribbon">
 
-    <!-- Rhizome ABC -->
-    <div class="output-card coming-soon reveal">
-      <span class="output-cs-tag">In development</span>
-      <div class="output-preview" style="aspect-ratio:16/7">
-        <div class="output-preview-inner">
-          <div class="output-preview-icon">
-            <svg width="36" height="36" viewBox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-dasharray="6 4"/><circle cx="60" cy="60" r="4" fill="rgba(255,255,255,0.15)"/></svg>
-          </div>
-          <span class="output-preview-label">// Coming Q3 2026</span>
+      <!-- LMRI -->
+      <a href="lmri.html" class="ribbon-card">
+        <div class="rc-num">01</div>
+        <div class="rc-tag">Nutrition coalition · Ethiopia</div>
+        <div class="rc-preview">
+          <div class="live-badge"><div class="live-dot"></div>Live</div>
+          <svg width="52" height="52" viewBox="0 0 120 120" fill="none" opacity="0.5"><circle cx="60" cy="60" r="50" stroke="#C0392B" stroke-width="2"/><circle cx="60" cy="60" r="30" stroke="#E67E22" stroke-width="1.5"/><circle cx="60" cy="60" r="10" stroke="#C9A84C" stroke-width="1.5"/><circle cx="60" cy="60" r="4" fill="#C9A84C"/></svg>
         </div>
-      </div>
-      <h3 class="output-title" style="color:rgba(255,255,255,0.45)">Rhizome — ABC Zone Edition</h3>
-      <p class="output-desc">Rhizome adapted for area-based coordination. Actor network filterable by ABC zone and sector. Disconnections between zones made visible. Decision layer for the ABC chair.</p>
-    </div>
+        <h3 class="rc-title">Last Mile Risk Index</h3>
+        <p class="rc-desc">22 woredas above threshold. 18 with zero NGO coverage. Real RUTF stockout data from 1,302 facilities — woreda-level early warning with facility drill-down and response chains.</p>
+        <span class="rc-link">Open tool →</span>
+      </a>
 
-    <!-- Capacity Building -->
-    <div class="output-card coming-soon reveal">
-      <span class="output-cs-tag">In development</span>
-      <div class="output-preview" style="aspect-ratio:16/7">
-        <div class="output-preview-inner">
-          <div class="output-preview-icon">
-            <svg width="36" height="36" viewBox="0 0 120 120" fill="none"><rect x="20" y="30" width="80" height="60" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none"/><line x1="20" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><circle cx="60" cy="70" r="8" stroke="rgba(201,168,76,0.3)" stroke-width="1.5" fill="none"/></svg>
-          </div>
-          <span class="output-preview-label">// Coming Q3 2026</span>
+      <!-- COVERAGE -->
+      <a href="coverage.html" class="ribbon-card">
+        <div class="rc-num">02</div>
+        <div class="rc-tag">Geographic coverage · Benishangul-Gumuz</div>
+        <div class="rc-preview">
+          <div class="live-badge"><div class="live-dot"></div>Live</div>
+          <svg width="52" height="52" viewBox="0 0 120 120" fill="none" opacity="0.5"><rect x="10" y="10" width="100" height="100" stroke="#0077b6" stroke-width="1.5" fill="none"/><rect x="25" y="25" width="70" height="70" stroke="#22c55e" stroke-width="1.5" fill="none"/><rect x="40" y="40" width="40" height="40" stroke="#C9A84C" stroke-width="1.5" fill="none"/><circle cx="60" cy="60" r="6" fill="#C9A84C"/></svg>
         </div>
+        <h3 class="rc-title">Multisectoral Coverage Dashboard</h3>
+        <p class="rc-desc">24 woredas, 4 zones, 6 sectors, 35+ organisations across Benishangul-Gumuz. Who is present, what is missing, which gaps require immediate coordination action.</p>
+        <span class="rc-link">Open tool →</span>
+      </a>
+
+      <!-- CHAIRS -->
+      <a href="chairs.html" class="ribbon-card">
+        <div class="rc-num">03</div>
+        <div class="rc-tag">Coordination accountability · Ethiopia</div>
+        <div class="rc-preview">
+          <div class="live-badge"><div class="live-dot"></div>Live</div>
+          <svg width="52" height="52" viewBox="0 0 120 120" fill="none" opacity="0.5"><circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2"/><circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="1.5"/><circle cx="60" cy="60" r="4" fill="#C9A84C"/><line x1="60" y1="10" x2="60" y2="28" stroke="#C9A84C" stroke-width="1.5"/><line x1="103" y1="85" x2="88" y2="77" stroke="#C9A84C" stroke-width="1.5"/><line x1="17" y1="85" x2="32" y2="77" stroke="#C9A84C" stroke-width="1.5"/></svg>
+        </div>
+        <h3 class="rc-title">Chair Performance & Accountability</h3>
+        <p class="rc-desc">Monthly tracking of coordination chair performance against CCPM indicators and NRC exit criteria. One synthesis page, ready for the HCT. Four zones, automated alerts.</p>
+        <span class="rc-link">Open tool →</span>
+      </a>
+
+      <!-- RHIZOME -->
+      <a href="rhizome.html" class="ribbon-card">
+        <div class="rc-num">04</div>
+        <div class="rc-tag">Relationship intelligence · Horn of Africa</div>
+        <div class="rc-preview">
+          <div class="live-badge"><div class="live-dot"></div>Live</div>
+          <svg width="52" height="52" viewBox="0 0 120 120" fill="none" opacity="0.5"><circle cx="60" cy="20" r="8" fill="#9B59B6"/><circle cx="20" cy="80" r="8" fill="#5B8DB8"/><circle cx="100" cy="80" r="8" fill="#E67E22"/><circle cx="60" cy="60" r="6" fill="#C9A84C"/><line x1="60" y1="20" x2="60" y2="60" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><line x1="20" y1="80" x2="60" y2="60" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><line x1="100" y1="80" x2="60" y2="60" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg>
+        </div>
+        <h3 class="rc-title">Rhizome — Relationship Intelligence</h3>
+        <p class="rc-desc">Multi-actor network graph for humanitarian coordination. Who has access to whom, where relationships are duplicated, where critical nodes are isolated. Live D3 network with sector moons.</p>
+        <span class="rc-link">Open tool →</span>
+      </a>
+
+      <!-- COMING SOON 1 -->
+      <div class="ribbon-card ribbon-card--soon">
+        <div class="rc-num" style="color:rgba(255,255,255,0.15)">05</div>
+        <div class="rc-tag" style="color:rgba(255,255,255,0.15)">In development · Q3 2026</div>
+        <div class="rc-preview rc-preview--dim">
+          <svg width="52" height="52" viewBox="0 0 120 120" fill="none" opacity="0.2"><circle cx="60" cy="60" r="50" stroke="white" stroke-width="2" stroke-dasharray="6 4"/><circle cx="60" cy="60" r="4" fill="white"/></svg>
+        </div>
+        <h3 class="rc-title" style="color:rgba(255,255,255,0.3)">Zone-Level Network Intelligence</h3>
+        <p class="rc-desc" style="color:rgba(255,255,255,0.18)">Actor network filterable by geographic zone and sector. Coordination disconnections made visible. Decision layer for zone-level coordination actors.</p>
       </div>
-      <h3 class="output-title" style="color:rgba(255,255,255,0.45)">AI Capacity Building</h3>
-      <p class="output-desc">Practical AI literacy for humanitarian and development practitioners. From prompt design to tool integration — built for field operators, not engineers. Contextualised for complex environments.</p>
+
+      <!-- COMING SOON 2 -->
+      <div class="ribbon-card ribbon-card--soon">
+        <div class="rc-num" style="color:rgba(255,255,255,0.15)">06</div>
+        <div class="rc-tag" style="color:rgba(255,255,255,0.15)">In development · Q3 2026</div>
+        <div class="rc-preview rc-preview--dim">
+          <svg width="52" height="52" viewBox="0 0 120 120" fill="none" opacity="0.2"><rect x="20" y="30" width="80" height="60" stroke="white" stroke-width="2" fill="none"/><line x1="20" y1="50" x2="100" y2="50" stroke="white" stroke-width="1"/><circle cx="60" cy="70" r="8" stroke="#C9A84C" stroke-width="1.5" fill="none"/></svg>
+        </div>
+        <h3 class="rc-title" style="color:rgba(255,255,255,0.3)">AI Capacity Building</h3>
+        <p class="rc-desc" style="color:rgba(255,255,255,0.18)">Practical AI literacy for humanitarian and development practitioners. Built for field operators, not engineers. Contextualised for complex environments.</p>
+      </div>
+
+      <!-- CTA -->
+      <div class="ribbon-card ribbon-card--cta" onclick="window.location='mailto:andre@kanonstrategy.com'">
+        <div class="rc-num" style="color:rgba(201,168,76,0.3)">→</div>
+        <div class="rc-tag" style="color:rgba(201,168,76,0.5)">Your context</div>
+        <div class="rc-preview rc-preview--cta">
+          <span style="font-family:var(--mono);font-size:32px;color:rgba(201,168,76,0.3)">?</span>
+        </div>
+        <h3 class="rc-title" style="color:rgba(255,255,255,0.4)">The tool you need doesn't exist yet.</h3>
+        <p class="rc-desc" style="color:rgba(255,255,255,0.2)">Tell us what decision you can't make right now. That's where we start.</p>
+        <span class="rc-link">Get in touch →</span>
+      </div>
+
     </div>
 
-    <!-- CTA -->
-    <div class="output-card output-card-cta reveal" onclick="window.location='mailto:andre@kanonstrategy.com'">
-      <div class="output-cta-inner">
-        <p class="output-cta-label">Your context</p>
-        <h3 class="output-cta-title">The tool your organization needs doesn't exist yet.</h3>
-        <p class="output-cta-desc">Tell us what decision you can't make right now. That's where we start.</p>
-        <span class="output-cta-arrow">→</span>
-      </div>
+    <!-- Scroll indicators -->
+    <div class="ribbon-nav">
+      <button class="ribbon-btn" id="ribbon-prev" onclick="ribbonScroll(-1)">←</button>
+      <div class="ribbon-dots" id="ribbon-dots"></div>
+      <button class="ribbon-btn" id="ribbon-next" onclick="ribbonScroll(1)">→</button>
     </div>
-
   </div>
 </section>
 
@@ -449,6 +425,39 @@
     });
   },{threshold:0.12});
   reveals.forEach(el=>io.observe(el));
+
+  // Ribbon navigation
+  var ribbon = document.getElementById('ribbon');
+  var cards = ribbon ? ribbon.querySelectorAll('.ribbon-card') : [];
+  var cardW = 321; // card width + gap
+
+  function ribbonScroll(dir){
+    if(!ribbon) return;
+    ribbon.scrollBy({left: dir * cardW * 2, behavior:'smooth'});
+    setTimeout(updateRibbonDots, 300);
+  }
+
+  function updateRibbonDots(){
+    if(!ribbon) return;
+    var idx = Math.round(ribbon.scrollLeft / cardW);
+    document.querySelectorAll('.ribbon-dot').forEach(function(d,i){
+      d.classList.toggle('active', i === Math.min(idx, cards.length-1));
+    });
+  }
+
+  // Build dots
+  var dotsEl = document.getElementById('ribbon-dots');
+  if(dotsEl && cards.length){
+    for(var i=0;i<cards.length;i++){
+      var d = document.createElement('div');
+      d.className = 'ribbon-dot' + (i===0?' active':'');
+      d.setAttribute('data-i', i);
+      d.onclick = (function(idx){ return function(){ ribbon.scrollTo({left:idx*cardW,behavior:'smooth'}); setTimeout(updateRibbonDots,300); }; })(i);
+      dotsEl.appendChild(d);
+    }
+  }
+  if(ribbon) ribbon.addEventListener('scroll', updateRibbonDots);
+
 </script>
 
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
