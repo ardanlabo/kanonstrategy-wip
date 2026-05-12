@@ -217,13 +217,23 @@ body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoo
       </div>
     </div>
 
-    <div class="sb-results" id="sb-results">
+    <div class="sb-results" id="sb-results" style="display:none">
       <div class="results-header">
         <span id="results-lbl">At-risk woredas</span>
         <span id="results-count" style="color:rgba(201,168,76,0.5)">22</span>
       </div>
-      <div class="results-empty" id="results-empty">Select a region to filter,<br>or click a woreda on the map.</div>
+      <div class="results-empty" id="results-empty" style="display:none"></div>
       <div id="results-list"></div>
+    </div>
+    <!-- Default empty state -->
+    <div id="sb-default" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;gap:16px;text-align:center;">
+      <svg width="32" height="32" viewBox="0 0 120 120" fill="none" opacity="0.15">
+        <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="3"/>
+        <circle cx="60" cy="60" r="30" stroke="#C9A84C" stroke-width="2.5"/>
+        <circle cx="60" cy="60" r="10" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="60" cy="60" r="3" fill="#C9A84C"/>
+      </svg>
+      <div style="font-family:var(--serif);font-weight:300;font-size:13px;font-style:italic;color:rgba(255,255,255,0.18);line-height:1.7">Select a region to filter<br>at-risk woredas,<br>or click directly on the map.</div>
     </div>
   </div>
 
@@ -298,14 +308,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   attribution:'&copy; OpenStreetMap contributors',maxZoom:14
 }).addTo(map);
 
-// ADM2 zone mesh - subtle
+// ADM2 zone mesh - visible woreda borders
 L.geoJSON(GEO_ADM2,{
-  style:{fillColor:'transparent',color:'rgba(255,255,255,0.08)',weight:0.6,fillOpacity:0}
+  style:{fillColor:'rgba(240,236,228,0.04)',color:'rgba(80,70,60,0.5)',weight:0.8,fillOpacity:1}
 }).addTo(map);
 
-// ADM1 region borders - bold
+// ADM1 region borders - bold black
 L.geoJSON(GEO_ADM1,{
-  style:{fillColor:'transparent',color:'rgba(255,255,255,0.55)',weight:2.5,fillOpacity:0}
+  style:{fillColor:'transparent',color:'#111',weight:3.5,fillOpacity:0,opacity:0.85}
 }).addTo(map);
 
 // High-risk woreda polygons
@@ -405,8 +415,16 @@ function updateResults(){
   lbl.textContent = filterRegion ? filterRegion+' — at risk' : 'At-risk woredas';
   cnt.textContent = data.length;
 
+  // Show/hide results panel vs default state
+  const sbResults = document.getElementById('sb-results');
+  const sbDefault = document.getElementById('sb-default');
+  const hasFilter = filterRegion || filterZone || filterWoreda;
+  if(hasFilter) { sbResults.style.display='flex'; sbResults.style.flexDirection='column'; if(sbDefault) sbDefault.style.display='none'; }
+  else { sbResults.style.display='none'; if(sbDefault) sbDefault.style.display='flex'; }
+
   if(!data.length){
     empty.style.display='flex';
+    empty.style.flexDirection='column';
     empty.textContent='No at-risk woredas in this selection.';
     list.innerHTML='';
     return;
