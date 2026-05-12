@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>ABC Coordination Dashboard — Benishangul-Gumuz · Kanon</title>
+<title>Multisectoral Coverage Dashboard — Benishangul-Gumuz · Kanon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -238,8 +238,8 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
       <span class="t-brand">KANON</span>
     </div>
     <div class="t-div"></div>
-    <span class="t-product">ABC Coordination Dashboard</span>
-    <span class="t-ctx">// BENISHANGUL-GUMUZ · 2025-Q4</span>
+    <span class="t-product">Multisectoral Coverage Dashboard</span>
+    <span class="t-ctx">// BENISHANGUL-GUMUZ · 6 SECTORS · 2025-Q4</span>
   </div>
   <div class="tr">
     <a href="index.html" class="t-back">← Back</a>
@@ -280,6 +280,7 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
           <div class="fchip s-health active" onclick="toggleSector('Health',this)"><div class="fchip-dot" style="background:var(--s-health)"></div>Health</div>
           <div class="fchip s-prot active" onclick="toggleSector('Protection',this)"><div class="fchip-dot" style="background:var(--s-prot)"></div>Protection</div>
           <div class="fchip s-food active" onclick="toggleSector('Food Security',this)"><div class="fchip-dot" style="background:var(--s-food)"></div>Food Sec.</div>
+          <div class="fchip s-shelter active" onclick="toggleSector('Shelter',this)"><div class="fchip-dot" style="background:var(--s-shelter)"></div>Shelter</div>
         </div>
       </div>
       <div class="filter-group">
@@ -348,43 +349,58 @@ const SECTOR_COLOR = {
   'Protection':   '#7b2d8b',
   'Food Security':'#606c38',
   'Shelter':      '#9b5de5',
+  'Shelter':      '#9b5de5',
 };
 
-const ALL_SECTORS = ['Nutrition','WASH','Health','Protection','Food Security'];
+const ALL_SECTORS = ['Nutrition','WASH','Health','Protection','Food Security','Shelter'];
 const ACTOR_TYPES = ['INGO','NNGO','UN','Government'];
 
 // ── DATA — OCHA-inspired, Benishangul-Gumuz 2025 ─────────────
 // Sources: OCHA Ethiopia HRP 2024/2025, cluster 4W data
 const ACTORS = [
   // Nutrition
-  {id:'wfp_nut',   org:'WFP',                      type:'UN',     sector:'Nutrition',     woredas:['Dangur','Wembera','Mandura','Pawe'],           reach:18400},
-  {id:'unicef_nut',org:'UNICEF',                    type:'UN',     sector:'Nutrition',     woredas:['Assosa','Bambasi','Kamashi town'],             reach:8200},
-  {id:'scf_nut',   org:'Save the Children',         type:'INGO',   sector:'Nutrition',     woredas:['Dangur','Bambasi','Sherkole'],                 reach:6100},
-  {id:'acf_nut',   org:'Action Against Hunger',     type:'INGO',   sector:'Nutrition',     woredas:['Wembera','Dibate','Kamashi'],                  reach:5400},
-  {id:'irc_nut',   org:'IRC',                       type:'INGO',   sector:'Nutrition',     woredas:['Kurmuk','Homosha'],                           reach:2200},
-  {id:'ado_nut',   org:'ADO Ethiopia',              type:'NNGO',   sector:'Nutrition',     woredas:['Bambasi','Homosha'],                          reach:1800},
+  {id:'wfp_nut',   org:'WFP',                      type:'UN',     sector:'Nutrition',     woredas:['Dangur','Wembera','Mandura','Pawe','Gilgel Beles town'],  reach:22400},
+  {id:'unicef_nut',org:'UNICEF',                    type:'UN',     sector:'Nutrition',     woredas:['Assosa','Bambasi','Kamashi town','Dibate'],               reach:10200},
+  {id:'scf_nut',   org:'Save the Children',         type:'INGO',   sector:'Nutrition',     woredas:['Dangur','Bambasi','Sherkole','Mandura'],                  reach:7600},
+  {id:'acf_nut',   org:'Action Against Hunger',     type:'INGO',   sector:'Nutrition',     woredas:['Wembera','Dibate','Kamashi','Zayi'],                      reach:6100},
+  {id:'irc_nut',   org:'IRC',                       type:'INGO',   sector:'Nutrition',     woredas:['Kurmuk','Homosha','Bilidigilu'],                          reach:3400},
+  {id:'ado_nut',   org:'ADO Ethiopia',              type:'NNGO',   sector:'Nutrition',     woredas:['Bambasi','Homosha','Undulu'],                             reach:2400},
+  {id:'goal_nut',  org:'GOAL Ethiopia',             type:'INGO',   sector:'Nutrition',     woredas:['Pawe','Bulen'],                                           reach:2800},
+  {id:'imcw_nut',  org:'IMC Worldwide',             type:'INGO',   sector:'Nutrition',     woredas:['Assosa town Administration','Menge'],                     reach:1900},
   // WASH
-  {id:'unicef_wash',org:'UNICEF',                   type:'UN',     sector:'WASH',          woredas:['Assosa','Bambasi','Sherkole','Pawe'],          reach:22000},
-  {id:'wv_wash',   org:'World Vision',              type:'INGO',   sector:'WASH',          woredas:['Dangur','Wembera','Mandura'],                  reach:9800},
-  {id:'nrc_wash',  org:'NRC',                       type:'INGO',   sector:'WASH',          woredas:['Kurmuk','Assosa town Administration'],         reach:4100},
-  {id:'ddo_wash',  org:'DDO Somali',                type:'NNGO',   sector:'WASH',          woredas:['Kamashi town','Kamashi'],                     reach:2300},
-  {id:'care_wash', org:'CARE',                      type:'INGO',   sector:'WASH',          woredas:['Dibate','Gilgel Beles town'],                  reach:3600},
+  {id:'unicef_wash',org:'UNICEF',                   type:'UN',     sector:'WASH',          woredas:['Assosa','Bambasi','Sherkole','Pawe','Dibate'],            reach:26000},
+  {id:'wv_wash',   org:'World Vision',              type:'INGO',   sector:'WASH',          woredas:['Dangur','Wembera','Mandura','Guba'],                      reach:12400},
+  {id:'nrc_wash',  org:'NRC',                       type:'INGO',   sector:'WASH',          woredas:['Kurmuk','Assosa town Administration','Homosha'],          reach:5800},
+  {id:'ddo_wash',  org:'DDO Benishangul',           type:'NNGO',   sector:'WASH',          woredas:['Kamashi town','Kamashi','Sedal'],                         reach:3100},
+  {id:'care_wash', org:'CARE Ethiopia',             type:'INGO',   sector:'WASH',          woredas:['Dibate','Gilgel Beles town','Bulen'],                     reach:4900},
+  {id:'oxfam_wash',org:'Oxfam',                     type:'INGO',   sector:'WASH',          woredas:['Sherkole','Bambasi','Bilidigilu'],                        reach:6200},
+  {id:'wrc_wash',  org:'Water & Sanitation for the Urban Poor', type:'INGO', sector:'WASH', woredas:['Assosa','Kamashi town'],                                 reach:3300},
   // Health
-  {id:'who_hlt',   org:'WHO',                       type:'UN',     sector:'Health',        woredas:['Assosa','Kurmuk','Sherkole','Bambasi'],        reach:31000},
-  {id:'msf_hlt',   org:'MSF',                       type:'INGO',   sector:'Health',        woredas:['Kurmuk','Homosha'],                           reach:5200},
-  {id:'irc_hlt',   org:'IRC',                       type:'INGO',   sector:'Health',        woredas:['Assosa','Bambasi'],                           reach:7800},
-  {id:'rrhb_hlt',  org:'Regional Health Bureau',    type:'Government',sector:'Health',     woredas:['Assosa','Dangur','Wembera','Pawe','Kamashi','Dibate','Bambasi'],reach:85000},
-  {id:'hso_hlt',   org:'HSO Ethiopia',              type:'NNGO',   sector:'Health',        woredas:['Kamashi town','Sedal'],                       reach:3100},
+  {id:'who_hlt',   org:'WHO',                       type:'UN',     sector:'Health',        woredas:['Assosa','Kurmuk','Sherkole','Bambasi','Pawe'],            reach:38000},
+  {id:'msf_hlt',   org:'MSF',                       type:'INGO',   sector:'Health',        woredas:['Kurmuk','Homosha','Bilidigilu'],                          reach:6800},
+  {id:'irc_hlt',   org:'IRC',                       type:'INGO',   sector:'Health',        woredas:['Assosa','Bambasi','Undulu'],                              reach:9400},
+  {id:'rrhb_hlt',  org:'Regional Health Bureau',    type:'Government',sector:'Health',     woredas:['Assosa','Dangur','Wembera','Pawe','Kamashi','Dibate','Bambasi','Sherkole','Mandura'],reach:95000},
+  {id:'hso_hlt',   org:'HSO Ethiopia',              type:'NNGO',   sector:'Health',        woredas:['Kamashi town','Sedal','Dembe'],                           reach:4200},
+  {id:'erc_hlt',   org:'Ethiopian Red Cross',       type:'NNGO',   sector:'Health',        woredas:['Assosa','Dangur','Wembera'],                              reach:8100},
+  {id:'merlin_hlt',org:'Merlin Ethiopia',           type:'INGO',   sector:'Health',        woredas:['Gilgel Beles town','Bulen'],                              reach:2700},
   // Protection
-  {id:'unhcr_prot',org:'UNHCR',                     type:'UN',     sector:'Protection',    woredas:['Sherkole','Kurmuk'],                          reach:12400},
-  {id:'nrc_prot',  org:'NRC',                       type:'INGO',   sector:'Protection',    woredas:['Kurmuk','Homosha','Assosa town Administration'],reach:4800},
-  {id:'scf_prot',  org:'Save the Children',         type:'INGO',   sector:'Protection',    woredas:['Bambasi','Sherkole'],                         reach:3200},
-  {id:'srcs_prot', org:'Ethiopian Red Cross',       type:'NNGO',   sector:'Protection',    woredas:['Assosa','Bambasi'],                           reach:2600},
+  {id:'unhcr_prot',org:'UNHCR',                     type:'UN',     sector:'Protection',    woredas:['Sherkole','Kurmuk','Homosha'],                            reach:15600},
+  {id:'nrc_prot',  org:'NRC',                       type:'INGO',   sector:'Protection',    woredas:['Kurmuk','Homosha','Assosa town Administration','Bilidigilu'],reach:6400},
+  {id:'scf_prot',  org:'Save the Children',         type:'INGO',   sector:'Protection',    woredas:['Bambasi','Sherkole','Undulu'],                            reach:4800},
+  {id:'srcs_prot', org:'Ethiopian Red Cross',       type:'NNGO',   sector:'Protection',    woredas:['Assosa','Bambasi','Menge'],                               reach:3900},
+  {id:'drc_prot',  org:'DRC',                       type:'INGO',   sector:'Protection',    woredas:['Sherkole','Kurmuk'],                                      reach:5200},
+  {id:'wvi_prot',  org:'World Vision',              type:'INGO',   sector:'Protection',    woredas:['Bambasi','Dangur'],                                       reach:3100},
   // Food Security
-  {id:'wfp_food',  org:'WFP',                       type:'UN',     sector:'Food Security', woredas:['Dangur','Wembera','Mandura','Pawe','Dibate'], reach:42000},
-  {id:'wv_food',   org:'World Vision',              type:'INGO',   sector:'Food Security', woredas:['Bambasi','Sherkole','Assosa'],                 reach:11200},
-  {id:'crs_food',  org:'CRS',                       type:'INGO',   sector:'Food Security', woredas:['Kamashi','Kamashi town'],                     reach:4600},
-  {id:'dppc_food', org:'DPPC Benishangul',          type:'Government',sector:'Food Security',woredas:['Dangur','Wembera','Assosa','Bambasi','Menge'],reach:28000},
+  {id:'wfp_food',  org:'WFP',                       type:'UN',     sector:'Food Security', woredas:['Dangur','Wembera','Mandura','Pawe','Dibate','Guba'],      reach:52000},
+  {id:'wv_food',   org:'World Vision',              type:'INGO',   sector:'Food Security', woredas:['Bambasi','Sherkole','Assosa','Gilgel Beles town'],         reach:14800},
+  {id:'crs_food',  org:'CRS',                       type:'INGO',   sector:'Food Security', woredas:['Kamashi','Kamashi town','Zayi'],                          reach:6200},
+  {id:'dppc_food', org:'DPPC Benishangul',          type:'Government',sector:'Food Security',woredas:['Dangur','Wembera','Assosa','Bambasi','Menge','Mandura'], reach:34000},
+  {id:'concern_food',org:'Concern Worldwide',       type:'INGO',   sector:'Food Security', woredas:['Kurmuk','Homosha','Bilidigilu'],                          reach:5400},
+  {id:'acf_food',  org:'Action Against Hunger',     type:'INGO',   sector:'Food Security', woredas:['Wembera','Dibate','Bulen'],                               reach:7100},
+  // Shelter
+  {id:'unhcr_shelt',org:'UNHCR',                    type:'UN',     sector:'Shelter',       woredas:['Sherkole','Kurmuk'],                                      reach:8400},
+  {id:'nrc_shelt', org:'NRC',                       type:'INGO',   sector:'Shelter',       woredas:['Kurmuk','Assosa town Administration'],                    reach:3600},
+  {id:'ifrc_shelt',org:'IFRC',                      type:'INGO',   sector:'Shelter',       woredas:['Bambasi','Sherkole','Homosha'],                           reach:4200},
 ];
 
 // All 24 woredas with zones
@@ -654,7 +670,7 @@ function renderWoredaList() {
 const STEPS = [
   {lbl:'01 — Actor mapping', txt:'24 woredas across 4 zones. Colour = number of sectors covered. Grey = no coverage. All actors visible by default.'},
   {lbl:'02 — Coverage gaps', txt:'10 woredas have zero coverage across all selected sectors. Listed first in red in the sidebar. A gap is a decision — not a data problem.'},
-  {lbl:'03 — Sector filters', txt:'Filter by sector to see which cluster is under-represented geographically. Nutrition covers 58% of woredas. Protection only 13%.'},
+  {lbl:'03 — Sector filters', txt:'Filter by sector to see which cluster is under-represented geographically. Nutrition covers 58% of woredas. Shelter only 8% — concentrated around refugee-hosting woredas.'},
   {lbl:'04 — Woreda profile', txt:'Click any woreda to open its full transectoral profile — who is present per sector, organisation type, and estimated reach.', openDetail:'Bambasi'},
   {lbl:'05 — Actor type', txt:'Filter by actor type to distinguish INGO, NNGO, UN, and Government presence. NNGOs are often the only actors in hard-to-reach woredas.'},
 ];
@@ -740,7 +756,7 @@ goToStep(0);
 <script>
 var _tourStep = 0;
 var _tourSteps = [
-  {title:'What is this tool?',text:'The <span class="tc-hl">ABC Coordination Dashboard</span> gives a transectoral view of humanitarian coverage across Benishangul-Gumuz — 24 woredas, 4 zones. It answers one question: who is doing what where, and where is nobody doing anything?'},
+  {title:'What is this tool?',text:'The <span class="tc-hl">Multisectoral Coverage Dashboard</span> gives a transectoral view of humanitarian coverage across Benishangul-Gumuz — 24 woredas, 4 zones, 6 sectors, 35+ organisations. It answers one question: who is doing what where — and where is nobody doing anything?'},
   {title:'The map — coverage by sector density',text:'Each woreda is coloured by the number of sectors covered. <span class="tc-hl">Green = 3+ sectors</span>, yellow = 2, orange = 1, grey = not covered. Region borders in dark red. Zone mesh visible underneath.'},
   {title:'Sector and actor filters',text:'Filter by <span class="tc-hl">sector</span> (Nutrition, WASH, Health, Protection, Food Security) and by <span class="tc-hl">actor type</span> (INGO, NNGO, UN, Government). Each combination updates the map, KPIs, and woreda list in real time.'},
   {title:'Woreda list — gaps first',text:'The sidebar list is sorted <span class="tc-hl">gaps first</span> — uncovered woredas at the top, in red. Each row shows the sector coverage dots. Click any woreda to open its full transectoral profile.'},
