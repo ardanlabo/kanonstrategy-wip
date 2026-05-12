@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Last Mile Risk Index — Kanon Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{
+  --void:#0D1117;--navy:#0F2952;--gold:#C9A84C;--gold-d:#A8863A;
+  --ink:#1A1C1E;--mid:#3D4149;--muted:#6B7280;--rule:#C4C7CE;
+  --critical:#C0392B;--high:#E67E22;--green:#22c55e;
+  --serif:'IBM Plex Serif',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+
+/* TOPBAR */
+.topbar{height:48px;flex-shrink:0;background:#0a0e15;border-bottom:0.5px solid rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1001;}
+.tl{display:flex;align-items:center;gap:14px;}
+.t-logo{display:flex;align-items:center;gap:10px;}
+.t-sep{width:1px;height:16px;background:rgba(201,168,76,0.25);}
+.t-brand{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.18em;color:rgba(255,255,255,0.85);}
+.t-div{width:0.5px;height:20px;background:rgba(255,255,255,0.08);}
+.t-product{font-family:var(--serif);font-weight:300;font-size:13px;color:rgba(255,255,255,0.55);}
+.t-ctx{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.1em;}
+.tr{display:flex;align-items:center;gap:16px;}
+.t-back{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.2s;}
+.t-back:hover{color:rgba(201,168,76,0.7);}
+
+/* REGION BAR */
+.region-bar{height:36px;flex-shrink:0;background:#0a0e15;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;padding:0 20px;gap:6px;overflow-x:auto;}
+.region-bar::-webkit-scrollbar{display:none;}
+.rb-label{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:rgba(255,255,255,0.18);text-transform:uppercase;margin-right:4px;white-space:nowrap;flex-shrink:0;}
+.rb-btn{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;padding:3px 10px;border:0.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.28);background:transparent;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;}
+.rb-btn:hover{border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.65);}
+.rb-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08);}
+.rb-sep{width:1px;height:16px;background:rgba(255,255,255,0.06);flex-shrink:0;margin:0 4px;}
+
+/* BODY */
+.body-wrap{flex:1;display:flex;overflow:hidden;position:relative;}
+#map{flex:1;z-index:1;}
+
+/* SIDEBAR */
+.sidebar{
+  width:300px;flex-shrink:0;
+  background:#0a0e15;
+  border-left:0.5px solid rgba(255,255,255,0.07);
+  display:flex;flex-direction:column;overflow:hidden;
+  z-index:1000;
+}
+.sb-section{padding:12px 14px;border-bottom:0.5px solid rgba(255,255,255,0.06);}
+.sb-label{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:rgba(201,168,76,0.4);text-transform:uppercase;margin-bottom:8px;}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.05);}
+.kpi-cell{background:#0a0e15;padding:10px 12px;}
+.kpi-num{font-family:var(--mono);font-size:20px;font-weight:500;line-height:1;margin-bottom:3px;}
+.kpi-lbl{font-family:var(--sans);font-size:9px;color:rgba(255,255,255,0.25);line-height:1.3;}
+
+/* WOREDA LIST */
+.woreda-list{flex:1;overflow-y:auto;}
+.woreda-list::-webkit-scrollbar{width:3px;}
+.woreda-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
+.wl-header{padding:8px 14px;font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(255,255,255,0.2);text-transform:uppercase;background:#080c12;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;}
+.wl-count{color:rgba(201,168,76,0.5);}
+.wl-item{padding:10px 14px;border-bottom:0.5px solid rgba(255,255,255,0.05);cursor:pointer;transition:background 0.12s;display:flex;align-items:center;gap:10px;}
+.wl-item:hover{background:rgba(255,255,255,0.03);}
+.wl-item.selected{background:rgba(201,168,76,0.06);border-left:2px solid var(--gold);}
+.wl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.wl-info{flex:1;min-width:0;}
+.wl-name{font-family:var(--sans);font-size:11px;font-weight:500;color:rgba(255,255,255,0.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wl-region{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px;}
+.wl-score{font-family:var(--mono);font-size:11px;font-weight:500;flex-shrink:0;}
+
+/* DETAIL DRAWER */
+.detail-drawer{
+  position:absolute;bottom:48px;left:0;right:300px;
+  background:#0c111a;
+  border-top:2px solid var(--gold);
+  transform:translateY(100%);
+  transition:transform 0.25s ease;
+  z-index:999;
+  max-height:45%;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.4);
+}
+.detail-drawer.open{transform:translateY(0);}
+.dd-header{padding:10px 18px;border-bottom:0.5px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;}
+.dd-title{font-family:var(--serif);font-weight:300;font-size:15px;color:#fff;}
+.dd-meta{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.25);margin-top:2px;}
+.dd-close{font-size:14px;color:rgba(255,255,255,0.2);cursor:pointer;padding:2px 6px;transition:color 0.15s;}
+.dd-close:hover{color:#fff;}
+.dd-body{padding:14px 18px;overflow-y:auto;max-height:calc(45vh - 48px);display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.dd-score-block{display:flex;flex-direction:column;gap:4px;}
+.dd-score-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(201,168,76,0.4);text-transform:uppercase;}
+.dd-score-val{font-family:var(--mono);font-size:28px;font-weight:500;line-height:1;}
+.dd-score-sub{font-family:var(--sans);font-size:10px;color:rgba(255,255,255,0.3);}
+.dd-chain{display:flex;flex-direction:column;gap:6px;}
+.dd-chain-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(201,168,76,0.4);text-transform:uppercase;margin-bottom:4px;}
+.dd-chain-node{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;background:rgba(255,255,255,0.03);border-left:1.5px solid rgba(255,255,255,0.08);}
+.dd-chain-node.active-chain{border-left-color:var(--gold);background:rgba(201,168,76,0.05);}
+.dd-chain-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.dd-chain-org{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.7);}
+.dd-chain-role{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px;}
+.dd-chain-arrow{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.12);padding:2px 12px;}
+.dd-action{grid-column:1/-1;background:rgba(201,168,76,0.04);border:0.5px solid rgba(201,168,76,0.15);border-left:2px solid var(--gold);padding:10px 14px;}
+.dd-action-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:rgba(201,168,76,0.6);text-transform:uppercase;margin-bottom:5px;}
+.dd-action-text{font-family:var(--sans);font-size:11px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.6;}
+
+/* TOUR */
+.tour-bar{
+  position:absolute;bottom:0;left:0;right:300px;
+  background:rgba(10,14,21,0.97);
+  border-top:0.5px solid rgba(255,255,255,0.07);
+  padding:9px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:998;height:48px;
+}
+.tour-left{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.tdots{display:flex;gap:5px;}
+.tdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer;transition:all 0.2s;}
+.tdot.active{background:var(--gold);}
+.tdot.done{background:rgba(201,168,76,0.35);}
+.t-ctr{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.18);}
+.tour-msg{flex:1;padding:0 16px;}
+.t-lbl{font-family:var(--mono);font-size:9px;color:rgba(201,168,76,0.6);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1px;}
+.t-txt{font-family:var(--sans);font-size:11px;font-weight:300;color:rgba(255,255,255,0.5);}
+.tour-btns{display:flex;gap:7px;flex-shrink:0;}
+.tbtn{font-family:var(--mono);font-size:10px;letter-spacing:0.07em;padding:4px 12px;cursor:pointer;transition:all 0.2s;border:0.5px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.3);}
+.tbtn:hover{color:rgba(255,255,255,0.6);}
+.tbtn.primary{border-color:rgba(201,168,76,0.4);color:var(--gold);background:rgba(201,168,76,0.05);}
+.tbtn.done{border-color:rgba(34,197,94,0.4);color:#22c55e;}
+
+/* MAP LEGEND */
+.map-legend{
+  position:absolute;bottom:60px;left:12px;
+  background:rgba(255,255,255,0.95);
+  border:1px solid #ddd;
+  padding:10px 12px;
+  z-index:999;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
+  pointer-events:none;
+}
+.ml-title{font-family:var(--mono);font-size:8px;color:#555;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+.ml-row{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+.ml-swatch{width:14px;height:10px;border:0.5px solid rgba(0,0,0,0.2);}
+.ml-lbl{font-family:var(--mono);font-size:9px;color:#444;}
+
+/* Leaflet popup override */
+.leaflet-popup-content-wrapper{background:#0c111a;border:0.5px solid rgba(201,168,76,0.25);border-radius:0;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.leaflet-popup-tip{background:#0c111a;}
+.leaflet-popup-content{color:#fff;font-family:'Inter',sans-serif;font-size:12px;margin:10px 14px;}
+.lp-name{font-family:'IBM Plex Serif',serif;font-size:14px;font-weight:300;margin-bottom:4px;}
+.lp-region{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.35);margin-bottom:8px;}
+.lp-score{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:500;}
+.lp-risk{font-family:'IBM Plex Mono',monospace;font-size:9px;margin-top:3px;}
+.lp-fac{font-family:'Inter',sans-serif;font-size:10px;color:rgba(255,255,255,0.4);margin-top:6px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tl">
+    <div class="t-logo">
+      <svg width="20" height="20" viewBox="0 0 120 120" fill="none">
+        <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2.5"/>
+        <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="2"/>
+        <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
+        <circle cx="60" cy="10" r="5" fill="#C9A84C"/>
+        <circle cx="103.3" cy="85" r="5" fill="#C9A84C"/>
+        <circle cx="16.7" cy="85" r="5" fill="#C9A84C"/>
+      </svg>
+      <div class="t-sep"></div>
+      <span class="t-brand">KANON</span>
+    </div>
+    <div class="t-div"></div>
+    <span class="t-product">Last Mile Risk Index</span>
+    <span class="t-ctx">// ETHIOPIA · LMRI T2 · MARCH 2026</span>
+  </div>
+  <div class="tr">
+    <a href="index.html" class="t-back">← Back</a>
+  </div>
+</div>
+
+<!-- REGION BAR -->
+<div class="region-bar">
+  <span class="rb-label">Region</span>
+  <button class="rb-btn active" data-region="all">All Ethiopia</button>
+  <div class="rb-sep"></div>
+  <button class="rb-btn" data-region="Amhara">Amhara</button>
+  <button class="rb-btn" data-region="Benishangul Gumuz">Benishangul Gumuz</button>
+  <button class="rb-btn" data-region="Oromia">Oromia</button>
+  <button class="rb-btn" data-region="Somali">Somali</button>
+  <button class="rb-btn" data-region="South Ethiopia">South Ethiopia</button>
+  <button class="rb-btn" data-region="Tigray">Tigray</button>
+</div>
+
+<div class="body-wrap">
+  <div id="map"></div>
+
+  <!-- LEGEND -->
+  <div class="map-legend">
+    <div class="ml-title">LMRI Score</div>
+    <div class="ml-row"><div class="ml-swatch" style="background:rgba(192,57,43,0.85)"></div><span class="ml-lbl">Critical ≥ 0.75</span></div>
+    <div class="ml-row"><div class="ml-swatch" style="background:rgba(230,126,34,0.8)"></div><span class="ml-lbl">High 0.50–0.74</span></div>
+    <div class="ml-row"><div class="ml-swatch" style="background:rgba(200,200,200,0.4)"></div><span class="ml-lbl">Below threshold</span></div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-section">
+      <div class="sb-label">// Summary — LMRI &gt; 0.5</div>
+      <div class="kpi-grid">
+        <div class="kpi-cell"><div class="kpi-num" id="kpi-total" style="color:var(--gold)">17</div><div class="kpi-lbl">Woredas at risk</div></div>
+        <div class="kpi-cell"><div class="kpi-num" id="kpi-critical" style="color:var(--critical)">8</div><div class="kpi-lbl">Critical ≥ 0.75</div></div>
+        <div class="kpi-cell"><div class="kpi-num" id="kpi-no-ngo" style="color:#ef4444">14</div><div class="kpi-lbl">No NGO support</div></div>
+        <div class="kpi-cell"><div class="kpi-num" id="kpi-fac" style="color:rgba(255,255,255,0.6)">201</div><div class="kpi-lbl">Facilities uncovered</div></div>
+      </div>
+    </div>
+
+    <div class="wl-header">
+      <span>Woredas at risk</span>
+      <span class="wl-count" id="wl-count">17</span>
+    </div>
+    <div class="woreda-list" id="woreda-list"></div>
+  </div>
+
+  <!-- DETAIL DRAWER -->
+  <div class="detail-drawer" id="detail-drawer">
+    <div class="dd-header">
+      <div>
+        <div class="dd-title" id="dd-title">—</div>
+        <div class="dd-meta" id="dd-meta">—</div>
+      </div>
+      <div class="dd-close" onclick="closeDetail()">✕</div>
+    </div>
+    <div class="dd-body" id="dd-body"></div>
+  </div>
+
+  <!-- TOUR -->
+  <div class="tour-bar" id="tour-bar">
+    <div class="tour-left">
+      <div class="tdots" id="tdots"></div>
+      <div class="t-ctr" id="t-ctr">1 / 5</div>
+    </div>
+    <div class="tour-msg">
+      <div class="t-lbl" id="t-lbl"></div>
+      <div class="t-txt" id="t-txt"></div>
+    </div>
+    <div class="tour-btns">
+      <button class="tbtn" id="btn-prev" onclick="prevStep()">← Prev</button>
+      <button class="tbtn primary" id="btn-next" onclick="nextStep()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────
+const LMRI = [
+  {woreda:"Axum Town",      zone:"Central",     region:"Tigray",            lmri:1.00, facilities:2,  hr:2,  risk:"critical", lat:13.9032, lon:38.8822, has_support:false, facilities_support:0},
+  {woreda:"Bare",           zone:"Afder",       region:"Somali",            lmri:1.00, facilities:1,  hr:1,  risk:"critical", lat:5.4176,  lon:42.2557, has_support:false, facilities_support:0},
+  {woreda:"Gubalafto",      zone:"North Wollo", region:"Amhara",            lmri:1.00, facilities:1,  hr:1,  risk:"critical", lat:11.8389, lon:38.9502, has_support:true,  facilities_support:1},
+  {woreda:"Guto Gida",      zone:"East Wollega",region:"Oromia",            lmri:1.00, facilities:4,  hr:4,  risk:"critical", lat:9.4455,  lon:36.6103, has_support:true,  facilities_support:3},
+  {woreda:"West Imi",       zone:"Afder",       region:"Somali",            lmri:1.00, facilities:12, hr:12, risk:"critical", lat:5.4176,  lon:42.1500, has_support:false, facilities_support:0},
+  {woreda:"Erar",           zone:"Sitti",       region:"Somali",            lmri:0.91, facilities:11, hr:10, risk:"critical", lat:10.2079, lon:41.872,  has_support:false, facilities_support:0},
+  {woreda:"Hintalo",        zone:"South Eastern",region:"Tigray",           lmri:0.88, facilities:17, hr:15, risk:"critical", lat:13.3411, lon:39.3966, has_support:false, facilities_support:0},
+  {woreda:"Dekasuftu",      zone:"Liben",       region:"Somali",            lmri:0.75, facilities:8,  hr:6,  risk:"critical", lat:5.3197,  lon:40.6358, has_support:false, facilities_support:0},
+  {woreda:"Gidan",          zone:"North Wollo", region:"Amhara",            lmri:0.75, facilities:8,  hr:6,  risk:"critical", lat:11.8500, lon:38.9000, has_support:false, facilities_support:0},
+  {woreda:"Raya Kobo",      zone:"North Wollo", region:"Amhara",            lmri:0.73, facilities:11, hr:8,  risk:"high",     lat:12.1500, lon:39.5500, has_support:false, facilities_support:0},
+  {woreda:"Lataa Sibuu",    zone:"West Wollega",region:"Oromia",            lmri:0.71, facilities:14, hr:10, risk:"high",     lat:9.3341,  lon:35.3739, has_support:true,  facilities_support:1},
+  {woreda:"Bambasi",        zone:"Assosa",      region:"Benishangul Gumuz", lmri:0.70, facilities:46, hr:32, risk:"high",     lat:10.2241, lon:34.7796, has_support:false, facilities_support:0},
+  {woreda:"Harshin",        zone:"Fafan",       region:"Somali",            lmri:0.70, facilities:33, hr:23, risk:"high",     lat:9.2045,  lon:43.1909, has_support:false, facilities_support:0},
+  {woreda:"Mena Sibu",      zone:"West Wollega",region:"Oromia",            lmri:0.68, facilities:19, hr:13, risk:"high",     lat:9.4000,  lon:35.2000, has_support:false, facilities_support:0},
+  {woreda:"Hamer",          zone:"South Omo",   region:"South Ethiopia",    lmri:0.67, facilities:3,  hr:2,  risk:"high",     lat:5.4513,  lon:36.4104, has_support:false, facilities_support:0},
+  {woreda:"Elkari",         zone:"Afder",       region:"Somali",            lmri:0.57, facilities:7,  hr:4,  risk:"high",     lat:5.5000,  lon:42.3000, has_support:false, facilities_support:0},
+  {woreda:"Bercano",        zone:"Shebele",     region:"Somali",            lmri:0.52, facilities:23, hr:12, risk:"high",     lat:5.8739,  lon:43.4872, has_support:false, facilities_support:0},
+];
+
+const REGIONAL = {
+  'Tigray':           {boh:'Dr. Gebremichael', capital:'Mekelle',    ngo:'IRC Ethiopia',     contact:'James Obi',       role:'Field Coordinator'},
+  'Amhara':           {boh:'Dr. Alemu Tadesse',capital:'Bahir Dar',  ngo:'Save the Children',contact:'Hana Tesfaye',    role:'Area Manager'},
+  'Oromia':           {boh:'Dr. Bekele Worku', capital:'Addis Ababa',ngo:'GOAL Ethiopia',    contact:'Patrick Walsh',   role:'Nutrition Program Manager'},
+  'Somali':           {boh:'Dr. Hussein Abdi', capital:'Jigjiga',    ngo:'ACF Ethiopia',     contact:'Marie Dubois',    role:'Field Coordinator Somali'},
+  'Benishangul Gumuz':{boh:'Dr. Tadesse Bekele',capital:'Assosa',   ngo:'ACF Ethiopia',     contact:'Marie Dubois',    role:'Field Coordinator BG'},
+  'South Ethiopia':   {boh:'Dr. Fikru Legesse',capital:'Arba Minch', ngo:'Save the Children',contact:'Hana Tesfaye',    role:'South Ethiopia Coord.'},
+};
+
+const NGO_COLOR = {
+  'IRC Ethiopia':'#E67E22','Save the Children':'#27AE60',
+  'GOAL Ethiopia':'#9B59B6','ACF Ethiopia':'#5B8DB8','WFP Sub-Office':'#C9A84C',
+};
+
+const REGION_BOUNDS = {
+  'Amhara':           [[8.7,35.3],[13.8,40.2]],
+  'Benishangul Gumuz':[[9.0,34.1],[12.0,36.7]],
+  'Oromia':           [[3.5,34.1],[10.4,43.0]],
+  'Somali':           [[3.4,39.1],[11.1,48.0]],
+  'South Ethiopia':   [[3.5,35.0],[7.5,38.5]],
+  'Tigray':           [[12.3,36.5],[15.0,40.0]],
+};
+
+// ── MAP ───────────────────────────────────────────────────────
+const map = L.map('map', {zoomControl:true}).setView([8.5, 39.5], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:'&copy; OpenStreetMap contributors', maxZoom:14
+}).addTo(map);
+
+// Add circle markers for LMRI woredas
+const markers = {};
+LMRI.forEach(w => {
+  const color = w.risk === 'critical' ? '#C0392B' : '#E67E22';
+  const r = w.risk === 'critical' ? 12 : 9;
+
+  const circle = L.circleMarker([w.lat, w.lon], {
+    radius: r,
+    fillColor: color,
+    color: color,
+    weight: 1.5,
+    opacity: 0.9,
+    fillOpacity: 0.75,
+  }).addTo(map);
+
+  circle.bindPopup(`
+    <div class="lp-name">${w.woreda}</div>
+    <div class="lp-region">${w.zone} · ${w.region}</div>
+    <div class="lp-score" style="color:${color}">${w.lmri.toFixed(2)}</div>
+    <div class="lp-risk" style="color:${color}">${w.risk === 'critical' ? 'CRITICAL' : 'HIGH RISK'}</div>
+    <div class="lp-fac">${w.facilities} facilities uncovered · ${w.has_support ? (w.facilities_support + ' under NGO umbrella') : 'No NGO support'}</div>
+  `);
+
+  circle.on('click', () => selectWoreda(w));
+  markers[w.woreda] = circle;
+});
+
+// Add grey polygon overlay for Ethiopia using GeoJSON regions
+// Simple grey background for context
+const ETHIOPIA_CENTER = L.latLng(9.0, 40.0);
+
+// ── STATE ─────────────────────────────────────────────────────
+let selectedWoreda = null;
+let activeRegion = 'all';
+let step = 0;
+
+// ── REGION FILTER ─────────────────────────────────────────────
+document.querySelectorAll('.rb-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.rb-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeRegion = btn.dataset.region;
+    zoomToRegion(activeRegion);
+    renderList();
+    updateKPIs();
+  });
+});
+
+function zoomToRegion(region) {
+  if (region === 'all') { map.setView([8.5, 39.5], 6); return; }
+  const bounds = REGION_BOUNDS[region];
+  if (bounds) map.fitBounds(bounds, {padding:[40,40]});
+}
+
+// ── KPIs ──────────────────────────────────────────────────────
+function getFiltered() {
+  if (activeRegion === 'all') return LMRI;
+  return LMRI.filter(w => w.region === activeRegion);
+}
+
+function updateKPIs() {
+  const data = getFiltered();
+  document.getElementById('kpi-total').textContent = data.length;
+  document.getElementById('kpi-critical').textContent = data.filter(w => w.risk === 'critical').length;
+  document.getElementById('kpi-no-ngo').textContent = data.filter(w => !w.has_support).length;
+  document.getElementById('kpi-fac').textContent = data.reduce((s,w) => s + w.facilities, 0);
+}
+
+// ── WOREDA LIST ───────────────────────────────────────────────
+function renderList() {
+  const data = getFiltered().sort((a,b) => b.lmri - a.lmri);
+  document.getElementById('wl-count').textContent = data.length;
+  document.getElementById('woreda-list').innerHTML = data.map(w => {
+    const color = w.risk === 'critical' ? '#C0392B' : '#E67E22';
+    const isSelected = selectedWoreda && selectedWoreda.woreda === w.woreda;
+    return `<div class="wl-item${isSelected?' selected':''}" onclick="selectWoreda(${JSON.stringify(w).replace(/"/g,'&quot;')})">
+      <div class="wl-dot" style="background:${color}"></div>
+      <div class="wl-info">
+        <div class="wl-name">${w.woreda}</div>
+        <div class="wl-region">${w.region} · ${w.zone}</div>
+      </div>
+      <div class="wl-score" style="color:${color}">${w.lmri.toFixed(2)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── SELECT WOREDA ─────────────────────────────────────────────
+function selectWoreda(w) {
+  if (typeof w === 'string') w = JSON.parse(w);
+  selectedWoreda = w;
+  renderList();
+  map.setView([w.lat, w.lon], 9, {animate:true});
+  if (markers[w.woreda]) markers[w.woreda].openPopup();
+  openDetail(w);
+}
+
+// ── DETAIL DRAWER ─────────────────────────────────────────────
+function openDetail(w) {
+  const reg = REGIONAL[w.region] || {boh:'Unknown',capital:'—',ngo:'—',contact:'—',role:'—'};
+  const color = w.risk === 'critical' ? '#C0392B' : '#E67E22';
+  const ngoColor = NGO_COLOR[reg.ngo] || '#5B8DB8';
+
+  document.getElementById('dd-title').textContent = w.woreda;
+  document.getElementById('dd-meta').textContent = w.zone + ' · ' + w.region + ' · LMRI ' + w.lmri.toFixed(2);
+  document.getElementById('detail-drawer').classList.add('open');
+
+  const firstContact = w.has_support
+    ? `Contact ${reg.contact} (${reg.ngo}) first — active in this territory. Coordinate with ${reg.boh} at ${reg.capital} BoH for access.`
+    : `No NGO present. Contact ${reg.boh} at ${reg.capital} BoH directly. Escalate to UNICEF Addis if no response within 48h.`;
+
+  document.getElementById('dd-body').innerHTML = `
+    <div class="dd-score-block">
+      <div class="dd-score-lbl">// LMRI score</div>
+      <div class="dd-score-val" style="color:${color}">${w.lmri.toFixed(2)}</div>
+      <div class="dd-score-sub">${w.risk === 'critical' ? 'Critical ≥ 0.75' : 'High 0.50–0.74'}</div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px;">
+        <div style="display:flex;justify-content:space-between"><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3)">Facilities uncovered</span><span style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.7)">${w.facilities}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3)">HW unreached</span><span style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.7)">${w.hr}</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.3)">Under NGO umbrella</span><span style="font-family:var(--mono);font-size:11px;color:${w.has_support?'#22c55e':'#ef4444'}">${w.facilities_support || 0}</span></div>
+      </div>
+    </div>
+
+    <div class="dd-chain">
+      <div class="dd-chain-lbl">// Response chain</div>
+      ${w.has_support ? `
+        <div class="dd-chain-node active-chain">
+          <div class="dd-chain-dot" style="background:${ngoColor}"></div>
+          <div><div class="dd-chain-org">${reg.ngo}</div><div class="dd-chain-role">${reg.contact} · ${reg.role}</div></div>
+        </div>
+        <div class="dd-chain-arrow">↑ report to</div>
+      ` : `
+        <div class="dd-chain-node" style="border-left-color:rgba(192,57,43,0.5)">
+          <div class="dd-chain-dot" style="background:rgba(192,57,43,0.4);border:1px dashed #C0392B"></div>
+          <div><div class="dd-chain-org" style="color:rgba(255,255,255,0.3)">No NGO present</div><div class="dd-chain-role" style="color:#C0392B">Coverage gap</div></div>
+        </div>
+        <div class="dd-chain-arrow">↑ escalate directly</div>
+      `}
+      <div class="dd-chain-node">
+        <div class="dd-chain-dot" style="background:#9B7FCC"></div>
+        <div><div class="dd-chain-org">${w.region} Regional BoH</div><div class="dd-chain-role">${reg.boh} · ${reg.capital}</div></div>
+      </div>
+      <div class="dd-chain-arrow">↑ escalate</div>
+      <div class="dd-chain-node">
+        <div class="dd-chain-dot" style="background:#C9A84C"></div>
+        <div><div class="dd-chain-org">UNICEF Ethiopia</div><div class="dd-chain-role">Sarah Okonkwo · Head of Nutrition Cluster · Addis Ababa</div></div>
+      </div>
+    </div>
+
+    <div class="dd-action">
+      <div class="dd-action-lbl">// Action this week</div>
+      <div class="dd-action-text">${firstContact}</div>
+    </div>
+  `;
+}
+
+function closeDetail() {
+  document.getElementById('detail-drawer').classList.remove('open');
+  selectedWoreda = null;
+  renderList();
+}
+
+// ── GUIDED TOUR ───────────────────────────────────────────────
+const STEPS = [
+  {lbl:'01 — What is LMRI',  txt:'The Last Mile Risk Index scores each woreda 0–1 based on RUTF stockout intensity. Scores above 0.5 require immediate attention.'},
+  {lbl:'02 — 17 woredas',    txt:'17 woredas across 6 regions are above threshold. 8 are critical (≥ 0.75). The map shows their geographic distribution.', zoom:true},
+  {lbl:'03 — No NGO support', txt:'14 of 17 woredas have zero NGO support. These are the most urgent — no field actor to relay supply or information.'},
+  {lbl:'04 — Response chain', txt:'Click any woreda to see the full response chain — who to call first, who escalates to UNICEF, and whether an NGO is present.', open:'Hintalo'},
+  {lbl:'05 — Region filter',  txt:'Use the region bar to zoom in and filter by region. Each woreda has a full profile ready for Monday morning briefings.'},
+];
+
+function goToStep(i) {
+  step = Math.max(0, Math.min(STEPS.length-1, i));
+  const s = STEPS[step];
+  document.getElementById('t-lbl').textContent = s.lbl;
+  document.getElementById('t-txt').textContent = s.txt;
+  document.getElementById('t-ctr').textContent = (step+1)+' / '+STEPS.length;
+
+  const dots = document.getElementById('tdots');
+  dots.innerHTML = '';
+  STEPS.forEach((_,idx) => {
+    const d = document.createElement('div');
+    d.className = 'tdot'+(idx===step?' active':idx<step?' done':'');
+    d.onclick = ()=>goToStep(idx);
+    dots.appendChild(d);
+  });
+
+  const prev = document.getElementById('btn-prev');
+  prev.style.opacity = step===0?'0.3':'1';
+  prev.style.pointerEvents = step===0?'none':'auto';
+
+  const next = document.getElementById('btn-next');
+  if(step===STEPS.length-1){
+    next.textContent='Explore freely';
+    next.className='tbtn done';
+    next.onclick=()=>{};
+  } else {
+    next.textContent='Next →';
+    next.className='tbtn primary';
+    next.onclick=nextStep;
+  }
+
+  if(s.open) {
+    setTimeout(()=>{
+      const w = LMRI.find(x=>x.woreda===s.open);
+      if(w) selectWoreda(w);
+    }, 300);
+  } else if(step!==3) {
+    closeDetail();
+  }
+
+  if(s.zoom) {
+    map.setView([8.5, 39.5], 6, {animate:true});
+  }
+}
+
+function nextStep(){goToStep(step+1);}
+function prevStep(){goToStep(step-1);}
+
+// ── INIT ──────────────────────────────────────────────────────
+updateKPIs();
+renderList();
+goToStep(0);
+
+// Click on map background closes detail
+map.on('click', () => closeDetail());
+</script>
+</body>
+</html>
