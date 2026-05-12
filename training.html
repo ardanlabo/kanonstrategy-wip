@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Fluency · Kanon Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0D1117;--void2:#131920;--navy:#0F2952;--gold:#C9A84C;--gold-d:#A8863A;
+  --parch:#F7F6F2;--ink:#1A1C1E;--mid:#3D4149;--muted:#6B7280;--rule:#C4C7CE;
+  --serif:'IBM Plex Serif',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;background:var(--void);border-bottom:0.5px solid rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:space-between;padding:0 64px;}
+.tl{display:flex;align-items:center;gap:12px;}
+.t-sep{width:1px;height:16px;background:rgba(201,168,76,0.25);}
+.t-brand{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.18em;color:rgba(255,255,255,0.85);}
+.t-product{font-family:var(--serif);font-weight:300;font-size:13px;color:rgba(255,255,255,0.4);}
+.t-back{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);transition:color 0.2s;}
+.t-back:hover{color:rgba(201,168,76,0.7);}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:end;padding-top:52px;}
+.hero-left{padding:80px 64px;border-right:0.5px solid rgba(255,255,255,0.06);}
+.hero-right{padding:80px 64px;display:flex;flex-direction:column;justify-content:flex-end;gap:0;}
+.hero-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(201,168,76,0.5);margin-bottom:28px;}
+.hero-title{font-family:var(--serif);font-weight:300;font-size:clamp(36px,4.5vw,60px);line-height:1.1;color:#fff;margin-bottom:28px;}
+.hero-title em{font-style:italic;color:rgba(255,255,255,0.4);}
+.hero-rule{width:40px;height:1px;background:var(--gold);margin-bottom:28px;}
+.hero-sub{font-family:var(--sans);font-weight:300;font-size:14px;line-height:1.85;color:rgba(255,255,255,0.35);margin-bottom:40px;}
+.hero-sub strong{color:rgba(255,255,255,0.6);font-weight:400;}
+.btn-primary{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:12px 24px;transition:all 0.2s;display:inline-block;}
+.btn-primary:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
+
+.hero-quote-block{padding-bottom:40px;border-bottom:0.5px solid rgba(255,255,255,0.06);margin-bottom:40px;}
+.hero-quote{font-family:var(--serif);font-weight:300;font-style:italic;font-size:16px;line-height:1.75;color:rgba(255,255,255,0.32);margin-bottom:14px;}
+.hero-quote-src{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);}
+.hs-cell{background:var(--void);padding:22px 18px;}
+.hs-num{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--gold);line-height:1;margin-bottom:5px;}
+.hs-lbl{font-family:var(--sans);font-weight:300;font-size:10px;color:rgba(255,255,255,0.22);line-height:1.5;}
+
+/* PROBLEM */
+.problem{display:grid;grid-template-columns:1fr 1fr;border-top:0.5px solid rgba(255,255,255,0.06);}
+.problem-left{padding:80px 64px;background:var(--void2);}
+.problem-right{padding:80px 64px;background:var(--void);border-left:0.5px solid rgba(255,255,255,0.06);}
+.s-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,168,76,0.4);margin-bottom:14px;}
+.s-title{font-family:var(--serif);font-weight:300;font-size:clamp(24px,3vw,36px);line-height:1.2;color:#fff;margin-bottom:18px;}
+.s-rule{width:28px;height:1px;background:var(--gold);margin-bottom:22px;}
+.s-body{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.9;color:rgba(255,255,255,0.35);}
+.s-body strong{color:rgba(255,255,255,0.6);font-weight:400;}
+.p-list{display:flex;flex-direction:column;gap:0;margin-top:8px;}
+.p-item{padding:16px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;gap:14px;align-items:flex-start;}
+.p-item:first-child{border-top:0.5px solid rgba(255,255,255,0.05);}
+.p-mark{font-family:var(--mono);font-size:10px;color:rgba(201,168,76,0.4);flex-shrink:0;padding-top:1px;}
+.p-text{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.65;color:rgba(255,255,255,0.32);}
+.p-text strong{color:rgba(255,255,255,0.55);font-weight:400;}
+
+/* WHAT */
+.what{padding:100px 64px;border-top:0.5px solid rgba(255,255,255,0.06);}
+.what-header{max-width:580px;margin-bottom:56px;}
+.what-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.05);}
+.wc{background:var(--void2);padding:36px 30px;position:relative;overflow:hidden;}
+.wc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+.wc:hover::before{transform:scaleX(1);}
+.wc-num{font-family:var(--mono);font-size:30px;font-weight:500;color:rgba(201,168,76,0.1);line-height:1;margin-bottom:18px;}
+.wc-title{font-family:var(--serif);font-weight:300;font-size:17px;color:#fff;margin-bottom:10px;line-height:1.3;}
+.wc-body{font-family:var(--sans);font-weight:300;font-size:11px;line-height:1.8;color:rgba(255,255,255,0.28);}
+.wc-body strong{color:rgba(255,255,255,0.5);font-weight:400;}
+
+/* HOW */
+.how{display:grid;grid-template-columns:300px 1fr;border-top:0.5px solid rgba(255,255,255,0.06);}
+.how-left{padding:80px 48px;background:var(--void2);border-right:0.5px solid rgba(255,255,255,0.06);}
+.how-right{padding:80px 64px;}
+.how-specs{margin-top:28px;display:flex;flex-direction:column;gap:0;}
+.how-spec{padding:10px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;gap:10px;}
+.how-spec-l{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.18);letter-spacing:0.08em;text-transform:uppercase;}
+.how-spec-v{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.4);text-align:right;}
+.how-steps{display:flex;flex-direction:column;gap:0;}
+.how-step{padding:26px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:grid;grid-template-columns:72px 1fr;gap:16px;}
+.how-step:first-child{border-top:0.5px solid rgba(255,255,255,0.05);}
+.hs-wk{font-family:var(--mono);font-size:10px;color:rgba(201,168,76,0.4);padding-top:3px;}
+.hs-title{font-family:var(--sans);font-weight:500;font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:5px;}
+.hs-desc{font-family:var(--sans);font-weight:300;font-size:11px;line-height:1.7;color:rgba(255,255,255,0.28);}
+
+/* NOT FOR EVERYONE */
+.nfe{padding:80px 64px;background:var(--void2);border-top:0.5px solid rgba(255,255,255,0.06);}
+.nfe-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px;}
+.nfe-col-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding-bottom:14px;border-bottom:0.5px solid rgba(255,255,255,0.08);margin-bottom:20px;}
+.nfe-col-lbl--y{color:#22c55e;}
+.nfe-col-lbl--n{color:rgba(255,255,255,0.18);}
+.nfe-items{display:flex;flex-direction:column;gap:10px;}
+.nfe-item{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.65;display:flex;gap:12px;}
+.nfe-item::before{font-family:var(--mono);font-size:10px;flex-shrink:0;margin-top:1px;}
+.nfe-y::before{content:'✓';color:rgba(34,197,94,0.6);}
+.nfe-n::before{content:'✕';color:rgba(255,255,255,0.12);}
+.nfe-y{color:rgba(255,255,255,0.42);}
+.nfe-n{color:rgba(255,255,255,0.18);}
+
+/* CTA */
+.cta{padding:100px 64px;border-top:0.5px solid rgba(201,168,76,0.08);display:grid;grid-template-columns:1fr auto;gap:64px;align-items:center;}
+.cta-title{font-family:var(--serif);font-weight:300;font-size:clamp(28px,4vw,50px);line-height:1.15;color:#fff;margin-bottom:14px;}
+.cta-sub{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.7;color:rgba(255,255,255,0.28);max-width:460px;}
+.cta-right{display:flex;flex-direction:column;gap:12px;align-items:flex-end;}
+.cta-email{font-family:var(--mono);font-size:12px;color:rgba(255,255,255,0.25);transition:color 0.2s;}
+.cta-email:hover{color:var(--gold);}
+
+footer{padding:28px 64px;border-top:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;}
+.f-copy{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.15);}
+.f-link{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);transition:color 0.2s;}
+.f-link:hover{color:rgba(255,255,255,0.5);}
+
+@media(max-width:1000px){
+  .topbar,.what,.nfe,.cta,footer{padding-left:24px;padding-right:24px;}
+  .hero,.problem,.how{grid-template-columns:1fr;}
+  .hero-left,.hero-right,.problem-left,.problem-right,.how-left,.how-right{padding:48px 24px;}
+  .hero-right,.problem-right,.how-right{border-left:none;border-top:0.5px solid rgba(255,255,255,0.06);}
+  .what-grid{grid-template-columns:1fr;}
+  .nfe-grid{grid-template-columns:1fr;gap:40px;}
+  .cta{grid-template-columns:1fr;gap:32px;}
+  .cta-right{align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tl">
+    <svg width="20" height="20" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2.5"/>
+      <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
+      <circle cx="60" cy="10" r="5" fill="#C9A84C"/>
+      <circle cx="103.3" cy="85" r="5" fill="#C9A84C"/>
+      <circle cx="16.7" cy="85" r="5" fill="#C9A84C"/>
+    </svg>
+    <div class="t-sep"></div>
+    <span class="t-brand">KANON</span>
+    <div class="t-sep"></div>
+    <span class="t-product">AI Fluency</span>
+  </div>
+  <a href="index.html" class="t-back">← Back</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Capacity building · Horn of Africa</p>
+    <h1 class="hero-title">Your teams are already<br>using AI. <em>Without a framework.</em></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub">Most humanitarian organisations have no shared methodology for AI use. Staff experiment individually. Data protection rules are ignored or unknown. Outputs are unverifiable. <strong>The gap is not technological : it is methodological.</strong> This programme builds the framework your organisation is missing, department by department, from your actual files and workflows.</p>
+    <a href="mailto:andre@kanonstrategy.com" class="btn-primary">Discuss your context →</a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-quote-block">
+      <p class="hero-quote">"A finance module built on generic templates wastes three hours. A finance module built on your actual reporting formats changes how the team works the following week."</p>
+      <span class="hero-quote-src">Kanon · Programme methodology</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hs-cell"><div class="hs-num">10</div><div class="hs-lbl">Weeks from go-ahead to a fully equipped, AI-literate team</div></div>
+      <div class="hs-cell"><div class="hs-num">6</div><div class="hs-lbl">Department-specific prompt libraries, transferred at handover</div></div>
+      <div class="hs-cell"><div class="hs-num">0</div><div class="hs-lbl">Generic templates. Every session built from your actual documents</div></div>
+      <div class="hs-cell"><div class="hs-num">∞</div><div class="hs-lbl">Reuse. Everything produced belongs to you permanently</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<div class="problem">
+  <div class="problem-left">
+    <p class="s-eyebrow">The real problem</p>
+    <h2 class="s-title">It's not that your teams<br>don't use AI.</h2>
+    <div class="s-rule"></div>
+    <p class="s-body">They do. Individually, inconsistently, and often without understanding what happens to the data they feed into external tools. <strong>The risk isn't that AI is ignored : it is used without guardrails.</strong><br><br>At the same time, the efficiency gains that AI should deliver , hours reclaimed from repetitive drafting, reporting, consolidation, aren't materialising. Not because the tools don't work. Because the workflows haven't been restructured to use them properly.</p>
+  </div>
+  <div class="problem-right">
+    <p class="s-eyebrow">What this looks like in practice</p>
+    <div class="p-list">
+      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>Beneficiary data entered into ChatGPT</strong> because someone needed a quick translation and didn't think it through.</p></div>
+      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>Five staff writing the same sitrep five different ways.</strong> None using the prompt structure that would cut the time in half.</p></div>
+      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>AI outputs treated as final</strong> : hallucinations in donor reports, incorrect figures in logistics summaries, no verification step.</p></div>
+      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>No shared language between departments.</strong> Finance uses one tool, programme another, coordination none. Zero cross-team learning.</p></div>
+      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>Zero institutional memory.</strong> When the person who figured it out leaves, the knowledge leaves with them.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT -->
+<div class="what">
+  <div class="what-header">
+    <p class="s-eyebrow">What this programme produces</p>
+    <h2 class="s-title">Not a training.<br>A system.</h2>
+    <div class="s-rule"></div>
+    <p class="s-body" style="color:rgba(255,255,255,0.35)">Most AI trainings produce awareness. This programme produces infrastructure: the shared language, the department-specific toolkits, and the institutional protocols that make AI use consistent, safe and measurable.</p>
+  </div>
+  <div class="what-grid">
+    <div class="wc">
+      <div class="wc-num">01</div>
+      <h3 class="wc-title">A compliance baseline every department operates from</h3>
+      <p class="wc-body">Two all-staff foundation sessions define what AI can and cannot receive from your organisation: beneficiary data, health records, financial information, staff data. <strong>Everyone leaves with a department-level data protocol they drafted themselves.</strong> Not a policy from HQ. A working protocol, built during the session.</p>
+    </div>
+    <div class="wc">
+      <div class="wc-num">02</div>
+      <h3 class="wc-title">Six department-specific prompt libraries</h3>
+      <p class="wc-body">One module per department: Finance, Logistics, Procurement, Operations, Coordination, Technical. Content defined by a 30-minute pre-session scoping with each department head. <strong>Every prompt tested against your actual documents during the session.</strong> The library produced is yours at handover.</p>
+    </div>
+    <div class="wc">
+      <div class="wc-num">03</div>
+      <h3 class="wc-title">An AI reference guide your organisation actually uses</h3>
+      <p class="wc-body">The closing session consolidates everything built across ten weeks : what works, what does not, which practices to sustain, recommendations for a second cycle. <strong>Formatted for onboarding new staff.</strong> Not for a shelf.</p>
+    </div>
+  </div>
+</div>
+
+<!-- HOW -->
+<div class="how">
+  <div class="how-left">
+    <p class="s-eyebrow">Structure</p>
+    <h2 class="s-title" style="font-size:26px">Ten weeks.<br>Three layers.</h2>
+    <div class="s-rule"></div>
+    <p class="s-body" style="color:rgba(255,255,255,0.3);font-size:12px">The sequence is deliberate. Compliance before productivity. Foundation before specialisation. Shared language before department-specific toolkits.</p>
+    <div class="how-specs">
+      <div class="how-spec"><span class="how-spec-l">Duration</span><span class="how-spec-v">10 weeks</span></div>
+      <div class="how-spec"><span class="how-spec-l">Format</span><span class="how-spec-v">On-site · 3h sessions</span></div>
+      <div class="how-spec"><span class="how-spec-l">Foundation</span><span class="how-spec-v">2 sessions · all staff</span></div>
+      <div class="how-spec"><span class="how-spec-l">Modules</span><span class="how-spec-v">6 sessions · targeted</span></div>
+      <div class="how-spec"><span class="how-spec-l">Closing</span><span class="how-spec-v">1 session · all staff</span></div>
+      <div class="how-spec"><span class="how-spec-l">Language</span><span class="how-spec-v">EN · FR available</span></div>
+      <div class="how-spec"><span class="how-spec-l">Replication</span><span class="how-spec-v">Other missions on request</span></div>
+    </div>
+  </div>
+  <div class="how-right">
+    <div class="how-steps">
+      <div class="how-step">
+        <span class="hs-wk">Week 1</span>
+        <div>
+          <div class="hs-title">Pre-programme scoping</div>
+          <div class="hs-desc">30-minute intake with each department head. Pain points, highest-volume tasks, existing tool usage, data sensitivity profile. This defines session content. Not a generic curriculum.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <span class="hs-wk">Wk 2–3</span>
+        <div>
+          <div class="hs-title">Foundation curriculum, all staff</div>
+          <div class="hs-desc">Session 1: AI landscape, ethics, bias, hallucination risks, what changes in daily workflows and what doesn't. Session 2: data protection, GDPR obligations, what goes into an AI tool and what never does. Every participant leaves with a draft department data protocol.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <span class="hs-wk">Wk 4–9</span>
+        <div>
+          <div class="hs-title">Specialised modules, one per department</div>
+          <div class="hs-desc">Finance, Logistics, Procurement, Operations & Programme, Coordination, Technical. Each session targets the specific high-volume tasks identified in pre-module scoping. Every module produces one shared prompt library, tested against real department files.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <span class="hs-wk">Week 10</span>
+        <div>
+          <div class="hs-title">Closing session</div>
+          <div class="hs-desc">Cross-team lessons learned, updated AI reference guide, recommendations for next steps. No new tools introduced. The session produces the institutional memory the organisation needs to sustain adoption independently.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOT FOR EVERYONE -->
+<div class="nfe">
+  <p class="s-eyebrow">Before you contact us</p>
+  <h2 class="s-title" style="max-width:480px">This programme is built for specific contexts.</h2>
+  <div class="nfe-grid">
+    <div>
+      <div class="nfe-col-lbl nfe-col-lbl--y">This is for you if</div>
+      <div class="nfe-items">
+        <div class="nfe-item nfe-y">Your teams carry high volumes of repetitive documentation: sitreps, 4W matrices, donor reports, procurement files.</div>
+        <div class="nfe-item nfe-y">You operate in a context where data sensitivity is a real operational concern, not a theoretical one.</div>
+        <div class="nfe-item nfe-y">You want institutional ownership, a programme your organisation runs independently after handover.</div>
+        <div class="nfe-item nfe-y">You're willing to dedicate 30 minutes per department head before the programme starts. That's what makes the content work.</div>
+        <div class="nfe-item nfe-y">You're based in Ethiopia or the Horn of Africa , or ready to host an on-site programme.</div>
+      </div>
+    </div>
+    <div>
+      <div class="nfe-col-lbl nfe-col-lbl--n">This is not for you if</div>
+      <div class="nfe-items">
+        <div class="nfe-item nfe-n">You're looking for a one-day awareness session with no follow-through.</div>
+        <div class="nfe-item nfe-n">You want a generic AI introduction that could run for any organisation in any sector.</div>
+        <div class="nfe-item nfe-n">You expect it to run without department head involvement. It can't.</div>
+        <div class="nfe-item nfe-n">You're looking for an ongoing managed service. Kanon builds and transfers. It does not manage.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div>
+    <h2 class="cta-title">Tell me about your organisation.<br>We'll take it from there.</h2>
+    <p class="cta-sub">A short message describing your context: sector, team size, main documentation pain points. That is enough to scope a first conversation. No form. No pitch deck. A direct exchange.</p>
+  </div>
+  <div class="cta-right">
+    <a href="mailto:andre@kanonstrategy.com" class="btn-primary">Get in touch →</a>
+    <a href="mailto:andre@kanonstrategy.com" class="cta-email">andre@kanonstrategy.com</a>
+  </div>
+</div>
+
+<footer>
+  <span class="f-copy">© 2026 Kanon Strategy FZE</span>
+  <a href="index.html" class="f-link">← Back to site</a>
+</footer>
+
+</body>
+</html>
