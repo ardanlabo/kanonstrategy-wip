@@ -194,6 +194,30 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
   box-shadow:0 2px 8px rgba(0,0,0,0.1);
   pointer-events:none;
 }
+
+/* ── TOUR OVERLAY ── */
+.tour-overlay{position:fixed;inset:0;z-index:9999;pointer-events:all;display:flex;flex-direction:column;justify-content:flex-end;}
+.tour-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.6);}
+.tour-card{position:relative;z-index:1;margin:0 auto 32px;width:580px;max-width:92vw;background:#0c111a;border:0.5px solid rgba(201,168,76,0.3);border-top:2px solid #C9A84C;}
+.tc-header{padding:12px 20px 10px;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;}
+.tc-step{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.12em;color:rgba(201,168,76,0.5);text-transform:uppercase;}
+.tc-dots{display:flex;gap:5px;margin-left:auto;}
+.tc-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer;transition:all 0.2s;}
+.tc-dot.active{background:#C9A84C;}
+.tc-dot.done{background:rgba(201,168,76,0.35);}
+.tc-body{padding:16px 20px 12px;}
+.tc-title{font-family:'IBM Plex Serif',Georgia,serif;font-size:16px;font-weight:300;color:#fff;margin-bottom:7px;}
+.tc-text{font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.7;}
+.tc-hl{background:rgba(201,168,76,0.12);color:#C9A84C;padding:1px 5px;font-family:'IBM Plex Mono',monospace;font-size:11px;}
+.tc-footer{padding:9px 20px;border-top:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;}
+.tc-counter{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,0.18);}
+.tc-btns{display:flex;gap:8px;}
+.tc-btn{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:5px 14px;cursor:pointer;border:0.5px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.3);transition:all 0.2s;}
+.tc-btn.primary{border-color:rgba(201,168,76,0.4);color:#C9A84C;background:rgba(201,168,76,0.05);}
+.tc-btn.primary:hover{background:rgba(201,168,76,0.1);}
+.tc-btn.unlock{border-color:rgba(34,197,94,0.4);color:#22c55e;background:rgba(34,197,94,0.05);}
+.tc-btn.unlock:hover{background:rgba(34,197,94,0.1);}
+.tc-btn:not(.primary):not(.unlock):hover{color:rgba(255,255,255,0.55);}
 </style>
 </head>
 <body>
@@ -689,6 +713,58 @@ function refresh() {
 initMap();
 refresh();
 goToStep(0);
+</script>
+
+<!-- TOUR OVERLAY -->
+<div class="tour-overlay" id="tour-overlay">
+  <div class="tour-backdrop"></div>
+  <div class="tour-card">
+    <div class="tc-header">
+      <span class="tc-step" id="tc-step">Step 1 of 5</span>
+      <div class="tc-dots" id="tc-dots"></div>
+    </div>
+    <div class="tc-body">
+      <div class="tc-title" id="tc-title"></div>
+      <div class="tc-text" id="tc-text"></div>
+    </div>
+    <div class="tc-footer">
+      <div class="tc-counter" id="tc-counter"></div>
+      <div class="tc-btns">
+        <button class="tc-btn" id="tc-prev" onclick="tourPrev()">← Back</button>
+        <button class="tc-btn primary" id="tc-next" onclick="tourNext()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var _tourStep = 0;
+var _tourSteps = [
+  {title:'What is this tool?',text:'The <span class="tc-hl">ABC Coordination Dashboard</span> gives a transectoral view of humanitarian coverage across Benishangul-Gumuz — 24 woredas, 4 zones. It answers one question: who is doing what where, and where is nobody doing anything?'},
+  {title:'The map — coverage by sector density',text:'Each woreda is coloured by the number of sectors covered. <span class="tc-hl">Green = 3+ sectors</span>, yellow = 2, orange = 1, grey = not covered. Region borders in dark red. Zone mesh visible underneath.'},
+  {title:'Sector and actor filters',text:'Filter by <span class="tc-hl">sector</span> (Nutrition, WASH, Health, Protection, Food Security) and by <span class="tc-hl">actor type</span> (INGO, NNGO, UN, Government). Each combination updates the map, KPIs, and woreda list in real time.'},
+  {title:'Woreda list — gaps first',text:'The sidebar list is sorted <span class="tc-hl">gaps first</span> — uncovered woredas at the top, in red. Each row shows the sector coverage dots. Click any woreda to open its full transectoral profile.'},
+  {title:'Woreda profile — who does what',text:'Each woreda profile shows every organisation present per sector — name, type (INGO/NNGO/UN), and estimated reach. Missing sectors are shown in grey. This is the coordination layer your meeting is missing.'},
+];
+function _tourRender(){
+  var s=_tourSteps[_tourStep];
+  document.getElementById('tc-step').textContent='Step '+(_tourStep+1)+' of '+_tourSteps.length;
+  document.getElementById('tc-title').textContent=s.title;
+  document.getElementById('tc-text').innerHTML=s.text;
+  document.getElementById('tc-counter').textContent=(_tourStep+1)+' / '+_tourSteps.length;
+  var dots=document.getElementById('tc-dots');dots.innerHTML='';
+  _tourSteps.forEach(function(_,i){var d=document.createElement('div');d.className='tc-dot'+(i===_tourStep?' active':i<_tourStep?' done':'');d.onclick=function(){tourGo(i);};dots.appendChild(d);});
+  var prev=document.getElementById('tc-prev');prev.style.opacity=_tourStep===0?'0.25':'1';prev.style.pointerEvents=_tourStep===0?'none':'auto';
+  var next=document.getElementById('tc-next');
+  if(_tourStep===_tourSteps.length-1){next.textContent='Access the tool →';next.className='tc-btn unlock';next.onclick=tourUnlock;}
+  else{next.textContent='Next →';next.className='tc-btn primary';next.onclick=tourNext;}
+  if(s.action) s.action();
+}
+function tourGo(i){_tourStep=Math.max(0,Math.min(_tourSteps.length-1,i));_tourRender();}
+function tourNext(){tourGo(_tourStep+1);}
+function tourPrev(){tourGo(_tourStep-1);}
+function tourUnlock(){document.getElementById('tour-overlay').style.display='none';}
+_tourRender();
 </script>
 </body>
 </html>
