@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>André R. Eylettens — Kanon Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060A0F;
+  --card: #0D1117;
+  --gold: #C9A84C;
+  --gold-d: #A8863A;
+  --gold-dim: rgba(201,168,76,0.12);
+  --gold-border: rgba(201,168,76,0.28);
+  --mono: 'IBM Plex Mono', monospace;
+  --serif: 'IBM Plex Serif', Georgia, serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: #fff;
+  font-family: var(--mono);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── ANIMATED BACKGROUND ── */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+}
+
+.bg-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 0.5px solid rgba(201,168,76,0.06);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ringPulse 8s ease-in-out infinite;
+}
+.bg-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+.bg-ring:nth-child(2) { width: 320px; height: 320px; animation-delay: 1.2s; }
+.bg-ring:nth-child(3) { width: 450px; height: 450px; animation-delay: 2.4s; }
+.bg-ring:nth-child(4) { width: 590px; height: 590px; animation-delay: 3.6s; }
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.bg-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 65%);
+  animation: glowPulse 6s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%,-50%) scale(1.15); }
+}
+
+/* Scanline */
+.bg-scan {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.15), transparent);
+  animation: scan 10s linear infinite;
+}
+@keyframes scan {
+  0% { top: -1px; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ── SHELL ── */
+.shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px 60px;
+  gap: 0;
+}
+
+/* ── CARD ── */
+.card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--card);
+  border: 1px solid var(--gold-border);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  animation: cardIn 1s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(32px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Top accent line */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* Corner marks */
+.corner { position: absolute; width: 16px; height: 16px; }
+.corner--tl { top: 10px; left: 10px; border-top: 1px solid var(--gold-border); border-left: 1px solid var(--gold-border); }
+.corner--tr { top: 10px; right: 10px; border-top: 1px solid var(--gold-border); border-right: 1px solid var(--gold-border); }
+.corner--bl { bottom: 10px; left: 10px; border-bottom: 1px solid var(--gold-border); border-left: 1px solid var(--gold-border); }
+.corner--br { bottom: 10px; right: 10px; border-bottom: 1px solid var(--gold-border); border-right: 1px solid var(--gold-border); }
+
+/* Ghost watermark */
+.card-wm {
+  position: absolute;
+  top: -30px; right: -30px;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+/* ── CARD HEADER ── */
+.card-header {
+  padding: 44px 36px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 0.5px solid rgba(255,255,255,0.05);
+  animation: fadeUp 0.9s 0.1s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.mark-wrap { margin-bottom: 20px; }
+
+.wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 28px;
+}
+.wm-kanon {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.45em;
+  color: rgba(255,255,255,0.9);
+}
+.wm-sub {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.38em;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+}
+
+.card-name {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 24px;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── CONTACT BLOCK ── */
+.card-contacts {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: fadeUp 0.9s 0.25s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 10px;
+  text-decoration: none;
+  transition: background 0.2s;
+  border-left: 1.5px solid transparent;
+}
+.contact-row:hover {
+  background: rgba(201,168,76,0.05);
+  border-left-color: var(--gold);
+}
+
+.c-icon {
+  width: 30px;
+  height: 30px;
+  border: 0.5px solid var(--gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.contact-row:hover .c-icon {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.c-info { display: flex; flex-direction: column; gap: 1px; }
+.c-label {
+  font-family: var(--mono);
+  font-size: 7.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+}
+.c-value {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.2s;
+}
+.contact-row:hover .c-value { color: #fff; }
+
+/* ── DIVIDER ── */
+.card-divider {
+  height: 0.5px;
+  background: rgba(255,255,255,0.06);
+  margin: 0 28px;
+}
+
+/* ── QR + SAVE ── */
+.card-footer {
+  padding: 24px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: fadeUp 0.9s 0.4s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.qr-label {
+  font-family: var(--mono);
+  font-size: 7.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+}
+
+.qr-frame {
+  padding: 10px;
+  background: #0D1117;
+  border: 0.5px solid var(--gold-border);
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 0;
+  background: var(--gold);
+  color: #060A0F;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s, letter-spacing 0.2s;
+  margin-top: 4px;
+}
+.save-btn:hover {
+  background: #DDB95A;
+  letter-spacing: 0.34em;
+}
+
+/* ── BOTTOM META ── */
+.card-meta {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: fadeUp 0.9s 0.55s cubic-bezier(0.22,1,0.36,1) both;
+}
+.meta-ref {
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.1);
+}
+.meta-url {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: rgba(201,168,76,0.25);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.meta-url:hover { color: var(--gold); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<div class="bg-layer">
+  <div class="bg-glow"></div>
+  <div class="bg-rings">
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+  </div>
+  <div class="bg-scan"></div>
+</div>
+
+<div class="shell">
+  <div class="card">
+
+    <!-- Corners -->
+    <div class="corner corner--tl"></div>
+    <div class="corner corner--tr"></div>
+    <div class="corner corner--bl"></div>
+    <div class="corner corner--br"></div>
+
+    <!-- Ghost watermark -->
+    <svg class="card-wm" viewBox="0 0 120 120" width="220" height="220" fill="none">
+      <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="1.5"/>
+      <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="1.2"/>
+      <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="1.2"/>
+      <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
+      <circle cx="60"    cy="10"  r="5.5" fill="#C9A84C"/>
+      <circle cx="103.3" cy="85"  r="5.5" fill="#C9A84C"/>
+      <circle cx="16.7"  cy="85"  r="5.5" fill="#C9A84C"/>
+    </svg>
+
+    <!-- Header -->
+    <div class="card-header">
+      <div class="mark-wrap">
+        <svg viewBox="0 0 80 80" width="60" height="60" fill="none">
+          <circle cx="40" cy="40" r="33" stroke="#C9A84C" stroke-width="1.8"/>
+          <circle cx="40" cy="40" r="21" stroke="#C9A84C" stroke-width="1.5"/>
+          <circle cx="40" cy="40" r="10.5" stroke="#C9A84C" stroke-width="1.5"/>
+          <circle cx="40" cy="40" r="3" fill="#C9A84C"/>
+          <circle cx="40"   cy="7"    r="4" fill="#C9A84C"/>
+          <circle cx="68.6" cy="56.5" r="4" fill="#C9A84C"/>
+          <circle cx="11.4" cy="56.5" r="4" fill="#C9A84C"/>
+          <circle cx="58.2" cy="29.5" r="3" fill="#C9A84C"/>
+          <circle cx="40"   cy="61"   r="3" fill="#C9A84C"/>
+          <circle cx="21.8" cy="29.5" r="3" fill="#C9A84C"/>
+        </svg>
+      </div>
+      <div class="wordmark">
+        <span class="wm-kanon">KANON</span>
+        <span class="wm-sub">Strategy</span>
+      </div>
+      <div class="card-name">André R. Eylettens</div>
+      <div class="card-title">Decision Support Systems<br>Horn of Africa</div>
+    </div>
+
+    <!-- Contacts -->
+    <div class="card-contacts">
+      <a href="mailto:andre@kanonstrategy.com" class="contact-row">
+        <div class="c-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
+          </svg>
+        </div>
+        <div class="c-info">
+          <span class="c-label">Email</span>
+          <span class="c-value">andre@kanonstrategy.com</span>
+        </div>
+      </a>
+
+      <a href="https://kanonstrategy.com" target="_blank" class="contact-row">
+        <div class="c-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <div class="c-info">
+          <span class="c-label">Web</span>
+          <span class="c-value">kanonstrategy.com</span>
+        </div>
+      </a>
+
+      <a href="tel:+251987039670" class="contact-row">
+        <div class="c-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6.09 6.09l1.79-1.79a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </div>
+        <div class="c-info">
+          <span class="c-label">Mobile · Ethiopia</span>
+          <span class="c-value">+251 987 039 670</span>
+        </div>
+      </a>
+
+      <a href="https://wa.me/33609027128" target="_blank" class="contact-row">
+        <div class="c-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.8" stroke-linecap="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+        </div>
+        <div class="c-info">
+          <span class="c-label">WhatsApp</span>
+          <span class="c-value">+33 6 09 02 71 28</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="card-divider"></div>
+
+    <!-- Footer QR + Save -->
+    <div class="card-footer">
+      <span class="qr-label">Scan to save contact</span>
+      <div class="qr-frame">
+        <img id="qr-img" width="120" height="120" alt="QR vCard">
+      </div>
+      <a href="./andre.vcf" download="Andre_Eylettens_Kanon.vcf" class="save-btn">
+        + Save to contacts
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Meta -->
+  <div class="card-meta">
+    <span class="meta-ref">Kanon Strategy FZE · Addis Ababa · UAE</span>
+    <a href="https://kanonstrategy.com" target="_blank" class="meta-url">kanonstrategy.com</a>
+  </div>
+</div>
+
+<script>
+document.getElementById('qr-img').src =
+  'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' +
+  encodeURIComponent('https://kanonstrategy.com/vcard.html') +
+  '&bgcolor=0D1117&color=C9A84C&qzone=2&format=png';
+</script>
+
+</body>
+</html>
