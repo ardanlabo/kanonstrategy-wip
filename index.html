@@ -468,7 +468,7 @@
 window.addEventListener('load',function(){
   if(typeof mapboxgl==='undefined') return;
   mapboxgl.accessToken='pk.eyJ1IjoiYmV5b25kYXJkYW4iLCJhIjoiY21tdDc3cnJhMWNhaDJwcjJxNmpvZTlkZSJ9.Soxwar_-MHR3fTvqG5ePGQ';
-  var map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/navigation-night-v1',center:[48.0,8.5],zoom:3.8,pitch:40,bearing:-6,interactive:false,attributionControl:false});
+  var map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/navigation-night-v1',center:[38.5,8.5],zoom:4.2,pitch:40,bearing:-6,interactive:false,attributionControl:false});
   map.on('load',function(){
     map.addSource('terrain-src',{type:'raster-dem',url:'mapbox://mapbox.mapbox-terrain-dem-v1',tileSize:512,maxzoom:14});
     map.setTerrain({source:'terrain-src',exaggeration:1.5});
