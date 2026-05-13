@@ -160,6 +160,43 @@
     footer{padding:24px;flex-direction:column;gap:16px;text-align:center;}
     .nav-links{display:none;}
   }
+
+  /* ── HAMBURGER + MOBILE MENU ── */
+  .nav-burger{display:none;flex-direction:column;justify-content:space-between;width:24px;height:16px;background:none;border:none;cursor:pointer;padding:0;z-index:110;}
+  .nav-burger span{display:block;width:100%;height:1.5px;background:#C9A84C;transition:all 0.2s ease;}
+  .nav-burger.open span:nth-child(1){transform:translateY(7.25px) rotate(45deg);}
+  .nav-burger.open span:nth-child(2){opacity:0;}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7.25px) rotate(-45deg);}
+
+  .nav-mobile{display:none;position:fixed;top:64px;left:0;right:0;background:#0D1117;border-bottom:0.5px solid rgba(201,168,76,0.15);z-index:99;flex-direction:column;padding:8px 0 16px;}
+  .nav-mobile.open{display:flex;}
+  .nm-link{font-family:'Inter',sans-serif;font-size:13px;letter-spacing:0.06em;color:rgba(255,255,255,0.55);padding:14px 24px;text-decoration:none;border-bottom:0.5px solid rgba(255,255,255,0.04);transition:color 0.15s;}
+  .nm-link:hover{color:#C9A84C;}
+  .nm-cta{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#C9A84C;padding:14px 24px;text-decoration:none;margin-top:4px;}
+
+  @media(max-width:900px){
+    .nav-burger{display:flex;}
+    .outputs-header{padding:0 24px;}
+    .ribbon{padding:0 16px;}
+    .ribbon-nav{padding:16px 24px 0;}
+    .approach-strip{padding:64px 24px;grid-template-columns:1fr;gap:40px;}
+    .stat-band{padding:60px 24px;grid-template-columns:1fr 1fr;gap:32px;}
+    .stat-item{padding:0;border:none;}
+    .contact-strip{padding:64px 24px;}
+    footer{padding:24px;flex-direction:column;gap:12px;text-align:center;}
+    .hero{padding:64px 24px 72px;}
+    .hero-scroll{display:none;}
+    .hud-corner--tr,.hud-corner--br{right:24px;}
+    .hud-corner--tl,.hud-corner--bl{left:24px;}
+  }
+
+  @media(max-width:480px){
+    .ribbon-card{flex:0 0 280px;}
+    .hero-headline{font-size:32px;}
+    .section-headline{font-size:24px;}
+    .stat-band{grid-template-columns:1fr;}
+  }
+
 </style>
 </head>
 <body>
@@ -190,7 +227,18 @@
     <a href="#approach" class="nav-link">Approach</a>
     <a href="mailto:andre@kanonstrategy.com" class="nav-cta">Get in touch</a>
   </div>
+  <button class="nav-burger" id="nav-burger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile menu -->
+<div class="nav-mobile" id="nav-mobile">
+  <a href="index.html" class="nm-link">Home</a>
+  <a href="#outputs" class="nm-link" onclick="closeMenu()">Tools</a>
+  <a href="#approach" class="nm-link" onclick="closeMenu()">Approach</a>
+  <a href="mailto:andre@kanonstrategy.com" class="nm-cta">Get in touch</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -469,7 +517,7 @@
 window.addEventListener('load',function(){
   if(typeof mapboxgl==='undefined') return;
   mapboxgl.accessToken='pk.eyJ1IjoiYmV5b25kYXJkYW4iLCJhIjoiY21tdDc3cnJhMWNhaDJwcjJxNmpvZTlkZSJ9.Soxwar_-MHR3fTvqG5ePGQ';
-  var map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/navigation-night-v1',center:[32.0,8.5],zoom:3.8,pitch:40,bearing:-6,interactive:false,attributionControl:false});
+  var map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/navigation-night-v1',center:[48.0,8.5],zoom:3.8,pitch:40,bearing:-6,interactive:false,attributionControl:false});
   map.on('load',function(){
     map.addSource('terrain-src',{type:'raster-dem',url:'mapbox://mapbox.mapbox-terrain-dem-v1',tileSize:512,maxzoom:14});
     map.setTerrain({source:'terrain-src',exaggeration:1.5});
@@ -487,6 +535,21 @@ window.addEventListener('load',function(){
     map.addLayer({id:'cities-labels',type:'symbol',source:'kanon-cities',layout:{'text-field':['get','name'],'text-font':['DIN Pro Regular','Arial Unicode MS Regular'],'text-size':['case',['get','capital'],11,9],'text-offset':[0,-1.3],'text-anchor':'bottom','text-optional':true},paint:{'text-color':['case',['get','capital'],'rgba(201,168,76,0.85)','rgba(255,255,255,0.35)'],'text-halo-color':'rgba(0,0,0,0.85)','text-halo-width':1.2}});
   });
 });
+</script>
+
+<script>
+function toggleMenu(){
+  var b=document.getElementById('nav-burger');
+  var m=document.getElementById('nav-mobile');
+  b.classList.toggle('open');
+  m.classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('nav-burger').classList.remove('open');
+  document.getElementById('nav-mobile').classList.remove('open');
+}
+// Close menu on scroll
+window.addEventListener('scroll',function(){closeMenu();},{passive:true});
 </script>
 </body>
 </html>
