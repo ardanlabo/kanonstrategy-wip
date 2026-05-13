@@ -196,6 +196,22 @@ a{text-decoration:none;color:inherit;}
 .tc-btn.unlock{border-color:rgba(34,197,94,0.4);color:#22c55e;background:rgba(34,197,94,0.05);}
 .tc-btn.unlock:hover{background:rgba(34,197,94,0.1);}
 .tc-btn:not(.primary):not(.unlock):hover{color:rgba(255,255,255,0.55);}
+
+  @media(max-width:640px){
+    .topbar{padding:0 12px;}
+    .tabs-wrap{padding:0 12px;overflow-x:auto;}
+    .tab{padding:0 12px 10px;font-size:9px;}
+    .zone-bar{padding:0 12px;flex-wrap:wrap;gap:4px;}
+    .zone-btn{font-size:9px;padding:3px 8px;}
+    .content-wrap{padding:16px 12px;}
+    .grid-4{grid-template-columns:1fr 1fr;}
+    .grid-3{grid-template-columns:1fr;}
+    .indicator-grid{grid-template-columns:1fr;}
+  }
+  @media(max-width:400px){
+    .grid-4{grid-template-columns:1fr;}
+  }
+
 </style>
 </head>
 <body>
