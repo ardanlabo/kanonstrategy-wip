@@ -17,18 +17,18 @@
 :root{
   --void:#0D1117;--navy:#0F2952;--gold:#C9A84C;--gold-d:#A8863A;
   --ink:#1A1C1E;--mid:#3D4149;--muted:#6B7280;--rule:#C4C7CE;
+  --parch:#F7F6F2;--warm:#EDECEA;
   --serif:'IBM Plex Serif',Georgia,serif;
   --sans:'Inter',system-ui,sans-serif;
   --mono:'IBM Plex Mono',monospace;
   --s-nut:#e85d04;--s-wash:#0077b6;--s-health:#d62828;
   --s-prot:#7b2d8b;--s-food:#606c38;--s-shelter:#9b5de5;
-  /* activity types */
   --t-dist:#C9A84C;--t-train:#0077b6;--t-coord:#7b2d8b;
   --t-assess:#e85d04;--t-med:#d62828;--t-nfi:#606c38;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+body{font-family:var(--sans);background:var(--parch);color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
 
 /* TOPBAR */
 .topbar{height:48px;flex-shrink:0;background:var(--void);border-bottom:0.5px solid rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:1001;}
@@ -39,188 +39,192 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
 .t-div{width:0.5px;height:20px;background:rgba(255,255,255,0.08);}
 .t-product{font-family:var(--serif);font-weight:300;font-size:13px;color:rgba(255,255,255,0.55);}
 .t-ctx{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.1em;}
-.t-back{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.2s;}
-.t-back:hover{color:rgba(201,168,76,0.7);}
+.t-back{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color .2s;}
+.t-back:hover{color:rgba(201,168,76,.7);}
 
 /* LAYOUT */
 .body-wrap{flex:1;display:flex;overflow:hidden;position:relative;}
 #map{flex:1;z-index:1;}
 
-/* SIDEBAR */
-.sidebar{width:320px;flex-shrink:0;background:#fff;border-left:1px solid #ddd;display:flex;flex-direction:column;overflow:hidden;z-index:1000;box-shadow:-2px 0 8px rgba(0,0,0,0.08);}
+/* ── SIDEBAR ── */
+.sidebar{
+  width:300px;flex-shrink:0;
+  background:#fff;
+  border-left:1px solid #ddd;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  z-index:1000;
+  box-shadow:-2px 0 8px rgba(0,0,0,.08);
+}
+.sb-scroll{flex:1;overflow-y:auto;}
+.sb-scroll::-webkit-scrollbar{width:3px;}
+.sb-scroll::-webkit-scrollbar-thumb{background:#ddd;}
 
-/* SIDEBAR TABS */
-.sb-tabs{display:flex;border-bottom:1px solid #eee;flex-shrink:0;}
-.sb-tab{flex:1;padding:10px 0;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:center;cursor:pointer;color:#999;border-bottom:2px solid transparent;transition:all 0.15s;}
-.sb-tab.active{color:var(--ink);border-bottom-color:var(--gold);}
-.sb-tab-pane{display:none;flex-direction:column;flex:1;overflow:hidden;}
-.sb-tab-pane.active{display:flex;}
+/* FILTER BLOCK */
+.sb-section{padding:11px 14px;border-bottom:1px solid #eee;}
+.sb-section-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:7px;}
 
-/* SECTIONS */
-.sb-section{padding:10px 14px;border-bottom:1px solid #eee;flex-shrink:0;}
-.sb-label{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:4px;}
+.chip{font-family:var(--mono);font-size:9px;padding:3px 8px;cursor:pointer;border:1px solid #ddd;background:#fafafa;color:#555;transition:all .15s;user-select:none;border-radius:2px;display:flex;align-items:center;gap:5px;}
+.chip:hover{border-color:#999;color:#222;}
+.chip.active{color:#fff;border-color:#222;background:#222;}
+.chip.active.s-nut{background:var(--s-nut);border-color:var(--s-nut);}
+.chip.active.s-wash{background:var(--s-wash);border-color:var(--s-wash);}
+.chip.active.s-health{background:var(--s-health);border-color:var(--s-health);}
+.chip.active.s-prot{background:var(--s-prot);border-color:var(--s-prot);}
+.chip.active.s-food{background:var(--s-food);border-color:var(--s-food);}
+.chip.active.s-shelter{background:var(--s-shelter);border-color:var(--s-shelter);}
+.chip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
 
-/* FILTER CHIPS */
-.filter-group{margin-bottom:10px;}
-.filter-group:last-child{margin-bottom:0;}
-.filter-group-lbl{font-family:var(--mono);font-size:8px;color:#999;margin-bottom:5px;letter-spacing:0.08em;}
-.filter-chips{display:flex;flex-wrap:wrap;gap:4px;}
-.fchip{font-family:var(--mono);font-size:9px;padding:3px 8px;cursor:pointer;border:1px solid #ddd;background:#fafafa;color:#555;transition:all 0.15s;user-select:none;border-radius:2px;display:flex;align-items:center;gap:5px;}
-.fchip:hover{border-color:#999;color:#222;}
-.fchip.active{background:#222;color:#fff;border-color:#222;}
-.fchip.active.s-nut{background:var(--s-nut);border-color:var(--s-nut);}
-.fchip.active.s-wash{background:var(--s-wash);border-color:var(--s-wash);}
-.fchip.active.s-health{background:var(--s-health);border-color:var(--s-health);}
-.fchip.active.s-prot{background:var(--s-prot);border-color:var(--s-prot);}
-.fchip.active.s-food{background:var(--s-food);border-color:var(--s-food);}
-.fchip.active.s-shelter{background:var(--s-shelter);border-color:var(--s-shelter);}
-.fchip.active.t-dist{background:var(--t-dist);border-color:var(--t-dist);}
-.fchip.active.t-train{background:var(--t-train);border-color:var(--t-train);}
-.fchip.active.t-coord{background:var(--t-coord);border-color:var(--t-coord);}
-.fchip.active.t-assess{background:var(--t-assess);border-color:var(--t-assess);}
-.fchip.active.t-med{background:var(--t-med);border-color:var(--t-med);}
-.fchip.active.t-nfi{background:var(--t-nfi);border-color:var(--t-nfi);}
-.fchip-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+/* DROPDOWNS */
+.sb-dropdowns{display:flex;flex-direction:column;gap:6px;}
+.sb-select-wrap{display:flex;flex-direction:column;gap:3px;}
+.sb-select-lbl{font-family:var(--mono);font-size:8px;color:#aaa;letter-spacing:.06em;text-transform:uppercase;}
+.sb-select{
+  width:100%;background:#fafafa;border:1px solid #ddd;color:var(--ink);
+  font-family:var(--mono);font-size:10px;padding:6px 10px;outline:none;cursor:pointer;
+  border-radius:2px;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;
+}
+.sb-select:focus{border-color:rgba(201,168,76,.5);}
+.sb-select option{background:#fff;}
 
-/* MONTH SELECTOR */
-.month-selector{display:flex;flex-direction:column;gap:6px;}
-.month-row{display:flex;align-items:center;gap:8px;}
-.month-row-lbl{font-family:var(--mono);font-size:8px;color:#999;width:50px;flex-shrink:0;letter-spacing:0.06em;}
+/* MONTH CHIPS */
+.month-block{display:flex;flex-direction:column;gap:5px;}
+.month-row{display:flex;align-items:flex-start;gap:6px;}
+.month-row-lbl{font-family:var(--mono);font-size:7.5px;color:#bbb;width:42px;flex-shrink:0;padding-top:4px;letter-spacing:.04em;text-transform:uppercase;}
 .month-chips{display:flex;flex-wrap:wrap;gap:3px;flex:1;}
-.mchip{font-family:var(--mono);font-size:8px;padding:2px 6px;cursor:pointer;border:1px solid #ddd;background:#fafafa;color:#888;transition:all 0.15s;border-radius:2px;user-select:none;}
-.mchip:hover{border-color:#aaa;color:#333;}
+.mchip{font-family:var(--mono);font-size:8px;padding:2px 6px;cursor:pointer;border:1px solid #ddd;background:#fafafa;color:#888;border-radius:2px;transition:all .15s;user-select:none;}
+.mchip:hover{border-color:#999;color:#333;}
 .mchip.active{background:var(--gold);color:#fff;border-color:var(--gold);}
 .mchip.future{border-style:dashed;}
 .mchip.future.active{background:transparent;color:var(--gold);border-color:var(--gold);}
 
-/* KPI ROW */
+/* KPI */
 .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#eee;flex-shrink:0;}
-.kpi-cell{background:#fff;padding:8px 12px;}
-.kpi-num{font-family:var(--mono);font-size:20px;font-weight:500;line-height:1;margin-bottom:3px;}
+.kpi-cell{background:#fff;padding:8px 10px;}
+.kpi-num{font-family:var(--mono);font-size:19px;font-weight:500;line-height:1;margin-bottom:2px;}
 .kpi-lbl{font-family:var(--sans);font-size:9px;color:var(--muted);line-height:1.3;}
 
 /* COVERAGE BARS */
-.cov-bars{display:flex;flex-direction:column;gap:7px;}
-.cov-row{display:flex;align-items:center;gap:8px;}
-.cov-sector{font-family:var(--mono);font-size:9px;color:var(--muted);width:60px;flex-shrink:0;text-transform:uppercase;}
+.cov-bars{display:flex;flex-direction:column;gap:6px;}
+.cov-row{display:flex;align-items:center;gap:7px;}
+.cov-lbl{font-family:var(--mono);font-size:8px;color:var(--muted);width:52px;flex-shrink:0;text-transform:uppercase;letter-spacing:.04em;}
 .cov-track{flex:1;height:5px;background:#eee;border-radius:1px;overflow:hidden;}
-.cov-fill{height:100%;border-radius:1px;transition:width 0.4s;}
-.cov-pct{font-family:var(--mono);font-size:9px;color:#555;width:28px;text-align:right;flex-shrink:0;}
-
-/* ACTIVITY SUMMARY */
-.act-summary{display:flex;flex-direction:column;gap:4px;}
-.act-sum-row{display:flex;align-items:center;gap:8px;}
-.act-sum-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.act-sum-lbl{font-family:var(--mono);font-size:9px;color:#555;flex:1;}
-.act-sum-n{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--ink);}
+.cov-fill{height:100%;border-radius:1px;transition:width .4s;}
+.cov-pct{font-family:var(--mono);font-size:9px;color:#555;width:26px;text-align:right;flex-shrink:0;}
 
 /* WOREDA LIST */
-.woreda-list{flex:1;overflow-y:auto;}
-.woreda-list::-webkit-scrollbar{width:4px;}
-.woreda-list::-webkit-scrollbar-thumb{background:#ddd;}
-.woreda-list-header{padding:8px 14px;font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:#999;text-transform:uppercase;background:#fafafa;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1;}
-.woreda-item{padding:10px 14px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background 0.12s;display:flex;align-items:center;gap:10px;}
-.woreda-item:hover{background:#fafafa;}
-.woreda-item.selected{background:#fff8ee;border-left:3px solid var(--gold);}
-.woreda-item.gap{background:#fff5f5;}
-.woreda-cov-dots{display:flex;gap:3px;flex-wrap:wrap;width:80px;flex-shrink:0;}
-.sec-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.sec-dot.empty{background:transparent;border:1px dashed #ccc;}
-.woreda-name{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--ink);flex:1;min-width:0;}
-.woreda-zone{font-family:var(--mono);font-size:8px;color:#999;display:block;margin-top:1px;}
-.gap-badge{font-family:var(--mono);font-size:8px;color:#dc2626;background:#fee2e2;padding:1px 5px;border-radius:1px;flex-shrink:0;}
+.wlist-header{padding:7px 14px;font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:#999;text-transform:uppercase;background:#fafafa;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.wlist{overflow-y:auto;flex:1;}
+.wlist::-webkit-scrollbar{width:3px;}
+.wlist::-webkit-scrollbar-thumb{background:#ddd;}
+.wi{padding:9px 14px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .12s;display:flex;align-items:center;gap:9px;}
+.wi:hover{background:#fafafa;}
+.wi.selected{background:#fff8ee;border-left:3px solid var(--gold);}
+.wi.gap{background:#fff5f5;}
+.wi-dots{display:flex;gap:3px;width:76px;flex-shrink:0;flex-wrap:wrap;}
+.sdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.sdot.empty{background:transparent;border:1px dashed #ccc;}
+.wi-name{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--ink);flex:1;min-width:0;}
+.wi-zone{font-family:var(--mono);font-size:7.5px;color:#aaa;display:block;margin-top:1px;}
+.gap-badge{font-family:var(--mono);font-size:7.5px;color:#dc2626;background:#fee2e2;padding:1px 4px;border-radius:1px;flex-shrink:0;}
 
-/* ACTIVITY LIST */
-.activity-list{flex:1;overflow-y:auto;}
-.activity-list::-webkit-scrollbar{width:4px;}
-.activity-list::-webkit-scrollbar-thumb{background:#ddd;}
-.act-item{padding:9px 14px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background 0.12s;}
-.act-item:hover{background:#fafafa;}
-.act-item-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;}
-.act-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
-.act-item-title{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--ink);flex:1;line-height:1.3;}
-.act-future-badge{font-family:var(--mono);font-size:7px;color:var(--gold);background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.3);padding:1px 4px;border-radius:1px;flex-shrink:0;}
-.act-item-meta{display:flex;gap:8px;margin-left:16px;flex-wrap:wrap;}
-.act-meta-piece{font-family:var(--mono);font-size:8px;color:#999;}
-.act-meta-piece.org{color:var(--mid);font-weight:500;}
+/* ── MAP LEGEND ── */
+.map-legend{position:absolute;top:60px;left:12px;background:rgba(255,255,255,.94);border:1px solid #ddd;padding:9px 11px;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.1);pointer-events:none;}
+.ml-title{font-family:var(--mono);font-size:8px;color:#999;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.ml-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.ml-sw{width:13px;height:9px;border:0.5px solid rgba(0,0,0,.12);}
+.ml-lbl{font-family:var(--mono);font-size:8.5px;color:#555;}
 
-/* DETAIL PANEL */
-.detail-panel{position:absolute;bottom:0;left:0;right:320px;background:#fff;border-top:2px solid var(--gold);transform:translateY(100%);transition:transform 0.25s ease;z-index:999;max-height:44%;box-shadow:0 -4px 16px rgba(0,0,0,0.1);}
+/* ── DETAIL PANEL ── */
+.detail-panel{
+  position:absolute;bottom:0;left:0;right:300px;
+  background:#fff;
+  border-top:2px solid var(--gold);
+  transform:translateY(100%);
+  transition:transform .25s ease;
+  z-index:999;
+  max-height:46%;
+  box-shadow:0 -4px 16px rgba(0,0,0,.1);
+  display:flex;flex-direction:column;
+}
 .detail-panel.open{transform:translateY(0);}
-.dp-header{padding:10px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;}
+.dp-header{padding:9px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0;}
 .dp-title{font-family:var(--serif);font-weight:300;font-size:15px;color:var(--ink);}
 .dp-zone{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:2px;}
-.dp-close{font-size:14px;color:#999;cursor:pointer;padding:2px 6px;transition:color 0.15s;}
+.dp-close{font-size:14px;color:#999;cursor:pointer;padding:2px 6px;transition:color .15s;}
 .dp-close:hover{color:#222;}
-.dp-body{padding:12px 16px;overflow-y:auto;max-height:calc(44vh - 48px);}
-.dp-tabs{display:flex;gap:0;border-bottom:1px solid #eee;margin-bottom:12px;}
-.dp-tab{font-family:var(--mono);font-size:8px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;cursor:pointer;color:#999;border-bottom:2px solid transparent;transition:all 0.15s;}
+
+/* DP TABS */
+.dp-tabs{display:flex;border-bottom:1px solid #eee;flex-shrink:0;}
+.dp-tab{font-family:var(--mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;cursor:pointer;color:#999;border-bottom:2px solid transparent;transition:all .15s;}
 .dp-tab.active{color:var(--ink);border-bottom-color:var(--gold);}
-.dp-panel{display:none;}
+
+/* DP MONTH FILTER strip */
+.dp-month-strip{padding:6px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;flex-shrink:0;background:#fafafa;}
+.dp-month-lbl{font-family:var(--mono);font-size:8px;color:#aaa;flex-shrink:0;}
+.dp-month-chips{display:flex;flex-wrap:wrap;gap:3px;}
+
+/* DP PANELS */
+.dp-panel{display:none;overflow-y:auto;flex:1;}
 .dp-panel.active{display:block;}
-.dp-cov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.dp-sector-block{border:1px solid #eee;padding:10px 12px;}
-.dp-sector-header{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
-.dp-sector-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.dp-sector-name{font-family:var(--mono);font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;}
-.dp-sector-gap{font-family:var(--sans);font-size:11px;color:#dc2626;font-style:italic;}
-.dp-org-list{display:flex;flex-direction:column;gap:5px;}
-.dp-org-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+
+/* DP ACTIVITIES */
+.dp-act-table{width:100%;border-collapse:collapse;}
+.dp-act-table th{font-family:var(--mono);font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:#999;padding:6px 10px;border-bottom:1px solid #eee;text-align:left;background:#fafafa;position:sticky;top:0;}
+.dp-act-table td{font-family:var(--sans);font-size:11px;color:var(--mid);padding:6px 10px;border-bottom:1px solid #f5f5f5;vertical-align:top;}
+.dp-type-pill{display:inline-flex;align-items:center;gap:4px;}
+.dp-type-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.future-row td{background:#fffbf2;}
+.dp-empty{padding:16px;font-family:var(--serif);font-weight:300;font-size:13px;font-style:italic;color:#bbb;text-align:center;}
+
+/* DP COVERAGE */
+.dp-cov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:12px 16px;}
+.dp-sec-block{border:1px solid #eee;padding:9px 12px;}
+.dp-sec-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.dp-sec-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.dp-sec-name{font-family:var(--mono);font-size:8.5px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;}
+.dp-sec-gap{font-family:var(--sans);font-size:11px;color:#dc2626;font-style:italic;}
+.dp-org-row{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px;}
 .dp-org-name{font-family:var(--sans);font-size:11px;color:var(--mid);}
 .dp-org-type{font-family:var(--mono);font-size:8px;color:#999;background:#f5f5f5;padding:1px 5px;}
 .dp-org-reach{font-family:var(--mono);font-size:9px;color:var(--muted);}
-/* activity detail table */
-.dp-act-table{width:100%;border-collapse:collapse;}
-.dp-act-table th{font-family:var(--mono);font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:#999;padding:6px 8px;border-bottom:1px solid #eee;text-align:left;background:#fafafa;}
-.dp-act-table td{font-family:var(--sans);font-size:11px;color:var(--mid);padding:7px 8px;border-bottom:1px solid #f5f5f5;vertical-align:top;}
-.dp-act-type-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;border-radius:2px;}
-.dp-act-type-dot{width:6px;height:6px;border-radius:50%;}
-.future-row{background:#fffbf0;}
-
-/* MAP OVERLAYS */
-.map-legend-box{position:absolute;bottom:56px;right:332px;background:rgba(255,255,255,0.95);border:1px solid #ddd;padding:10px 12px;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,0.1);pointer-events:none;}
-.ml-title{font-family:var(--mono);font-size:8px;color:#999;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:7px;}
-.ml-row{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
-.ml-swatch{width:14px;height:10px;border:0.5px solid rgba(0,0,0,0.15);}
-.ml-lbl{font-family:var(--mono);font-size:9px;color:#555;}
-
-/* CLUSTER CUSTOM */
-.leaflet-cluster-anim .leaflet-marker-icon,.leaflet-cluster-anim .leaflet-marker-shadow{transition:transform .3s ease-out,opacity .3s ease-in;}
-.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background-clip:padding-box;}
-.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{width:30px;height:30px;margin-left:5px;margin-top:5px;text-align:center;border-radius:15px;font:bold 12px/30px "Helvetica Neue",Arial,Helvetica,sans-serif;}
 
 /* TOUR OVERLAY */
 .tour-overlay{position:fixed;inset:0;z-index:9999;pointer-events:all;display:flex;flex-direction:column;justify-content:flex-end;}
-.tour-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.6);}
-.tour-card{position:relative;z-index:1;margin:0 auto 32px;width:620px;max-width:92vw;background:#0c111a;border:0.5px solid rgba(201,168,76,0.3);border-top:2px solid #C9A84C;}
-.tc-header{padding:12px 20px 10px;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;}
-.tc-step{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:rgba(201,168,76,0.5);text-transform:uppercase;}
+.tour-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.62);}
+.tour-card{position:relative;z-index:1;margin:0 auto 32px;width:620px;max-width:92vw;background:#0c111a;border:0.5px solid rgba(201,168,76,.3);border-top:2px solid #C9A84C;}
+.tc-hdr{padding:12px 20px 10px;border-bottom:0.5px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px;}
+.tc-step{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:rgba(201,168,76,.5);text-transform:uppercase;}
 .tc-dots{display:flex;gap:5px;margin-left:auto;}
-.tc-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer;transition:all 0.2s;}
+.tc-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.12);cursor:pointer;transition:all .2s;}
 .tc-dot.active{background:#C9A84C;}
-.tc-dot.done{background:rgba(201,168,76,0.35);}
+.tc-dot.done{background:rgba(201,168,76,.35);}
 .tc-body{padding:16px 20px 12px;}
 .tc-title{font-family:var(--serif);font-size:16px;font-weight:300;color:#fff;margin-bottom:7px;}
-.tc-text{font-family:var(--sans);font-size:12px;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.75;}
-.tc-hl{background:rgba(201,168,76,0.12);color:#C9A84C;padding:1px 5px;font-family:var(--mono);font-size:11px;}
-.tc-footer{padding:9px 20px;border-top:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;}
-.tc-counter{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.18);}
+.tc-text{font-family:var(--sans);font-size:12px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.75;}
+.tc-hl{background:rgba(201,168,76,.12);color:#C9A84C;padding:1px 5px;font-family:var(--mono);font-size:11px;}
+.tc-ftr{padding:9px 20px;border-top:0.5px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;}
+.tc-ctr{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.18);}
 .tc-btns{display:flex;gap:8px;}
-.tc-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;padding:5px 14px;cursor:pointer;border:0.5px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.3);transition:all 0.2s;}
-.tc-btn.primary{border-color:rgba(201,168,76,0.4);color:#C9A84C;background:rgba(201,168,76,0.05);}
-.tc-btn.primary:hover{background:rgba(201,168,76,0.1);}
-.tc-btn.unlock{border-color:rgba(34,197,94,0.4);color:#22c55e;background:rgba(34,197,94,0.05);}
-.tc-btn.unlock:hover{background:rgba(34,197,94,0.1);}
-.tc-btn:not(.primary):not(.unlock):hover{color:rgba(255,255,255,0.55);}
+.tc-btn{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:5px 14px;cursor:pointer;border:0.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.3);transition:all .2s;}
+.tc-btn.primary{border-color:rgba(201,168,76,.4);color:#C9A84C;background:rgba(201,168,76,.05);}
+.tc-btn.primary:hover{background:rgba(201,168,76,.1);}
+.tc-btn.unlock{border-color:rgba(34,197,94,.4);color:#22c55e;background:rgba(34,197,94,.05);}
+.tc-btn.unlock:hover{background:rgba(34,197,94,.1);}
+.tc-btn:not(.primary):not(.unlock):hover{color:rgba(255,255,255,.55);}
 
+/* mobile */
 @media(max-width:768px){
-  .body-wrap{flex-direction:column;}
   #map{height:calc(100vh - 48px);min-height:0;flex:none;}
-  .sidebar{position:fixed;bottom:0;left:0;right:0;width:100%;height:75vh;border-left:none;border-top:2px solid var(--gold);transform:translateY(100%);transition:transform 0.28s ease;z-index:1002;}
+  .sidebar{position:fixed;bottom:0;left:0;right:0;width:100%;height:78vh;border-left:none;border-top:2px solid var(--gold);transform:translateY(100%);transition:transform .28s ease;z-index:1002;}
   .sidebar.drawer-open{transform:translateY(0);}
   .detail-panel{right:0;}
-  .drawer-trigger{display:flex!important;align-items:center;gap:8px;position:fixed;bottom:12px;left:12px;background:#0a0e15;border:0.5px solid rgba(201,168,76,0.4);color:var(--gold);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px;cursor:pointer;z-index:1001;font-family:monospace;}
-  .drawer-close{display:block!important;position:absolute;top:10px;right:12px;background:transparent;border:0.5px solid rgba(255,255,255,0.1);color:rgba(0,0,0,0.5);font-size:13px;cursor:pointer;width:28px;height:28px;}
+  .drawer-trigger{display:flex!important;align-items:center;gap:8px;position:fixed;bottom:12px;left:12px;background:#0a0e15;border:0.5px solid rgba(201,168,76,.4);color:var(--gold);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;cursor:pointer;z-index:1001;font-family:monospace;}
+  .drawer-close{display:block!important;position:absolute;top:10px;right:12px;background:transparent;border:0.5px solid rgba(0,0,0,.1);color:#555;font-size:13px;cursor:pointer;width:28px;height:28px;}
 }
 @media(min-width:769px){.drawer-trigger{display:none!important;}.drawer-close{display:none!important;}}
 </style>
@@ -244,7 +248,7 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
     </div>
     <div class="t-div"></div>
     <span class="t-product">Multisectoral Coverage Dashboard</span>
-    <span class="t-ctx">// BENISHANGUL-GUMUZ · 6 SECTORS · Sept 2025 – Jul 2026</span>
+    <span class="t-ctx" id="t-ctx">// BENISHANGUL-GUMUZ · 6 SECTORS · 2025-Q4</span>
   </div>
   <a href="index.html" class="t-back">← Back</a>
 </div>
@@ -252,97 +256,91 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
 <div class="body-wrap">
   <div id="map"></div>
 
-  <div class="map-legend-box" id="map-legend-box">
-    <div class="ml-title" id="legend-title">Coverage (static)</div>
-    <div id="legend-body">
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(34,197,94,0.65)"></div><span class="ml-lbl">3+ sectors</span></div>
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(250,204,21,0.65)"></div><span class="ml-lbl">2 sectors</span></div>
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(251,146,60,0.65)"></div><span class="ml-lbl">1 sector</span></div>
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(200,200,200,0.55)"></div><span class="ml-lbl">Not covered</span></div>
+  <!-- MAP LEGEND -->
+  <div class="map-legend">
+    <div class="ml-title">Coverage</div>
+    <div class="ml-row"><div class="ml-sw" style="background:rgba(34,197,94,.65)"></div><span class="ml-lbl">3+ sectors</span></div>
+    <div class="ml-row"><div class="ml-sw" style="background:rgba(250,204,21,.65)"></div><span class="ml-lbl">2 sectors</span></div>
+    <div class="ml-row"><div class="ml-sw" style="background:rgba(251,146,60,.65)"></div><span class="ml-lbl">1 sector</span></div>
+    <div class="ml-row"><div class="ml-sw" style="background:rgba(200,200,200,.55)"></div><span class="ml-lbl">Not covered</span></div>
+    <div style="border-top:1px solid #eee;margin-top:5px;padding-top:5px">
+      <div class="ml-title">Activities</div>
+      <div class="ml-row"><div style="width:9px;height:9px;border-radius:50%;background:#888;flex-shrink:0"></div><span class="ml-lbl">Implemented</span></div>
+      <div class="ml-row"><div style="width:9px;height:9px;border-radius:50%;border:1.5px dashed #C9A84C;flex-shrink:0"></div><span class="ml-lbl">Planned</span></div>
     </div>
   </div>
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="drawer-close" onclick="toggleDrawer()">✕</button>
+    <div class="sb-scroll">
 
-    <!-- TABS -->
-    <div class="sb-tabs">
-      <div class="sb-tab active" id="tab-coverage" onclick="switchTab('coverage')">Coverage</div>
-      <div class="sb-tab" id="tab-activities" onclick="switchTab('activities')">Activities</div>
-    </div>
-
-    <!-- ── COVERAGE TAB ── -->
-    <div class="sb-tab-pane active" id="pane-coverage">
-      <!-- Filters -->
+      <!-- FILTERS -->
       <div class="sb-section">
-        <div class="sb-label">Sector filter</div>
-        <div class="filter-chips" id="sector-chips">
-          <div class="fchip s-nut active" onclick="toggleSector('Nutrition',this)"><div class="fchip-dot" style="background:var(--s-nut)"></div>Nutrition</div>
-          <div class="fchip s-wash active" onclick="toggleSector('WASH',this)"><div class="fchip-dot" style="background:var(--s-wash)"></div>WASH</div>
-          <div class="fchip s-health active" onclick="toggleSector('Health',this)"><div class="fchip-dot" style="background:var(--s-health)"></div>Health</div>
-          <div class="fchip s-prot active" onclick="toggleSector('Protection',this)"><div class="fchip-dot" style="background:var(--s-prot)"></div>Protection</div>
-          <div class="fchip s-food active" onclick="toggleSector('Food Security',this)"><div class="fchip-dot" style="background:var(--s-food)"></div>Food Sec.</div>
-          <div class="fchip s-shelter active" onclick="toggleSector('Shelter',this)"><div class="fchip-dot" style="background:var(--s-shelter)"></div>Shelter</div>
+        <div class="sb-section-lbl">Filters</div>
+
+        <div style="margin-bottom:8px">
+          <div class="sb-section-lbl" style="margin-bottom:5px">Sector</div>
+          <div class="chips" id="sector-chips">
+            <div class="chip s-nut active" onclick="toggleSector('Nutrition',this)"><div class="chip-dot" style="background:var(--s-nut)"></div>Nutrition</div>
+            <div class="chip s-wash active" onclick="toggleSector('WASH',this)"><div class="chip-dot" style="background:var(--s-wash)"></div>WASH</div>
+            <div class="chip s-health active" onclick="toggleSector('Health',this)"><div class="chip-dot" style="background:var(--s-health)"></div>Health</div>
+            <div class="chip s-prot active" onclick="toggleSector('Protection',this)"><div class="chip-dot" style="background:var(--s-prot)"></div>Protection</div>
+            <div class="chip s-food active" onclick="toggleSector('Food Security',this)"><div class="chip-dot" style="background:var(--s-food)"></div>Food Sec.</div>
+            <div class="chip s-shelter active" onclick="toggleSector('Shelter',this)"><div class="chip-dot" style="background:var(--s-shelter)"></div>Shelter</div>
+          </div>
         </div>
-        <div style="margin-top:8px">
-          <div class="filter-group-lbl">Actor type</div>
-          <div class="filter-chips">
-            <div class="fchip active" onclick="toggleActor('INGO',this)">INGO</div>
-            <div class="fchip active" onclick="toggleActor('NNGO',this)">NNGO</div>
-            <div class="fchip active" onclick="toggleActor('UN',this)">UN</div>
-            <div class="fchip active" onclick="toggleActor('Government',this)">Govt</div>
+
+        <div style="margin-bottom:8px">
+          <div class="sb-section-lbl" style="margin-bottom:5px">Actor type</div>
+          <div class="chips" id="actor-chips">
+            <div class="chip active" onclick="toggleActor('INGO',this)">INGO</div>
+            <div class="chip active" onclick="toggleActor('NNGO',this)">NNGO</div>
+            <div class="chip active" onclick="toggleActor('UN',this)">UN</div>
+            <div class="chip active" onclick="toggleActor('Government',this)">Govt</div>
+          </div>
+        </div>
+
+        <div class="sb-dropdowns">
+          <div class="sb-select-wrap">
+            <div class="sb-select-lbl">Zone</div>
+            <select class="sb-select" id="sel-zone" onchange="onZoneChange()">
+              <option value="">All zones</option>
+            </select>
+          </div>
+          <div class="sb-select-wrap">
+            <div class="sb-select-lbl">Woreda</div>
+            <select class="sb-select" id="sel-woreda" onchange="onWoredaChange()">
+              <option value="">All woredas</option>
+            </select>
           </div>
         </div>
       </div>
+
+      <!-- PERIOD FILTER -->
+      <div class="sb-section">
+        <div class="sb-section-lbl">Period — activities</div>
+        <div class="month-block" id="month-block"></div>
+      </div>
+
       <!-- KPI -->
       <div class="kpi-row" id="kpi-row"></div>
-      <!-- Bars -->
+
+      <!-- COVERAGE BARS -->
       <div class="sb-section">
-        <div class="sb-label">Coverage by sector</div>
+        <div class="sb-section-lbl">Coverage by sector</div>
         <div class="cov-bars" id="cov-bars"></div>
       </div>
-      <!-- Woreda list -->
-      <div class="woreda-list-header">
+
+      <!-- WOREDA LIST HEADER -->
+      <div class="wlist-header">
         <span>Woredas</span>
-        <span id="wlist-count" style="color:#999">24</span>
+        <span id="wlist-count" style="color:#bbb">24</span>
       </div>
-      <div class="woreda-list" id="woreda-list"></div>
     </div>
 
-    <!-- ── ACTIVITIES TAB ── -->
-    <div class="sb-tab-pane" id="pane-activities">
-      <!-- Month filter -->
-      <div class="sb-section">
-        <div class="sb-label">Period</div>
-        <div class="month-selector" id="month-selector"></div>
-      </div>
-      <!-- Activity type filter -->
-      <div class="sb-section">
-        <div class="sb-label">Activity type</div>
-        <div class="filter-chips" id="acttype-chips">
-          <div class="fchip t-dist active" onclick="toggleActType('Distribution',this)"><div class="fchip-dot" style="background:var(--t-dist)"></div>Distrib.</div>
-          <div class="fchip t-train active" onclick="toggleActType('Training',this)"><div class="fchip-dot" style="background:var(--t-train)"></div>Training</div>
-          <div class="fchip t-coord active" onclick="toggleActType('Coordination',this)"><div class="fchip-dot" style="background:var(--t-coord)"></div>Coord.</div>
-          <div class="fchip t-assess active" onclick="toggleActType('Assessment',this)"><div class="fchip-dot" style="background:var(--t-assess)"></div>Assess.</div>
-          <div class="fchip t-med active" onclick="toggleActType('Medical',this)"><div class="fchip-dot" style="background:var(--t-med)"></div>Medical</div>
-          <div class="fchip t-nfi active" onclick="toggleActType('NFI',this)"><div class="fchip-dot" style="background:var(--t-nfi)"></div>NFI</div>
-        </div>
-      </div>
-      <!-- Activity KPI -->
-      <div class="kpi-row" id="act-kpi-row"></div>
-      <!-- Activity summary -->
-      <div class="sb-section">
-        <div class="sb-label">By type</div>
-        <div class="act-summary" id="act-summary"></div>
-      </div>
-      <!-- Activity list header -->
-      <div class="woreda-list-header">
-        <span>Activities</span>
-        <span id="act-count" style="color:#999">0</span>
-      </div>
-      <div class="activity-list" id="activity-list"></div>
-    </div>
+    <!-- WOREDA LIST — outside scroll so it fills remaining space -->
+    <div class="wlist" id="woreda-list"></div>
   </div>
 
   <!-- DETAIL PANEL -->
@@ -354,17 +352,24 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
       </div>
       <div class="dp-close" onclick="closeDetail()">✕</div>
     </div>
-    <div class="dp-body">
-      <div class="dp-tabs">
-        <div class="dp-tab active" id="dptab-cov" onclick="switchDpTab('cov')">Coverage</div>
-        <div class="dp-tab" id="dptab-act" onclick="switchDpTab('act')">Activities</div>
-      </div>
-      <div class="dp-panel active" id="dppanel-cov">
-        <div class="dp-cov-grid" id="dp-cov-content"></div>
-      </div>
-      <div class="dp-panel" id="dppanel-act">
-        <table class="dp-act-table" id="dp-act-content"><thead><tr><th>Type</th><th>Activity</th><th>Organisation</th><th>Month</th><th>Beneficiaries</th></tr></thead><tbody></tbody></table>
-      </div>
+    <div class="dp-tabs">
+      <div class="dp-tab active" id="dptab-act" onclick="switchDpTab('act')">Activities</div>
+      <div class="dp-tab" id="dptab-cov" onclick="switchDpTab('cov')">Coverage</div>
+    </div>
+    <!-- Shared month strip in panel -->
+    <div class="dp-month-strip">
+      <span class="dp-month-lbl">Period</span>
+      <div class="dp-month-chips" id="dp-month-chips"></div>
+    </div>
+
+    <div class="dp-panel active" id="dppanel-act">
+      <table class="dp-act-table" id="dp-act-table">
+        <thead><tr><th>Type</th><th>Activity</th><th>Organisation</th><th>Month</th><th>Beneficiaries</th></tr></thead>
+        <tbody id="dp-act-tbody"></tbody>
+      </table>
+    </div>
+    <div class="dp-panel" id="dppanel-cov">
+      <div class="dp-cov-grid" id="dp-cov-content"></div>
     </div>
   </div>
 </div>
@@ -373,7 +378,7 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
 <div class="tour-overlay" id="tour-overlay">
   <div class="tour-backdrop"></div>
   <div class="tour-card">
-    <div class="tc-header">
+    <div class="tc-hdr">
       <span class="tc-step" id="tc-step">Step 1 of 5</span>
       <div class="tc-dots" id="tc-dots"></div>
     </div>
@@ -381,8 +386,8 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
       <div class="tc-title" id="tc-title"></div>
       <div class="tc-text" id="tc-text"></div>
     </div>
-    <div class="tc-footer">
-      <div class="tc-counter" id="tc-counter"></div>
+    <div class="tc-ftr">
+      <div class="tc-ctr" id="tc-ctr"></div>
       <div class="tc-btns">
         <button class="tc-btn" id="tc-prev" onclick="tourPrev()">← Back</button>
         <button class="tc-btn primary" id="tc-next" onclick="tourNext()">Next →</button>
@@ -394,23 +399,15 @@ body{font-family:var(--sans);background:#f0ece4;color:var(--ink);-webkit-font-sm
 <button class="drawer-trigger" id="drawer-trigger" onclick="toggleDrawer()">⊞ Filters</button>
 
 <script>
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // DATA
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+const SECTOR_COLOR={'Nutrition':'#e85d04','WASH':'#0077b6','Health':'#d62828','Protection':'#7b2d8b','Food Security':'#606c38','Shelter':'#9b5de5'};
+const ACT_TYPE_COLOR={'Distribution':'#C9A84C','Training':'#0077b6','Coordination':'#7b2d8b','Assessment':'#e85d04','Medical':'#d62828','NFI':'#606c38'};
+const ALL_SECTORS=['Nutrition','WASH','Health','Protection','Food Security','Shelter'];
+const ZONES=['Assosa','Kamashi','Mao Komo','Metekel'];
 
-const SECTOR_COLOR = {
-  'Nutrition':'#e85d04','WASH':'#0077b6','Health':'#d62828',
-  'Protection':'#7b2d8b','Food Security':'#606c38','Shelter':'#9b5de5'
-};
-const ACT_TYPE_COLOR = {
-  'Distribution':'#C9A84C','Training':'#0077b6','Coordination':'#7b2d8b',
-  'Assessment':'#e85d04','Medical':'#d62828','NFI':'#606c38'
-};
-const ALL_SECTORS = ['Nutrition','WASH','Health','Protection','Food Security','Shelter'];
-const ALL_ACT_TYPES = ['Distribution','Training','Coordination','Assessment','Medical','NFI'];
-
-// PAST: Sept 2025 → May 2026 (current), FUTURE: Jun–Aug 2026
-const MONTHS = [
+const MONTHS=[
   {key:'2025-09',label:'Sep 25',future:false},{key:'2025-10',label:'Oct 25',future:false},
   {key:'2025-11',label:'Nov 25',future:false},{key:'2025-12',label:'Dec 25',future:false},
   {key:'2026-01',label:'Jan 26',future:false},{key:'2026-02',label:'Feb 26',future:false},
@@ -420,9 +417,34 @@ const MONTHS = [
   {key:'2026-08',label:'Aug 26',future:true},
 ];
 
-// STATIC COVERAGE DATA (35+ organisations, OCHA-informed)
-const ACTORS = [
-  // NUTRITION
+const WOREDAS=[
+  {name:'Assosa',zone:'Assosa',lat:10.07,lon:34.53},
+  {name:'Assosa town Administration',zone:'Assosa',lat:10.06,lon:34.55},
+  {name:'Bambasi',zone:'Assosa',lat:9.84,lon:34.73},
+  {name:'Bilidigilu',zone:'Assosa',lat:9.90,lon:35.28},
+  {name:'Homosha',zone:'Assosa',lat:10.31,lon:34.52},
+  {name:'Kurmuk',zone:'Assosa',lat:10.55,lon:34.28},
+  {name:'Menge',zone:'Assosa',lat:10.38,lon:34.97},
+  {name:'Sherkole',zone:'Assosa',lat:10.64,lon:34.58},
+  {name:'Undulu',zone:'Assosa',lat:10.17,lon:34.98},
+  {name:'Dembe',zone:'Kamashi',lat:9.80,lon:35.60},
+  {name:'Kamashi',zone:'Kamashi',lat:9.58,lon:36.07},
+  {name:'Kamashi town',zone:'Kamashi',lat:9.51,lon:35.87},
+  {name:'Mizyiga',zone:'Kamashi',lat:9.37,lon:36.22},
+  {name:'Sedal',zone:'Kamashi',lat:10.73,lon:35.18},
+  {name:'Zayi',zone:'Kamashi',lat:10.38,lon:36.55},
+  {name:'Maokomo Special',zone:'Mao Komo',lat:9.20,lon:34.25},
+  {name:'Bulen',zone:'Metekel',lat:10.72,lon:35.91},
+  {name:'Dangur',zone:'Metekel',lat:11.42,lon:35.95},
+  {name:'Dibate',zone:'Metekel',lat:10.75,lon:36.25},
+  {name:'Gilgel Beles town',zone:'Metekel',lat:11.18,lon:36.37},
+  {name:'Guba',zone:'Metekel',lat:11.62,lon:35.97},
+  {name:'Mandura',zone:'Metekel',lat:11.15,lon:36.35},
+  {name:'Pawe',zone:'Metekel',lat:11.28,lon:36.37},
+  {name:'Wembera',zone:'Metekel',lat:10.45,lon:35.75},
+];
+
+const ACTORS=[
   {org:'WFP',type:'UN',sector:'Nutrition',woredas:['Dangur','Wembera','Mandura','Pawe','Gilgel Beles town'],reach:22400},
   {org:'UNICEF',type:'UN',sector:'Nutrition',woredas:['Assosa','Bambasi','Kamashi town','Dibate'],reach:10200},
   {org:'Action Against Hunger',type:'INGO',sector:'Nutrition',woredas:['Wembera','Dibate','Kamashi','Zayi'],reach:6100},
@@ -432,7 +454,6 @@ const ACTORS = [
   {org:'IMC Worldwide',type:'INGO',sector:'Nutrition',woredas:['Assosa town Administration','Menge'],reach:1900},
   {org:'ADO Ethiopia',type:'NNGO',sector:'Nutrition',woredas:['Bambasi','Homosha','Undulu'],reach:2400},
   {org:'PANE',type:'NNGO',sector:'Nutrition',woredas:['Kamashi','Sedal'],reach:1600},
-  // WASH
   {org:'UNICEF',type:'UN',sector:'WASH',woredas:['Assosa','Bambasi','Sherkole','Pawe','Dibate'],reach:26000},
   {org:'World Vision',type:'INGO',sector:'WASH',woredas:['Dangur','Wembera','Mandura','Guba'],reach:12400},
   {org:'NRC',type:'INGO',sector:'WASH',woredas:['Kurmuk','Assosa town Administration','Homosha'],reach:5800},
@@ -440,7 +461,6 @@ const ACTORS = [
   {org:'CARE Ethiopia',type:'INGO',sector:'WASH',woredas:['Dibate','Gilgel Beles town','Bulen'],reach:4900},
   {org:'DDO Benishangul',type:'NNGO',sector:'WASH',woredas:['Kamashi town','Kamashi','Sedal'],reach:3100},
   {org:'Action Against Hunger',type:'INGO',sector:'WASH',woredas:['Homosha','Undulu'],reach:2200},
-  // HEALTH
   {org:'WHO',type:'UN',sector:'Health',woredas:['Assosa','Kurmuk','Sherkole','Bambasi','Pawe','Menge'],reach:38000},
   {org:'MSF',type:'INGO',sector:'Health',woredas:['Kurmuk','Homosha','Bilidigilu'],reach:6800},
   {org:'IRC',type:'INGO',sector:'Health',woredas:['Assosa','Bambasi','Undulu'],reach:9400},
@@ -449,7 +469,6 @@ const ACTORS = [
   {org:'Ethiopian Red Cross',type:'NNGO',sector:'Health',woredas:['Assosa','Dangur','Wembera'],reach:8100},
   {org:'Merlin Ethiopia',type:'INGO',sector:'Health',woredas:['Gilgel Beles town','Bulen'],reach:2700},
   {org:'HSO Ethiopia',type:'NNGO',sector:'Health',woredas:['Kamashi town','Sedal','Dembe'],reach:4200},
-  // PROTECTION
   {org:'UNHCR',type:'UN',sector:'Protection',woredas:['Sherkole','Kurmuk','Homosha'],reach:15600},
   {org:'NRC',type:'INGO',sector:'Protection',woredas:['Kurmuk','Homosha','Assosa town Administration','Bilidigilu'],reach:6400},
   {org:'DRC',type:'INGO',sector:'Protection',woredas:['Sherkole','Kurmuk'],reach:5200},
@@ -457,55 +476,20 @@ const ACTORS = [
   {org:'World Vision',type:'INGO',sector:'Protection',woredas:['Bambasi','Dangur'],reach:3100},
   {org:'Ethiopian Red Cross',type:'NNGO',sector:'Protection',woredas:['Assosa','Bambasi','Menge'],reach:3900},
   {org:'ARRA',type:'Government',sector:'Protection',woredas:['Sherkole','Kurmuk','Homosha'],reach:12000},
-  // FOOD SECURITY
   {org:'WFP',type:'UN',sector:'Food Security',woredas:['Dangur','Wembera','Mandura','Pawe','Dibate','Guba'],reach:52000},
   {org:'World Vision',type:'INGO',sector:'Food Security',woredas:['Bambasi','Sherkole','Assosa','Gilgel Beles town'],reach:14800},
   {org:'CRS',type:'INGO',sector:'Food Security',woredas:['Kamashi','Kamashi town','Zayi'],reach:6200},
   {org:'DPPC Benishangul',type:'Government',sector:'Food Security',woredas:['Dangur','Wembera','Assosa','Bambasi','Menge','Mandura'],reach:34000},
   {org:'Action Against Hunger',type:'INGO',sector:'Food Security',woredas:['Wembera','Dibate','Bulen'],reach:7100},
   {org:'Concern Worldwide',type:'INGO',sector:'Food Security',woredas:['Kurmuk','Homosha','Bilidigilu'],reach:5400},
-  // SHELTER
   {org:'UNHCR',type:'UN',sector:'Shelter',woredas:['Sherkole','Kurmuk'],reach:8400},
   {org:'NRC',type:'INGO',sector:'Shelter',woredas:['Kurmuk','Assosa town Administration'],reach:3600},
   {org:'IFRC',type:'INGO',sector:'Shelter',woredas:['Bambasi','Sherkole','Homosha'],reach:4200},
   {org:'IOM',type:'UN',sector:'Shelter',woredas:['Bambasi','Sherkole'],reach:3200},
 ];
 
-// WOREDAS
-const WOREDAS = [
-  {name:'Dangur',zone:'Metekel',lat:11.42,lon:35.95},
-  {name:'Wembera',zone:'Metekel',lat:10.45,lon:35.75},
-  {name:'Mandura',zone:'Metekel',lat:11.15,lon:36.35},
-  {name:'Pawe',zone:'Metekel',lat:11.28,lon:36.37},
-  {name:'Dibate',zone:'Metekel',lat:10.75,lon:36.25},
-  {name:'Bulen',zone:'Metekel',lat:10.72,lon:35.91},
-  {name:'Guba',zone:'Metekel',lat:11.62,lon:35.97},
-  {name:'Gilgel Beles town',zone:'Metekel',lat:11.18,lon:36.37},
-  {name:'Assosa',zone:'Assosa',lat:10.07,lon:34.53},
-  {name:'Bambasi',zone:'Assosa',lat:9.84,lon:34.73},
-  {name:'Sherkole',zone:'Assosa',lat:10.64,lon:34.58},
-  {name:'Kurmuk',zone:'Assosa',lat:10.55,lon:34.28},
-  {name:'Homosha',zone:'Assosa',lat:10.31,lon:34.52},
-  {name:'Menge',zone:'Assosa',lat:10.38,lon:34.97},
-  {name:'Bilidigilu',zone:'Assosa',lat:9.90,lon:35.28},
-  {name:'Undulu',zone:'Assosa',lat:10.17,lon:34.98},
-  {name:'Assosa town Administration',zone:'Assosa',lat:10.06,lon:34.55},
-  {name:'Kamashi',zone:'Kamashi',lat:9.58,lon:36.07},
-  {name:'Kamashi town',zone:'Kamashi',lat:9.51,lon:35.87},
-  {name:'Sedal',zone:'Kamashi',lat:10.73,lon:35.18},
-  {name:'Zayi',zone:'Kamashi',lat:10.38,lon:36.55},
-  {name:'Dembe',zone:'Kamashi',lat:9.80,lon:35.60},
-  {name:'Mizyiga',zone:'Kamashi',lat:9.37,lon:36.22},
-  {name:'Maokomo Special',zone:'Mao Komo',lat:9.20,lon:34.25},
-];
-
-// ════════════════════════════════════════════════════════════════
-// ACTIVITIES — credible dataset Sept 2025 – Aug 2026
-// GPS = approximate town/site coordinates
-// ════════════════════════════════════════════════════════════════
-const ACTIVITIES = [
-  // ── SEPT 2025
-  {id:'a001',month:'2025-09',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Dangur',site:'Dangur Market Hub',lat:11.40,lon:35.94,desc:'General food distribution — 3,200 IDP households, cycle 1/4',bene:16000,future:false},
+const ACTIVITIES=[
+  {id:'a001',month:'2025-09',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Dangur',site:'Dangur Market Hub',lat:11.40,lon:35.94,desc:'General food distribution — 3,200 IDP households cycle 1',bene:16000,future:false},
   {id:'a002',month:'2025-09',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Wembera',site:'Wembera Distribution Point',lat:10.44,lon:35.73,desc:'Monthly food ration — conflict-affected households',bene:8400,future:false},
   {id:'a003',month:'2025-09',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Bambasi',site:'Bambasi Health Center',lat:9.83,lon:34.74,desc:'RUTF distribution — OTP-active facilities, 142 SAM children',bene:142,future:false},
   {id:'a004',month:'2025-09',org:'WHO',type:'Medical',sector:'Health',woreda:'Assosa',site:'Assosa Regional Hospital',lat:10.06,lon:34.53,desc:'Emergency drug kit replenishment — cholera pre-positioning',bene:15000,future:false},
@@ -513,28 +497,22 @@ const ACTIVITIES = [
   {id:'a006',month:'2025-09',org:'NRC',type:'Training',sector:'Protection',woreda:'Kurmuk',site:'NRC Field Office Kurmuk',lat:10.55,lon:34.29,desc:'Community protection monitoring training — 22 volunteers',bene:22,future:false},
   {id:'a007',month:'2025-09',org:'Action Against Hunger',type:'Assessment',sector:'Nutrition',woreda:'Wembera',site:'Wembera Zonal Health',lat:10.46,lon:35.76,desc:'SMART nutrition survey — Metekel Zone',bene:1200,future:false},
   {id:'a008',month:'2025-09',org:'IRC',type:'Medical',sector:'Health',woreda:'Homosha',site:'Homosha HC',lat:10.30,lon:34.51,desc:'MHNT mobile health team deployment — 3 rounds',bene:2100,future:false},
-
-  // ── OCT 2025
-  {id:'a009',month:'2025-10',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Mandura',site:'Mandura Town',lat:11.14,lon:36.34,desc:'Food ration — cycle 2. Maize/oil/pulses 24kg/person',bene:11200,future:false},
+  {id:'a009',month:'2025-10',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Mandura',site:'Mandura Town',lat:11.14,lon:36.34,desc:'Food ration — cycle 2. Maize/oil/pulses',bene:11200,future:false},
   {id:'a010',month:'2025-10',org:'UNICEF',type:'Distribution',sector:'WASH',woreda:'Sherkole',site:'Sherkole Refugee Camp',lat:10.63,lon:34.57,desc:'Chlorine/hygiene kit distribution — 2,400 households',bene:12000,future:false},
   {id:'a011',month:'2025-10',org:'MSF',type:'Medical',sector:'Health',woreda:'Kurmuk',site:'MSF Kurmuk OPD',lat:10.56,lon:34.28,desc:'OPD consultations + cholera response pre-positioning',bene:3400,future:false},
   {id:'a012',month:'2025-10',org:'Action Against Hunger',type:'Distribution',sector:'Nutrition',woreda:'Bambasi',site:'Bambasi Health Center',lat:9.84,lon:34.73,desc:'TSFP: supplementary feeding — PLW and U5',bene:680,future:false},
-  {id:'a013',month:'2025-10',org:'Save the Children',type:'Training',sector:'Nutrition',woreda:'Dangur',site:'Dangur Woreda Health Office',lat:11.41,lon:35.96,desc:'CMAM refresher training — 18 HEWs, 4 health posts',bene:18,future:false},
-  {id:'a014',month:'2025-10',org:'GOAL Ethiopia',type:'Medical',sector:'Health',woreda:'Pawe',site:'Pawe Refugee Camp',lat:11.29,lon:36.38,desc:'Health services delivery — Pawe refugee settlement (EritREAN/Sudanese)',bene:4800,future:false},
+  {id:'a013',month:'2025-10',org:'Save the Children',type:'Training',sector:'Nutrition',woreda:'Dangur',site:'Dangur Woreda Health Office',lat:11.41,lon:35.96,desc:'CMAM refresher training — 18 HEWs',bene:18,future:false},
+  {id:'a014',month:'2025-10',org:'GOAL Ethiopia',type:'Medical',sector:'Health',woreda:'Pawe',site:'Pawe Refugee Camp',lat:11.29,lon:36.38,desc:'Health services delivery — Pawe refugee settlement',bene:4800,future:false},
   {id:'a015',month:'2025-10',org:'Ethiopian Red Cross',type:'Assessment',sector:'Health',woreda:'Assosa',site:'ERCS BG Sub-office',lat:10.07,lon:34.54,desc:'Rapid health facility assessment — 14 facilities post-flooding',bene:0,future:false},
   {id:'a016',month:'2025-10',org:'NRC',type:'NFI',sector:'Shelter',woreda:'Assosa town Administration',site:'NRC Assosa Warehouse',lat:10.06,lon:34.55,desc:'Core relief item distribution — 320 returnee HH from Oromia',bene:1600,future:false},
-
-  // ── NOV 2025
   {id:'a017',month:'2025-11',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Pawe',site:'Pawe Woreda Admin',lat:11.28,lon:36.36,desc:'WFP general ration — Pawe camp + host community',bene:19600,future:false},
-  {id:'a018',month:'2025-11',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Dibate',site:'Dibate HC',lat:10.74,lon:36.24,desc:'RUTF + vitamin A supplementation distribution',bene:890,future:false},
+  {id:'a018',month:'2025-11',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Dibate',site:'Dibate HC',lat:10.74,lon:36.24,desc:'RUTF + vitamin A supplementation',bene:890,future:false},
   {id:'a019',month:'2025-11',org:'WHO',type:'Coordination',sector:'Health',woreda:'Assosa',site:'Regional Health Bureau',lat:10.07,lon:34.52,desc:'Health Cluster coordination meeting — BG sub-national',bene:0,future:false},
   {id:'a020',month:'2025-11',org:'Oxfam',type:'Distribution',sector:'WASH',woreda:'Bambasi',site:'Bambasi IDP Site',lat:9.85,lon:34.72,desc:'Emergency water trucking + bladder installation — 14,300 IDPs',bene:14300,future:false},
   {id:'a021',month:'2025-11',org:'DRC',type:'Assessment',sector:'Protection',woreda:'Sherkole',site:'Sherkole Refugee Camp',lat:10.64,lon:34.56,desc:'Protection monitoring — GBV incidence assessment round 2',bene:0,future:false},
   {id:'a022',month:'2025-11',org:'Action Against Hunger',type:'Training',sector:'WASH',woreda:'Homosha',site:'Homosha Community Centre',lat:10.31,lon:34.52,desc:'Hygiene promotion training — 35 community hygiene promoters',bene:35,future:false},
   {id:'a023',month:'2025-11',org:'ADO Ethiopia',type:'Distribution',sector:'Nutrition',woreda:'Homosha',site:'Homosha Health Post network',lat:10.30,lon:34.50,desc:'Community-based MUAC screening + OTP enrolment',bene:1800,future:false},
   {id:'a024',month:'2025-11',org:'IFRC',type:'NFI',sector:'Shelter',woreda:'Bambasi',site:'Bambasi Returnee Site',lat:9.83,lon:34.75,desc:'Shelter kit distribution — 640 returnee HH',bene:3200,future:false},
-
-  // ── DEC 2025
   {id:'a025',month:'2025-12',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Wembera',site:'Wembera Distribution Hub',lat:10.44,lon:35.74,desc:'Year-end food distribution — 4,200 HH including IDPs',bene:21000,future:false},
   {id:'a026',month:'2025-12',org:'UNHCR',type:'NFI',sector:'Shelter',woreda:'Kurmuk',site:'Ura Site Phase 2',lat:10.53,lon:34.26,desc:'Shelter material distribution — 900 new arrivals at Ura',bene:4500,future:false},
   {id:'a027',month:'2025-12',org:'MSF',type:'Medical',sector:'Health',woreda:'Homosha',site:'Homosha MC',lat:10.31,lon:34.53,desc:'Surge deployment — acute watery diarrhea outbreak response',bene:2600,future:false},
@@ -542,18 +520,14 @@ const ACTIVITIES = [
   {id:'a029',month:'2025-12',org:'World Vision',type:'Distribution',sector:'Food Security',woreda:'Assosa',site:'Assosa Woreda DPC',lat:10.08,lon:34.53,desc:'Cash-based intervention — 1,200 food-insecure host community HH',bene:6000,future:false},
   {id:'a030',month:'2025-12',org:'ADO Ethiopia',type:'Training',sector:'Nutrition',woreda:'Undulu',site:'Undulu HC',lat:10.16,lon:34.97,desc:'IYCF counselling training — HEWs and community volunteers',bene:24,future:false},
   {id:'a031',month:'2025-12',org:'Regional Health Bureau',type:'Coordination',sector:'Health',woreda:'Assosa',site:'RHB BG',lat:10.06,lon:34.51,desc:'Annual inter-cluster review meeting — health/nutrition/WASH',bene:0,future:false},
-
-  // ── JAN 2026
-  {id:'a032',month:'2026-01',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Dangur',site:'Dangur Hub',lat:11.40,lon:35.93,desc:'Lean season scale-up — 5,100 HH targeted (IDP+resident)',bene:25500,future:false},
+  {id:'a032',month:'2026-01',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Dangur',site:'Dangur Hub',lat:11.40,lon:35.93,desc:'Lean season scale-up — 5,100 HH targeted',bene:25500,future:false},
   {id:'a033',month:'2026-01',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Assosa',site:'Assosa Zonal Hospital',lat:10.07,lon:34.53,desc:'RUTF pipeline replenishment — 12 OTP sites',bene:820,future:false},
   {id:'a034',month:'2026-01',org:'Action Against Hunger',type:'Assessment',sector:'Nutrition',woreda:'Kamashi',site:'Kamashi Woreda',lat:9.57,lon:36.06,desc:'IPC Phase Classification data collection',bene:0,future:false},
   {id:'a035',month:'2026-01',org:'WHO',type:'Medical',sector:'Health',woreda:'Bambasi',site:'Bambasi HC',lat:9.82,lon:34.72,desc:'Measles outbreak response — vaccination round 1',bene:4200,future:false},
   {id:'a036',month:'2026-01',org:'NRC',type:'Training',sector:'Protection',woreda:'Kurmuk',site:'NRC Kurmuk',lat:10.54,lon:34.28,desc:'SGBV case management SOPs training — 14 case workers',bene:14,future:false},
   {id:'a037',month:'2026-01',org:'DDO Benishangul',type:'Distribution',sector:'WASH',woreda:'Kamashi town',site:'Kamashi Town Centre',lat:9.50,lon:35.86,desc:'Borehole rehabilitation — 3 sites, 4,500 beneficiaries',bene:4500,future:false},
   {id:'a038',month:'2026-01',org:'ADO Ethiopia',type:'Distribution',sector:'Nutrition',woreda:'Bambasi',site:'Bambasi Zone HP',lat:9.84,lon:34.74,desc:'Community-based OTP: RUTF distribution round 3',bene:290,future:false},
-  {id:'a039',month:'2026-01',org:'GOAL Ethiopia',type:'Medical',sector:'Health',woreda:'Guba',site:'Guba HC',lat:11.61,lon:35.96,desc:'MHNT deployment — remote woredas, 2-week mission',bene:1400,future:false},
-
-  // ── FEB 2026
+  {id:'a039',month:'2026-01',org:'GOAL Ethiopia',type:'Medical',sector:'Health',woreda:'Guba',site:'Guba HC',lat:11.61,lon:35.96,desc:'MHNT deployment — remote woreda 2-week mission',bene:1400,future:false},
   {id:'a040',month:'2026-02',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Mandura',site:'Mandura Distribution Point',lat:11.13,lon:36.33,desc:'Lean season food assistance — 3rd round',bene:13200,future:false},
   {id:'a041',month:'2026-02',org:'UNICEF',type:'Distribution',sector:'WASH',woreda:'Dibate',site:'Dibate IDP Site',lat:10.74,lon:36.23,desc:'WASH emergency kit distribution — 1,800 displaced HH',bene:9000,future:false},
   {id:'a042',month:'2026-02',org:'MSF',type:'Medical',sector:'Health',woreda:'Kurmuk',site:'MSF Kurmuk',lat:10.55,lon:34.27,desc:'OPD consultations — 3,200 cases incl. border arrivals',bene:3200,future:false},
@@ -561,28 +535,22 @@ const ACTIVITIES = [
   {id:'a044',month:'2026-02',org:'Save the Children',type:'Assessment',sector:'Protection',woreda:'Bambasi',site:'Bambasi Town',lat:9.84,lon:34.74,desc:'Child protection rapid assessment — returnee population',bene:0,future:false},
   {id:'a045',month:'2026-02',org:'IRC',type:'Training',sector:'Health',woreda:'Assosa',site:'IRC BG Office',lat:10.08,lon:34.52,desc:'Clinical IMCI refresher — 30 nurses from 10 facilities',bene:30,future:false},
   {id:'a046',month:'2026-02',org:'Concern Worldwide',type:'Distribution',sector:'Food Security',woreda:'Homosha',site:'Homosha Food Dist. Point',lat:10.30,lon:34.51,desc:'CBT cash voucher — 820 food-insecure HH',bene:4100,future:false},
-
-  // ── MAR 2026
   {id:'a047',month:'2026-03',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Wembera',site:'Wembera West Hub',lat:10.45,lon:35.72,desc:'Mid-year food ration — post-lean season consolidation',bene:18400,future:false},
   {id:'a048',month:'2026-03',org:'UNICEF',type:'Coordination',sector:'Nutrition',woreda:'Assosa',site:'Assosa Cluster Meeting Room',lat:10.07,lon:34.54,desc:'Q1 Nutrition Cluster review — BG region',bene:0,future:false},
   {id:'a049',month:'2026-03',org:'WHO',type:'Coordination',sector:'Health',woreda:'Assosa',site:'RHB Conference Room',lat:10.06,lon:34.53,desc:'Health Cluster Q1 review + disease surveillance debrief',bene:0,future:false},
   {id:'a050',month:'2026-03',org:'Action Against Hunger',type:'Distribution',sector:'Nutrition',woreda:'Zayi',site:'Zayi HC',lat:10.37,lon:36.54,desc:'CMAM OTP: RUTF distribution + screening round 4',bene:380,future:false},
   {id:'a051',month:'2026-03',org:'World Vision',type:'Distribution',sector:'WASH',woreda:'Dangur',site:'Dangur West Kebele',lat:11.41,lon:35.92,desc:'Gravity-fed water system rehabilitation',bene:6400,future:false},
   {id:'a052',month:'2026-03',org:'DRC',type:'Training',sector:'Protection',woreda:'Kurmuk',site:'DRC Kurmuk Field Base',lat:10.54,lon:34.28,desc:'Community-based protection committee training — 40 participants',bene:40,future:false},
-  {id:'a053',month:'2026-03',org:'IFRC',type:'NFI',sector:'Shelter',woreda:'Homosha',site:'Homosha IDP Site',lat:10.31,lon:34.52,desc:'Blanket and tarpaulin distribution — newly displaced 480 HH',bene:2400,future:false},
+  {id:'a053',month:'2026-03',org:'IFRC',type:'NFI',sector:'Shelter',woreda:'Homosha',site:'Homosha IDP Site',lat:10.31,lon:34.52,desc:'Blanket and tarpaulin distribution — 480 newly displaced HH',bene:2400,future:false},
   {id:'a054',month:'2026-03',org:'CRS',type:'Distribution',sector:'Food Security',woreda:'Kamashi',site:'Kamashi Zone',lat:9.57,lon:36.05,desc:'Cash + seed distribution — 1,100 agricultural HH',bene:5500,future:false},
-
-  // ── APR 2026
   {id:'a055',month:'2026-04',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Guba',site:'Guba Town',lat:11.62,lon:35.96,desc:'Food ration — remote woreda catch-up distribution',bene:7200,future:false},
   {id:'a056',month:'2026-04',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Bambasi',site:'Bambasi Zonal Hospital',lat:9.83,lon:34.73,desc:'RUTF cycle 5 + IYCF materials',bene:620,future:false},
   {id:'a057',month:'2026-04',org:'Action Against Hunger',type:'Assessment',sector:'WASH',woreda:'Dibate',site:'Dibate Woreda Office',lat:10.74,lon:36.25,desc:'WASH coverage gap assessment — pre-rainy season',bene:0,future:false},
-  {id:'a058',month:'2026-04',org:'MSF',type:'Medical',sector:'Health',woreda:'Kurmuk',site:'MSF Kurmuk Clinic',lat:10.56,lon:34.28,desc:'Malaria peak response — 2,900 consultations April',bene:2900,future:false},
+  {id:'a058',month:'2026-04',org:'MSF',type:'Medical',sector:'Health',woreda:'Kurmuk',site:'MSF Kurmuk Clinic',lat:10.56,lon:34.28,desc:'Malaria peak response — 2,900 consultations',bene:2900,future:false},
   {id:'a059',month:'2026-04',org:'NRC',type:'NFI',sector:'Shelter',woreda:'Kurmuk',site:'Ura Phase 3',lat:10.53,lon:34.27,desc:'3rd shelter kit round — 600 new Sudanese arrivals',bene:3000,future:false},
-  {id:'a060',month:'2026-04',org:'Save the Children',type:'Training',sector:'Nutrition',woreda:'Sherkole',site:'Sherkole Camp HC',lat:10.62,lon:34.57,desc:'IYCF-E training — refugee mothers group (60 participants)',bene:60,future:false},
+  {id:'a060',month:'2026-04',org:'Save the Children',type:'Training',sector:'Nutrition',woreda:'Sherkole',site:'Sherkole Camp HC',lat:10.62,lon:34.57,desc:'IYCF-E training — refugee mothers group, 60 participants',bene:60,future:false},
   {id:'a061',month:'2026-04',org:'Concern Worldwide',type:'Distribution',sector:'Food Security',woreda:'Bilidigilu',site:'Bilidigilu Village Hub',lat:9.89,lon:35.27,desc:'Food voucher — hard-to-reach woreda pilot',bene:3200,future:false},
   {id:'a062',month:'2026-04',org:'DPPC Benishangul',type:'Coordination',sector:'Food Security',woreda:'Assosa',site:'DPPC BG Office',lat:10.07,lon:34.52,desc:'IPC Technical Working Group — pre-harvest assessment',bene:0,future:false},
-
-  // ── MAY 2026 (current month)
   {id:'a063',month:'2026-05',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Dangur',site:'Dangur Hub',lat:11.39,lon:35.95,desc:'May food ration — ongoing lean season response',bene:22000,future:false},
   {id:'a064',month:'2026-05',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Assosa',site:'BG Nutrition Hub',lat:10.07,lon:34.53,desc:'RUTF cycle 6 — 14 OTP sites restocked',bene:760,future:false},
   {id:'a065',month:'2026-05',org:'WHO',type:'Coordination',sector:'Health',woreda:'Assosa',site:'RHB Conference Room',lat:10.07,lon:34.53,desc:'Emergency Health Cluster meeting — suspected meningitis alert',bene:0,future:false},
@@ -590,25 +558,19 @@ const ACTIVITIES = [
   {id:'a067',month:'2026-05',org:'IRC',type:'Medical',sector:'Health',woreda:'Bambasi',site:'Bambasi HC',lat:9.84,lon:34.72,desc:'Mobile health team — IDPs returnee site, 3,100 consultations',bene:3100,future:false},
   {id:'a068',month:'2026-05',org:'DDO Benishangul',type:'Distribution',sector:'WASH',woreda:'Sedal',site:'Sedal WP',lat:10.72,lon:35.17,desc:'Handpump rehabilitation — 5 water points',bene:3800,future:false},
   {id:'a069',month:'2026-05',org:'PANE',type:'Training',sector:'Nutrition',woreda:'Kamashi',site:'Kamashi HC',lat:9.56,lon:36.07,desc:'MUAC screening training — 16 community health workers',bene:16,future:false},
-
-  // ── JUN 2026 (PLANNED)
   {id:'a070',month:'2026-06',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Wembera',site:'Wembera Hub',lat:10.44,lon:35.73,desc:'PLANNED: Pre-harvest food ration — 4,800 HH',bene:24000,future:true},
   {id:'a071',month:'2026-06',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Bambasi',site:'Bambasi HC',lat:9.83,lon:34.73,desc:'PLANNED: RUTF cycle 7 + Vitamin A — 15 OTP sites',bene:810,future:true},
-  {id:'a072',month:'2026-06',org:'WHO',type:'Training',sector:'Health',woreda:'Assosa',site:'RHB Training Hall',lat:10.07,lon:34.53,desc:'PLANNED: IDSR refresher — surveillance officers from 6 zones',bene:36,future:true},
+  {id:'a072',month:'2026-06',org:'WHO',type:'Training',sector:'Health',woreda:'Assosa',site:'RHB Training Hall',lat:10.07,lon:34.53,desc:'PLANNED: IDSR refresher — surveillance officers 6 zones',bene:36,future:true},
   {id:'a073',month:'2026-06',org:'Action Against Hunger',type:'Distribution',sector:'Nutrition',woreda:'Wembera',site:'Wembera PHU',lat:10.45,lon:35.75,desc:'PLANNED: TSFP cycle 6 — lean season PLW scale-up',bene:920,future:true},
   {id:'a074',month:'2026-06',org:'MSF',type:'Medical',sector:'Health',woreda:'Kurmuk',site:'MSF Kurmuk',lat:10.55,lon:34.28,desc:'PLANNED: Rainy season surge — malaria/diarrhoea pre-positioning',bene:4000,future:true},
-  {id:'a075',month:'2026-06',org:'NRC',type:'NFI',sector:'Shelter',woreda:'Kurmuk',site:'Ura Expansion',lat:10.53,lon:34.26,desc:'PLANNED: Emergency shelter kit — anticipated new arrivals Sudan',bene:5000,future:true},
+  {id:'a075',month:'2026-06',org:'NRC',type:'NFI',sector:'Shelter',woreda:'Kurmuk',site:'Ura Expansion',lat:10.53,lon:34.26,desc:'PLANNED: Emergency shelter kit — anticipated new Sudan arrivals',bene:5000,future:true},
   {id:'a076',month:'2026-06',org:'CARE Ethiopia',type:'Distribution',sector:'WASH',woreda:'Bulen',site:'Bulen Town',lat:10.71,lon:35.90,desc:'PLANNED: Solar water pump installation — 2 sites',bene:7200,future:true},
-
-  // ── JUL 2026 (PLANNED)
   {id:'a077',month:'2026-07',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Mandura',site:'Mandura Hub',lat:11.14,lon:36.34,desc:'PLANNED: Mid-year food ration cycle',bene:11000,future:true},
   {id:'a078',month:'2026-07',org:'UNICEF',type:'Coordination',sector:'Nutrition',woreda:'Assosa',site:'BG Cluster Hub',lat:10.07,lon:34.53,desc:'PLANNED: Q2 Nutrition Cluster review + pipeline planning',bene:0,future:true},
   {id:'a079',month:'2026-07',org:'Action Against Hunger',type:'Assessment',sector:'Nutrition',woreda:'Kamashi',site:'Kamashi Zone',lat:9.57,lon:36.06,desc:'PLANNED: Post-harvest nutrition survey — SMART methodology',bene:1400,future:true},
   {id:'a080',month:'2026-07',org:'Oxfam',type:'Distribution',sector:'WASH',woreda:'Bambasi',site:'Bambasi IDP Site',lat:9.84,lon:34.74,desc:'PLANNED: WASH NFI re-stocking — rainy season response',bene:9600,future:true},
   {id:'a081',month:'2026-07',org:'DRC',type:'Training',sector:'Protection',woreda:'Sherkole',site:'Sherkole Camp',lat:10.63,lon:34.57,desc:'PLANNED: GBV survivor support training — 25 caseworkers',bene:25,future:true},
   {id:'a082',month:'2026-07',org:'IFRC',type:'NFI',sector:'Shelter',woreda:'Bambasi',site:'Bambasi Returnee Site',lat:9.83,lon:34.75,desc:'PLANNED: Emergency shelter replenishment — seasonal floods',bene:2800,future:true},
-
-  // ── AUG 2026 (PLANNED)
   {id:'a083',month:'2026-08',org:'WFP',type:'Distribution',sector:'Food Security',woreda:'Pawe',site:'Pawe Woreda',lat:11.28,lon:36.37,desc:'PLANNED: Post-harvest transition ration — 3,800 HH',bene:19000,future:true},
   {id:'a084',month:'2026-08',org:'UNICEF',type:'Distribution',sector:'Nutrition',woreda:'Dibate',site:'Dibate HC',lat:10.74,lon:36.24,desc:'PLANNED: RUTF + micronutrient cycle 8',bene:750,future:true},
   {id:'a085',month:'2026-08',org:'WHO',type:'Coordination',sector:'Health',woreda:'Assosa',site:'RHB',lat:10.07,lon:34.52,desc:'PLANNED: Q3 Health Cluster review + planning session',bene:0,future:true},
@@ -617,201 +579,184 @@ const ACTIVITIES = [
   {id:'a088',month:'2026-08',org:'World Vision',type:'Distribution',sector:'Food Security',woreda:'Assosa',site:'Assosa WFP sub-office',lat:10.08,lon:34.53,desc:'PLANNED: Cash-based transfer — 1,400 HH pre-school cycle',bene:7000,future:true},
 ];
 
-// ════════════════════════════════════════════════════════════════
-// GeoJSON (same as original coverage page)
-// ════════════════════════════════════════════════════════════════
-const GEODATA={"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Gilgel Beles town","zone":"Metekel"},"geometry":{"type":"Polygon","coordinates":[[[36.3493,11.1575],[36.3432,11.1592],[36.3373,11.1665],[36.3283,11.1569],[36.3394,11.1441],[36.3477,11.1372],[36.3504,11.1453],[36.3493,11.1575]]]}},{"type":"Feature","properties":{"name":"Pawe","zone":"Metekel"},"geometry":{"type":"Polygon","coordinates":[[[36.4678,11.1583],[36.4682,11.1783],[36.466,11.1864],[36.4685,11.1972],[36.4676,11.2153],[36.4602,11.2264],[36.4708,11.2333],[36.4758,11.2447],[36.4671,11.265],[36.4832,11.2718],[36.4903,11.2791],[36.495,11.289],[36.505,11.285],[36.5148,11.2896],[36.5296,11.3025],[36.5454,11.3048],[36.5569,11.3021],[36.5621,11.3118],[36.5624,11.3183],[36.5564,11.3295],[36.5475,11.3373],[36.5345,11.3353],[36.5387,11.3456],[36.5588,11.3543],[36.5636,11.358],[36.5639,11.3713],[36.5514,11.3866],[36.5411,11.3941],[36.5331,11.3941],[36.5299,11.4345],[36.5211,11.4445],[36.5122,11.4583],[36.5035,11.4581],[36.4978,11.4437],[36.4889,11.4401],[36.4715,11.4363],[36.4672,11.4286],[36.4481,11.4269],[36.4099,11.4139],[36.4098,11.4332],[36.4027,11.4319],[36.3976,11.4265],[36.3838,11.4249],[36.3752,11.4161],[36.371,11.4082],[36.3734,11.4016],[36.3804,11.3951],[36.3779,11.3844],[36.3729,11.3819],[36.3752,11.3713],[36.3823,11.359],[36.3784,11.3548],[36.3702,11.3622],[36.3671,11.3608],[36.3556,11.3691],[36.3499,11.3678],[36.3438,11.3724],[36.3365,11.3655],[36.3271,11.3628],[36.3187,11.3566],[36.3112,11.3575],[36.3029,11.3453],[36.2904,11.3314],[36.2924,11.3211],[36.298,11.3169],[36.2956,11.3086],[36.288,11.304],[36.2854,11.2975],[36.2796,11.2964],[36.2833,11.2883],[36.2828,11.2752],[36.2869,11.2645],[36.2865,11.2483],[36.2766,11.2482],[36.2683,11.2609],[36.2572,11.2537],[36.251,11.2376],[36.2463,11.2303],[36.2519,11.2204],[36.2576,11.2171],[36.2655,11.2081],[36.2744,11.2023],[36.2788,11.2038],[36.2901,11.1798],[36.2784,11.1725],[36.2767,11.1675],[36.2832,11.1643],[36.2889,11.167],[36.2942,11.1634],[36.3066,11.1602],[36.3087,11.1558],[36.3221,11.1539],[36.3283,11.1569],[36.3373,11.1665],[36.3432,11.1592],[36.3493,11.1575],[36.3573,11.1584],[36.366,11.1741],[36.3714,11.1766],[36.3664,11.1831],[36.3685,11.1877],[36.3796,11.1979],[36.3749,11.2104],[36.3643,11.2175],[36.367,11.2266],[36.377,11.2288],[36.3821,11.2356],[36.38,11.2426],[36.3857,11.2478],[36.4005,11.2418],[36.3936,11.2336],[36.3979,11.2237],[36.3898,11.214],[36.3897,11.209],[36.396,11.2013],[36.406,11.1935],[36.4019,11.1819],[36.3938,11.1836],[36.3817,11.1707],[36.4015,11.1665],[36.4128,11.1592],[36.4182,11.1533],[36.4424,11.1513],[36.4474,11.1582],[36.4678,11.1583]]]}},{"type":"Feature","properties":{"name":"Assosa town Administration","zone":"Assosa"},"geometry":{"type":"Polygon","coordinates":[[[34.5582,10.0659],[34.5458,10.0848],[34.5414,10.0853],[34.5348,10.0667],[34.5265,10.0654],[34.5215,10.06],[34.519,10.045],[34.5235,10.036],[34.543,10.0417],[34.5464,10.0446],[34.5585,10.0468],[34.5582,10.0659]]]}},{"type":"Feature","properties":{"name":"Kamashi town","zone":"Kamashi"},"geometry":{"type":"Polygon","coordinates":[[[35.8666,9.5475],[35.8587,9.5475],[35.8375,9.5378],[35.8322,9.5256],[35.8388,9.5014],[35.8384,9.4945],[35.8442,9.4914],[35.8455,9.4856],[35.8563,9.4829],[35.8593,9.4922],[35.865,9.4956],[35.8765,9.4954],[35.8832,9.5014],[35.886,9.5098],[35.8739,9.5307],[35.8776,9.5468],[35.8666,9.5475]]]}}]};
+// GeoJSON (key polygons only — rest use circle markers)
+const GEODATA={"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Gilgel Beles town"},"geometry":{"type":"Polygon","coordinates":[[[36.3493,11.1575],[36.3432,11.1592],[36.3373,11.1665],[36.3283,11.1569],[36.3394,11.1441],[36.3477,11.1372],[36.3504,11.1453],[36.3493,11.1575]]]}},{"type":"Feature","properties":{"name":"Pawe"},"geometry":{"type":"Polygon","coordinates":[[[36.4678,11.1583],[36.4682,11.1783],[36.466,11.1864],[36.4685,11.1972],[36.4676,11.2153],[36.4602,11.2264],[36.4708,11.2333],[36.4758,11.2447],[36.4671,11.265],[36.4832,11.2718],[36.4903,11.2791],[36.495,11.289],[36.505,11.285],[36.5148,11.2896],[36.5296,11.3025],[36.5454,11.3048],[36.5569,11.3021],[36.5621,11.3118],[36.5624,11.3183],[36.5564,11.3295],[36.5475,11.3373],[36.5345,11.3353],[36.5387,11.3456],[36.5588,11.3543],[36.5636,11.358],[36.5639,11.3713],[36.5514,11.3866],[36.5411,11.3941],[36.5331,11.3941],[36.5299,11.4345],[36.5211,11.4445],[36.5122,11.4583],[36.5035,11.4581],[36.4978,11.4437],[36.4889,11.4401],[36.4715,11.4363],[36.4672,11.4286],[36.4481,11.4269],[36.4099,11.4139],[36.4098,11.4332],[36.4027,11.4319],[36.3976,11.4265],[36.3838,11.4249],[36.3752,11.4161],[36.371,11.4082],[36.3734,11.4016],[36.3804,11.3951],[36.3779,11.3844],[36.3729,11.3819],[36.3752,11.3713],[36.3823,11.359],[36.3784,11.3548],[36.3702,11.3622],[36.3671,11.3608],[36.3556,11.3691],[36.3499,11.3678],[36.3438,11.3724],[36.3365,11.3655],[36.3271,11.3628],[36.3187,11.3566],[36.3112,11.3575],[36.3029,11.3453],[36.2904,11.3314],[36.2924,11.3211],[36.298,11.3169],[36.2956,11.3086],[36.288,11.304],[36.2854,11.2975],[36.2796,11.2964],[36.2833,11.2883],[36.2828,11.2752],[36.2869,11.2645],[36.2865,11.2483],[36.2766,11.2482],[36.2683,11.2609],[36.2572,11.2537],[36.251,11.2376],[36.2463,11.2303],[36.2519,11.2204],[36.2576,11.2171],[36.2655,11.2081],[36.2744,11.2023],[36.2788,11.2038],[36.2901,11.1798],[36.2784,11.1725],[36.2767,11.1675],[36.2832,11.1643],[36.2889,11.167],[36.2942,11.1634],[36.3066,11.1602],[36.3087,11.1558],[36.3221,11.1539],[36.3283,11.1569],[36.3373,11.1665],[36.3432,11.1592],[36.3493,11.1575],[36.3573,11.1584],[36.366,11.1741],[36.3714,11.1766],[36.3664,11.1831],[36.3685,11.1877],[36.3796,11.1979],[36.3749,11.2104],[36.3643,11.2175],[36.367,11.2266],[36.377,11.2288],[36.3821,11.2356],[36.38,11.2426],[36.3857,11.2478],[36.4005,11.2418],[36.3936,11.2336],[36.3979,11.2237],[36.3898,11.214],[36.3897,11.209],[36.396,11.2013],[36.406,11.1935],[36.4019,11.1819],[36.3938,11.1836],[36.3817,11.1707],[36.4015,11.1665],[36.4128,11.1592],[36.4182,11.1533],[36.4424,11.1513],[36.4474,11.1582],[36.4678,11.1583]]]}},{"type":"Feature","properties":{"name":"Assosa town Administration"},"geometry":{"type":"Polygon","coordinates":[[[34.5582,10.0659],[34.5458,10.0848],[34.5414,10.0853],[34.5348,10.0667],[34.5265,10.0654],[34.5215,10.06],[34.519,10.045],[34.5235,10.036],[34.543,10.0417],[34.5464,10.0446],[34.5585,10.0468],[34.5582,10.0659]]]}},{"type":"Feature","properties":{"name":"Kamashi town"},"geometry":{"type":"Polygon","coordinates":[[[35.8666,9.5475],[35.8587,9.5475],[35.8375,9.5378],[35.8322,9.5256],[35.8388,9.5014],[35.8384,9.4945],[35.8442,9.4914],[35.8455,9.4856],[35.8563,9.4829],[35.8593,9.4922],[35.865,9.4956],[35.8765,9.4954],[35.8832,9.5014],[35.886,9.5098],[35.8739,9.5307],[35.8776,9.5468],[35.8666,9.5475]]]}}]};
 
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // STATE
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 let activeSectors = new Set(ALL_SECTORS);
 let activeActors  = new Set(['INGO','NNGO','UN','Government']);
-let activeActTypes= new Set(ALL_ACT_TYPES);
-let activeMonths  = new Set(MONTHS.filter(m=>!m.future).map(m=>m.key)); // all past by default, no future
+let activeMonths  = new Set(MONTHS.filter(m=>!m.future).map(m=>m.key));
+let filterZone    = '';
+let filterWoreda  = '';
 let selectedWoreda= null;
-let currentTab    = 'coverage';
-let currentDpTab  = 'cov';
+let currentDpTab  = 'act';
 let geoLayers     = {};
 let clusterGroup  = null;
 let map;
 
-// ════════════════════════════════════════════════════════════════
-// MAP
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// MAP INIT
+// ═══════════════════════════════════════════════
 function initMap(){
   map = L.map('map',{zoomControl:true}).setView([10.2,35.5],8);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'&copy; OpenStreetMap',maxZoom:14
   }).addTo(map);
 
-  // Woreda polygons
+  // Polygons for woredas that have them
   GEODATA.features.forEach(f=>{
-    const name = f.properties.name;
-    const layer = L.geoJSON(f,{
-      style:()=> getMapStyle(name)
-    }).addTo(map);
+    const name=f.properties.name;
+    const layer=L.geoJSON(f,{style:()=>getMapStyle(name)}).addTo(map);
     layer.on('click',()=>selectWoreda(name));
-    layer.on('mouseover',e=>{e.target.setStyle({weight:2.5,color:'#333'});showTooltip(e,name);});
-    layer.on('mouseout',e=>{e.target.setStyle(getMapStyle(name));hideTooltip();});
+    layer.on('mouseover',e=>{e.target.setStyle({weight:2.5,color:'#333'});showTT(e.originalEvent,name);});
+    layer.on('mouseout',e=>{e.target.setStyle(getMapStyle(name));hideTT();});
     geoLayers[name]=layer;
   });
 
-  // Simple woreda circles for woredas without polygons
+  // Circle markers for all woredas (including those with polygons — circles sit on top fine)
   WOREDAS.forEach(w=>{
-    if(!geoLayers[w.name]){
-      const c = getMapColor(w.name);
-      const circle = L.circleMarker([w.lat,w.lon],{
-        radius:14,fillColor:c.fill,color:c.stroke,
-        weight:1.5,fillOpacity:0.8
-      }).addTo(map);
-      circle.on('click',()=>selectWoreda(w.name));
-      circle.on('mouseover',e=>{showTooltipAt(e.originalEvent,w.name);});
-      circle.on('mouseout',()=>hideTooltip());
-      geoLayers[w.name]=circle;
-    }
+    if(geoLayers[w.name]) return; // already has polygon
+    const c=getMapColor(w.name);
+    const circ=L.circleMarker([w.lat,w.lon],{radius:13,fillColor:c.fill,color:c.stroke,weight:1.5,fillOpacity:0.85});
+    circ.on('click',()=>selectWoreda(w.name));
+    circ.on('mouseover',e=>{showTT(e.originalEvent,w.name);});
+    circ.on('mouseout',()=>hideTT());
+    circ.addTo(map);
+    geoLayers[w.name]=circ;
   });
 
-  clusterGroup = L.markerClusterGroup({
-    maxClusterRadius:50,
-    iconCreateFunction:createClusterIcon,
+  // Cluster group for activity markers
+  clusterGroup=L.markerClusterGroup({
+    maxClusterRadius:48,
+    iconCreateFunction:clusterIcon,
     spiderfyOnMaxZoom:true,
-    showCoverageOnHover:false
+    showCoverageOnHover:false,
   });
   map.addLayer(clusterGroup);
 }
 
-function createClusterIcon(cluster){
-  const markers = cluster.getAllChildMarkers();
-  // Check if any future
-  const hasFuture = markers.some(m=>m.options.isFuture);
-  const hasReal   = markers.some(m=>!m.options.isFuture);
-  let bg = hasFuture && !hasReal ? 'rgba(201,168,76,0.15)' : 'rgba(13,17,23,0.75)';
-  let border = hasFuture && hasReal ? '#C9A84C' : (hasFuture ? '#C9A84C' : '#666');
-  const n = markers.length;
-  const sz = n < 5 ? 28 : n < 15 ? 34 : 42;
+function clusterIcon(cluster){
+  const ms=cluster.getAllChildMarkers();
+  const hasFuture=ms.some(m=>m.options.isFuture);
+  const hasReal=ms.some(m=>!m.options.isFuture);
+  const n=ms.length;
+  const sz=n<5?28:n<15?34:42;
+  const bg=hasFuture&&!hasReal?'rgba(13,17,23,0.1)':'rgba(13,17,23,0.78)';
+  const border=hasFuture?'#C9A84C':'#555';
+  const col=hasFuture&&!hasReal?'#C9A84C':'#fff';
   return L.divIcon({
-    html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${bg};border:1.5px solid ${border};display:flex;align-items:center;justify-content:center;font-family:IBM Plex Mono,monospace;font-size:10px;font-weight:500;color:${hasFuture&&!hasReal?'#C9A84C':'#fff'}">${n}</div>`,
+    html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${bg};border:1.5px ${hasFuture&&!hasReal?'dashed':'solid'} ${border};display:flex;align-items:center;justify-content:center;font-family:IBM Plex Mono,monospace;font-size:10px;font-weight:500;color:${col}">${n}</div>`,
     className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
   });
 }
 
-function createActivityMarker(act){
-  const c = ACT_TYPE_COLOR[act.type]||'#888';
-  const sz = act.future ? 10 : 12;
-  const border = act.future ? `2px dashed ${c}` : `2px solid ${c}`;
-  const bg = act.future ? 'rgba(255,255,255,0.15)' : c;
-  const icon = L.divIcon({
-    html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${bg};border:${border};box-shadow:0 0 4px rgba(0,0,0,0.3)"></div>`,
+function makeActivityMarker(act){
+  const c=ACT_TYPE_COLOR[act.type]||'#888';
+  const sz=10;
+  const icon=L.divIcon({
+    html:`<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${act.future?'transparent':c};border:1.5px ${act.future?'dashed':'solid'} ${c};box-shadow:0 0 3px rgba(0,0,0,.25)"></div>`,
     className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]
   });
-  const marker = L.marker([act.lat,act.lon],{icon,isFuture:act.future});
-  marker.bindPopup(`
-    <div style="font-family:IBM Plex Mono,monospace;min-width:200px">
-      <div style="font-family:IBM Plex Serif,serif;font-size:13px;margin-bottom:4px;color:#111">${act.org}</div>
-      <div style="font-size:9px;color:${c};margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em">${act.type} · ${act.sector}${act.future?' · PLANNED':''}</div>
-      <div style="font-size:10px;color:#555;line-height:1.6;margin-bottom:4px">${act.desc}</div>
-      <div style="font-size:9px;color:#999">${act.site} · ${MONTHS.find(m=>m.key===act.month)?.label||act.month}</div>
-      ${act.bene>0?`<div style="font-size:9px;color:#333;margin-top:4px;font-weight:500">${act.bene.toLocaleString()} beneficiaries</div>`:''}
-    </div>
-  `);
+  const ml=MONTHS.find(m=>m.key===act.month);
+  const marker=L.marker([act.lat,act.lon],{icon,isFuture:act.future});
+  marker.bindPopup(`<div style="font-family:IBM Plex Mono,monospace;min-width:190px">
+    <div style="font-family:IBM Plex Serif,serif;font-size:13px;color:#111;margin-bottom:3px">${act.org}</div>
+    <div style="font-size:8.5px;color:${c};text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">${act.type} · ${act.sector}${act.future?' · PLANNED':''}</div>
+    <div style="font-size:10px;color:#555;line-height:1.55;margin-bottom:3px">${act.desc}</div>
+    <div style="font-size:9px;color:#999">${act.site} · ${ml?ml.label:act.month}</div>
+    ${act.bene>0?`<div style="font-size:9px;color:#333;margin-top:3px;font-weight:500">${act.bene.toLocaleString()} beneficiaries</div>`:''}
+  </div>`);
   return marker;
 }
 
-function updateLegend(){
-  const isAct = currentTab==='activities';
-  document.getElementById('legend-title').textContent = isAct ? 'Activity type' : 'Coverage';
-  const body = document.getElementById('legend-body');
-  if(isAct){
-    body.innerHTML = ALL_ACT_TYPES.map(t=>`
-      <div class="ml-row">
-        <div style="width:10px;height:10px;border-radius:50%;background:${ACT_TYPE_COLOR[t]};flex-shrink:0"></div>
-        <span class="ml-lbl">${t}</span>
-      </div>`).join('') +
-      `<div class="ml-row" style="margin-top:4px;border-top:1px solid #eee;padding-top:4px">
-        <div style="width:10px;height:10px;border-radius:50%;border:2px dashed #C9A84C;flex-shrink:0"></div>
-        <span class="ml-lbl">Planned</span>
-      </div>`;
-  } else {
-    body.innerHTML=`
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(34,197,94,0.65)"></div><span class="ml-lbl">3+ sectors</span></div>
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(250,204,21,0.65)"></div><span class="ml-lbl">2 sectors</span></div>
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(251,146,60,0.65)"></div><span class="ml-lbl">1 sector</span></div>
-      <div class="ml-row"><div class="ml-swatch" style="background:rgba(200,200,200,0.55)"></div><span class="ml-lbl">Not covered</span></div>`;
-  }
-}
-
-function updateActivityMarkers(){
+function rebuildActivityMarkers(){
   clusterGroup.clearLayers();
-  const filtered = getFilteredActivities();
-  filtered.forEach(act=>{
-    clusterGroup.addLayer(createActivityMarker(act));
-  });
+  getFilteredActivities().forEach(a=>clusterGroup.addLayer(makeActivityMarker(a)));
 }
 
+// ═══════════════════════════════════════════════
+// MAP STYLE
+// ═══════════════════════════════════════════════
 function getMapColor(name){
-  const n = getSectorCount(name);
-  if(n===0) return {fill:'rgba(200,200,200,0.55)',stroke:'#aaa'};
-  if(n===1) return {fill:'rgba(251,146,60,0.65)',stroke:'#f97316'};
-  if(n===2) return {fill:'rgba(250,204,21,0.65)',stroke:'#eab308'};
-  return {fill:'rgba(34,197,94,0.65)',stroke:'#16a34a'};
+  const n=getSectorCount(name);
+  if(n===0) return {fill:'rgba(200,200,200,.55)',stroke:'#aaa'};
+  if(n===1) return {fill:'rgba(251,146,60,.65)',stroke:'#f97316'};
+  if(n===2) return {fill:'rgba(250,204,21,.65)',stroke:'#eab308'};
+  return {fill:'rgba(34,197,94,.65)',stroke:'#16a34a'};
 }
 function getMapStyle(name){
-  const c = getMapColor(name);
-  const sel = selectedWoreda===name;
-  return {fillColor:c.fill,color:sel?'#C9A84C':c.stroke,weight:sel?3:1.5,fillOpacity:0.85};
+  const c=getMapColor(name);
+  const sel=selectedWoreda===name;
+  return {fillColor:c.fill,color:sel?'#C9A84C':c.stroke,weight:sel?3:1.5,fillOpacity:.85};
 }
 function updateMapColors(){
   Object.entries(geoLayers).forEach(([name,layer])=>{
     if(layer.setStyle) layer.setStyle(getMapStyle(name));
+    else if(layer.setRadius){
+      const c=getMapColor(name);
+      const sel=selectedWoreda===name;
+      layer.setStyle({fillColor:c.fill,color:sel?'#C9A84C':c.stroke,weight:sel?3:1.5,fillOpacity:.85});
+    }
   });
 }
 
 // tooltip
-let _tt=null;
-function showTooltip(e,name){showTooltipAt(e.originalEvent,name);}
-function showTooltipAt(e,name){
-  if(!_tt){_tt=document.createElement('div');_tt.style.cssText='position:fixed;background:rgba(0,0,0,0.82);color:#fff;padding:6px 10px;font-family:IBM Plex Mono,monospace;font-size:11px;pointer-events:none;z-index:3000;border-left:2px solid #C9A84C;';document.body.appendChild(_tt);}
-  const w=WOREDAS.find(x=>x.name===name);const n=getSectorCount(name);
-  _tt.innerHTML=`<strong>${name}</strong><br>${w?w.zone+' Zone':''}<br>${n} sector(s) covered`;
+let _tt=null,_ttMove=null;
+function showTT(e,name){
+  if(!_tt){_tt=document.createElement('div');_tt.style.cssText='position:fixed;background:rgba(0,0,0,.82);color:#fff;padding:6px 10px;font-family:IBM Plex Mono,monospace;font-size:10px;pointer-events:none;z-index:4000;border-left:2px solid #C9A84C;line-height:1.5;';document.body.appendChild(_tt);}
+  const w=WOREDAS.find(x=>x.name===name);
+  _tt.innerHTML=`<strong>${name}</strong><br>${w?w.zone+' Zone':''}<br>${getSectorCount(name)} sector(s) covered`;
   _tt.style.display='block';
-  document.addEventListener('mousemove',_moveTooltip);
+  _ttMove=ev=>{_tt.style.left=(ev.clientX+14)+'px';_tt.style.top=(ev.clientY+14)+'px';};
+  document.addEventListener('mousemove',_ttMove);
 }
-function _moveTooltip(e){if(_tt){_tt.style.left=(e.clientX+14)+'px';_tt.style.top=(e.clientY+14)+'px';}}
-function hideTooltip(){if(_tt)_tt.style.display='none';document.removeEventListener('mousemove',_moveTooltip);}
+function hideTT(){if(_tt)_tt.style.display='none';if(_ttMove){document.removeEventListener('mousemove',_ttMove);_ttMove=null;}}
 
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// DROPDOWNS
+// ═══════════════════════════════════════════════
+function buildZoneDropdown(){
+  const el=document.getElementById('sel-zone');
+  el.innerHTML='<option value="">All zones</option>';
+  ZONES.forEach(z=>{const o=document.createElement('option');o.value=z;o.textContent=z;el.appendChild(o);});
+}
+function onZoneChange(){
+  filterZone=document.getElementById('sel-zone').value;
+  filterWoreda='';
+  const wd=document.getElementById('sel-woreda');
+  wd.innerHTML='<option value="">All woredas</option>';
+  const list=WOREDAS.filter(w=>!filterZone||w.zone===filterZone).sort((a,b)=>a.name.localeCompare(b.name));
+  list.forEach(w=>{const o=document.createElement('option');o.value=w.name;o.textContent=w.name;wd.appendChild(o);});
+  refresh();
+}
+function onWoredaChange(){
+  filterWoreda=document.getElementById('sel-woreda').value;
+  if(filterWoreda) selectWoreda(filterWoreda);
+  else {selectedWoreda=null;closeDetail();refresh();}
+}
+
+// ═══════════════════════════════════════════════
 // FILTERS
-// ════════════════════════════════════════════════════════════════
-function toggleSector(s,el){
-  activeSectors.has(s)?activeSectors.delete(s):activeSectors.add(s);
-  el.classList.toggle('active',activeSectors.has(s));
-  refresh();
-}
-function toggleActor(t,el){
-  activeActors.has(t)?activeActors.delete(t):activeActors.add(t);
-  el.classList.toggle('active',activeActors.has(t));
-  refresh();
-}
-function toggleActType(t,el){
-  activeActTypes.has(t)?activeActTypes.delete(t):activeActTypes.add(t);
-  el.classList.toggle('active',activeActTypes.has(t));
-  refreshActivities();
-}
+// ═══════════════════════════════════════════════
+function toggleSector(s,el){activeSectors.has(s)?activeSectors.delete(s):activeSectors.add(s);el.classList.toggle('active',activeSectors.has(s));refresh();}
+function toggleActor(t,el){activeActors.has(t)?activeActors.delete(t):activeActors.add(t);el.classList.toggle('active',activeActors.has(t));refresh();}
 function toggleMonth(key){
   activeMonths.has(key)?activeMonths.delete(key):activeMonths.add(key);
-  renderMonthSelector();
-  refreshActivities();
+  renderMonthBlock();
+  renderDpMonthChips();
+  rebuildActivityMarkers();
+  if(selectedWoreda) renderDpActivities(selectedWoreda);
 }
 
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // COVERAGE LOGIC
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function getWoredaCoverage(name){
   const cov={};
   ACTORS.forEach(a=>{
-    if(!activeSectors.has(a.sector)) return;
-    if(!activeActors.has(a.type)) return;
+    if(!activeSectors.has(a.sector)||!activeActors.has(a.type)) return;
     if(a.woredas.includes(name)){
       if(!cov[a.sector]) cov[a.sector]=[];
       cov[a.sector].push(a);
@@ -820,61 +765,36 @@ function getWoredaCoverage(name){
   return cov;
 }
 function getSectorCount(name){return Object.keys(getWoredaCoverage(name)).length;}
-
-// ════════════════════════════════════════════════════════════════
-// ACTIVITIES LOGIC
-// ════════════════════════════════════════════════════════════════
 function getFilteredActivities(woredaFilter){
   return ACTIVITIES.filter(a=>{
     if(!activeMonths.has(a.month)) return false;
-    if(!activeActTypes.has(a.type)) return false;
     if(woredaFilter && a.woreda!==woredaFilter) return false;
     return true;
   });
 }
 
-// ════════════════════════════════════════════════════════════════
-// TABS
-// ════════════════════════════════════════════════════════════════
-function switchTab(tab){
-  currentTab=tab;
-  ['coverage','activities'].forEach(t=>{
-    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
-    document.getElementById('pane-'+t).classList.toggle('active',t===tab);
-  });
-  updateLegend();
-  if(tab==='activities') refreshActivities();
-}
-function switchDpTab(tab){
-  currentDpTab=tab;
-  ['cov','act'].forEach(t=>{
-    document.getElementById('dptab-'+t).classList.toggle('active',t===tab);
-    document.getElementById('dppanel-'+t).classList.toggle('active',t===tab);
-  });
-}
-
-// ════════════════════════════════════════════════════════════════
-// RENDER FUNCTIONS
-// ════════════════════════════════════════════════════════════════
-function renderMonthSelector(){
-  const past  = MONTHS.filter(m=>!m.future);
-  const future= MONTHS.filter(m=>m.future);
-  const el = document.getElementById('month-selector');
-  el.innerHTML=`
+// ═══════════════════════════════════════════════
+// RENDER SIDEBAR
+// ═══════════════════════════════════════════════
+function renderMonthBlock(){
+  const past=MONTHS.filter(m=>!m.future);
+  const future=MONTHS.filter(m=>m.future);
+  document.getElementById('month-block').innerHTML=`
     <div class="month-row">
-      <div class="month-row-lbl">Past</div>
+      <span class="month-row-lbl">Past</span>
       <div class="month-chips">${past.map(m=>`<div class="mchip${activeMonths.has(m.key)?' active':''}" onclick="toggleMonth('${m.key}')">${m.label}</div>`).join('')}</div>
     </div>
-    <div class="month-row">
-      <div class="month-row-lbl">Planned</div>
+    <div class="month-row" style="margin-top:4px">
+      <span class="month-row-lbl">Planned</span>
       <div class="month-chips">${future.map(m=>`<div class="mchip future${activeMonths.has(m.key)?' active':''}" onclick="toggleMonth('${m.key}')">${m.label}</div>`).join('')}</div>
     </div>`;
 }
 
 function renderKPI(){
-  const covered  = WOREDAS.filter(w=>getSectorCount(w.name)>0).length;
-  const gaps     = WOREDAS.length-covered;
-  const multi    = WOREDAS.filter(w=>getSectorCount(w.name)>=3).length;
+  const visible=WOREDAS.filter(w=>!filterZone||w.zone===filterZone);
+  const covered=visible.filter(w=>getSectorCount(w.name)>0).length;
+  const gaps=visible.length-covered;
+  const multi=visible.filter(w=>getSectorCount(w.name)>=3).length;
   document.getElementById('kpi-row').innerHTML=`
     <div class="kpi-cell"><div class="kpi-num" style="color:#16a34a">${covered}</div><div class="kpi-lbl">Woredas covered</div></div>
     <div class="kpi-cell"><div class="kpi-num" style="color:#dc2626">${gaps}</div><div class="kpi-lbl">No coverage</div></div>
@@ -882,205 +802,203 @@ function renderKPI(){
 }
 
 function renderCovBars(){
-  const total=WOREDAS.length;
+  const visible=WOREDAS.filter(w=>!filterZone||w.zone===filterZone);
+  const total=visible.length||1;
   document.getElementById('cov-bars').innerHTML=ALL_SECTORS.filter(s=>activeSectors.has(s)).map(s=>{
-    const n=WOREDAS.filter(w=>ACTORS.some(a=>a.sector===s&&activeActors.has(a.type)&&a.woredas.includes(w.name))).length;
+    const n=visible.filter(w=>ACTORS.some(a=>a.sector===s&&activeActors.has(a.type)&&a.woredas.includes(w.name))).length;
     const pct=Math.round(n/total*100);
-    return `<div class="cov-row"><div class="cov-sector" style="color:${SECTOR_COLOR[s]}">${s.substring(0,6)}</div><div class="cov-track"><div class="cov-fill" style="width:${pct}%;background:${SECTOR_COLOR[s]}"></div></div><div class="cov-pct">${pct}%</div></div>`;
-  }).join('')||'<div style="font-size:11px;color:#999">No sectors selected</div>';
+    return `<div class="cov-row"><div class="cov-lbl" style="color:${SECTOR_COLOR[s]}">${s.replace('Food Security','Food Sec').substring(0,8)}</div><div class="cov-track"><div class="cov-fill" style="width:${pct}%;background:${SECTOR_COLOR[s]}"></div></div><div class="cov-pct">${pct}%</div></div>`;
+  }).join('')||'<div style="font-size:11px;color:#bbb">No sectors selected</div>';
 }
 
 function renderWoredaList(){
-  const sorted=[...WOREDAS].sort((a,b)=>{
-    const na=getSectorCount(a.name),nb=getSectorCount(b.name);
-    if(na!==nb) return na-nb;
-    return a.name.localeCompare(b.name);
-  });
-  document.getElementById('wlist-count').textContent=sorted.length;
-  document.getElementById('woreda-list').innerHTML=sorted.map(w=>{
+  let list=WOREDAS.filter(w=>!filterZone||w.zone===filterZone);
+  if(filterWoreda) list=list.filter(w=>w.name===filterWoreda);
+  list=list.sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById('wlist-count').textContent=list.length;
+  document.getElementById('woreda-list').innerHTML=list.map(w=>{
     const cov=getWoredaCoverage(w.name);const n=Object.keys(cov).length;
-    const isGap=n===0;const isSel=selectedWoreda===w.name;
-    const dots=ALL_SECTORS.filter(s=>activeSectors.has(s)).map(s=>`<div class="sec-dot ${cov[s]?'':'empty'}" style="background:${cov[s]?SECTOR_COLOR[s]:'transparent'};${cov[s]?'':'border:1px dashed #ccc'}" title="${s}"></div>`).join('');
-    return `<div class="woreda-item${isGap?' gap':''}${isSel?' selected':''}" onclick="selectWoreda('${w.name.replace(/'/g,"\\'")}')">
-      <div class="woreda-cov-dots">${dots}</div>
-      <div><div class="woreda-name">${w.name}</div><span class="woreda-zone">${w.zone}</span></div>
+    const isSel=selectedWoreda===w.name;const isGap=n===0;
+    const dots=ALL_SECTORS.filter(s=>activeSectors.has(s)).map(s=>`<div class="sdot${cov[s]?'':' empty'}" style="${cov[s]?'background:'+SECTOR_COLOR[s]:''}" title="${s}"></div>`).join('');
+    return `<div class="wi${isSel?' selected':''}${isGap?' gap':''}" onclick="selectWoreda('${w.name.replace(/'/g,"\\'")}')">
+      <div class="wi-dots">${dots}</div>
+      <div><div class="wi-name">${w.name}</div><span class="wi-zone">${w.zone}</span></div>
       ${isGap?'<div class="gap-badge">GAP</div>':''}
     </div>`;
   }).join('');
 }
 
-function renderActKPI(){
-  const acts=getFilteredActivities();
-  const total=acts.length;
-  const planned=acts.filter(a=>a.future).length;
-  const bene=acts.reduce((s,a)=>s+a.bene,0);
-  document.getElementById('act-kpi-row').innerHTML=`
-    <div class="kpi-cell"><div class="kpi-num" style="color:#C9A84C">${total}</div><div class="kpi-lbl">Activities</div></div>
-    <div class="kpi-cell"><div class="kpi-num" style="color:#7b2d8b">${planned}</div><div class="kpi-lbl">Planned</div></div>
-    <div class="kpi-cell"><div class="kpi-num" style="color:#16a34a;font-size:13px">${bene>10000?(bene/1000).toFixed(0)+'k':bene.toLocaleString()}</div><div class="kpi-lbl">Beneficiaries</div></div>`;
-}
-
-function renderActSummary(){
-  const acts=getFilteredActivities();
-  const byType={};
-  ALL_ACT_TYPES.forEach(t=>{byType[t]=acts.filter(a=>a.type===t).length;});
-  document.getElementById('act-summary').innerHTML=ALL_ACT_TYPES.filter(t=>activeActTypes.has(t)).map(t=>`
-    <div class="act-sum-row">
-      <div class="act-sum-dot" style="background:${ACT_TYPE_COLOR[t]}"></div>
-      <div class="act-sum-lbl">${t}</div>
-      <div class="act-sum-n">${byType[t]}</div>
-    </div>`).join('');
-}
-
-function renderActivityList(){
-  const acts=getFilteredActivities().sort((a,b)=>{
-    if(a.future!==b.future) return a.future?1:-1;
-    return b.month.localeCompare(a.month)||a.org.localeCompare(b.org);
-  });
-  document.getElementById('act-count').textContent=acts.length;
-  document.getElementById('activity-list').innerHTML=acts.map(a=>{
-    const c=ACT_TYPE_COLOR[a.type]||'#888';
-    const ml=MONTHS.find(m=>m.key===a.month);
-    return `<div class="act-item" onclick="flyToActivity(${a.lat},${a.lon})">
-      <div class="act-item-header">
-        <div class="act-type-dot" style="background:${a.future?'transparent':c};border:1.5px ${a.future?'dashed':'solid'} ${c}"></div>
-        <div class="act-item-title">${a.desc.length>55?a.desc.substring(0,55)+'…':a.desc}</div>
-        ${a.future?'<div class="act-future-badge">PLANNED</div>':''}
-      </div>
-      <div class="act-item-meta">
-        <span class="act-meta-piece org">${a.org}</span>
-        <span class="act-meta-piece">${a.type}</span>
-        <span class="act-meta-piece">${a.woreda}</span>
-        <span class="act-meta-piece">${ml?ml.label:a.month}</span>
-        ${a.bene>0?`<span class="act-meta-piece">${a.bene.toLocaleString()} bene.</span>`:''}
-      </div>
-    </div>`;
-  }).join('')||'<div style="padding:16px 14px;font-size:11px;color:#999">No activities match current filters.</div>';
-}
-
-function flyToActivity(lat,lon){
-  map.flyTo([lat,lon],11,{duration:1});
-}
-
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // DETAIL PANEL
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+function renderDpMonthChips(){
+  document.getElementById('dp-month-chips').innerHTML=MONTHS.map(m=>`<div class="mchip${m.future?' future':''}${activeMonths.has(m.key)?' active':''}" onclick="toggleMonth('${m.key}')" style="font-size:7.5px;padding:2px 5px">${m.label}</div>`).join('');
+}
+
 function selectWoreda(name){
   selectedWoreda=name;
+  // sync dropdown
+  const wd=document.getElementById('sel-woreda');
+  if(wd.querySelector(`option[value="${name}"]`)) wd.value=name;
   updateMapColors();
   renderWoredaList();
   openDetail(name);
   const w=WOREDAS.find(x=>x.name===name);
-  if(w) map.flyTo([w.lat,w.lon],10,{duration:0.8});
+  if(w) map.flyTo([w.lat,w.lon],10,{duration:.8});
 }
 
 function openDetail(name){
   const w=WOREDAS.find(x=>x.name===name);
   document.getElementById('dp-title').textContent=name;
-  document.getElementById('dp-zone').textContent=(w?w.zone+' Zone':'');
+  document.getElementById('dp-zone').textContent=w?w.zone+' Zone':'';
   document.getElementById('detail-panel').classList.add('open');
+  renderDpMonthChips();
+  renderDpActivities(name);
+  renderDpCoverage(name);
+}
 
-  // Coverage tab
-  const cov=getWoredaCoverage(name);
-  document.getElementById('dp-cov-content').innerHTML=ALL_SECTORS.filter(s=>activeSectors.has(s)).map(s=>{
-    const actors=cov[s];const color=SECTOR_COLOR[s];
-    if(!actors||actors.length===0) return `<div class="dp-sector-block"><div class="dp-sector-header"><div class="dp-sector-dot" style="background:${color};opacity:0.3"></div><div class="dp-sector-name" style="color:#ccc">${s}</div></div><div class="dp-sector-gap">No coverage</div></div>`;
-    return `<div class="dp-sector-block" style="border-left:3px solid ${color}"><div class="dp-sector-header"><div class="dp-sector-dot" style="background:${color}"></div><div class="dp-sector-name" style="color:${color}">${s}</div></div><div class="dp-org-list">${actors.map(a=>`<div class="dp-org-row"><span class="dp-org-name">${a.org}</span><span class="dp-org-type">${a.type}</span><span class="dp-org-reach">${a.reach.toLocaleString()}</span></div>`).join('')}</div></div>`;
-  }).join('');
-
-  // Activities tab
-  const acts=getFilteredActivities(name);
-  const tbody=document.querySelector('#dp-act-content tbody');
-  tbody.innerHTML=acts.length?acts.sort((a,b)=>b.month.localeCompare(a.month)).map(a=>{
+function renderDpActivities(name){
+  const acts=getFilteredActivities(name).sort((a,b)=>{
+    if(a.future!==b.future) return a.future?1:-1;
+    return b.month.localeCompare(a.month);
+  });
+  const tbody=document.getElementById('dp-act-tbody');
+  if(!acts.length){
+    tbody.innerHTML=`<tr><td colspan="5"><div class="dp-empty">No activities match current filters for this woreda.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML=acts.map(a=>{
     const c=ACT_TYPE_COLOR[a.type]||'#888';
     const ml=MONTHS.find(m=>m.key===a.month);
     return `<tr class="${a.future?'future-row':''}">
-      <td><div class="dp-act-type-pill"><div class="dp-act-type-dot" style="background:${a.future?'transparent':c};border:1.5px ${a.future?'dashed':'solid'} ${c}"></div><span style="font-family:var(--mono);font-size:9px;color:${c}">${a.type}</span></div></td>
-      <td style="max-width:160px;font-size:10px">${a.desc}</td>
-      <td>${a.org}</td>
-      <td style="font-family:var(--mono);font-size:9px">${ml?ml.label:a.month}${a.future?' 🗓':''}</td>
-      <td style="font-family:var(--mono);font-size:9px">${a.bene>0?a.bene.toLocaleString():'—'}</td>
+      <td><div class="dp-type-pill"><div class="dp-type-dot" style="background:${a.future?'transparent':c};border:1px ${a.future?'dashed':'solid'} ${c}"></div><span style="font-family:var(--mono);font-size:8.5px;color:${c}">${a.type}</span></div></td>
+      <td style="max-width:180px;font-size:10px;line-height:1.4">${a.desc}</td>
+      <td style="font-size:10px">${a.org}</td>
+      <td style="font-family:var(--mono);font-size:8.5px;white-space:nowrap">${ml?ml.label:a.month}${a.future?' 📅':''}</td>
+      <td style="font-family:var(--mono);font-size:8.5px">${a.bene>0?a.bene.toLocaleString():'—'}</td>
     </tr>`;
-  }).join(''):`<tr><td colspan="5" style="padding:12px;color:#999;font-style:italic">No activities match current filters for this woreda.</td></tr>`;
+  }).join('');
+}
+
+function renderDpCoverage(name){
+  const cov=getWoredaCoverage(name);
+  document.getElementById('dp-cov-content').innerHTML=ALL_SECTORS.filter(s=>activeSectors.has(s)).map(s=>{
+    const actors=cov[s];const col=SECTOR_COLOR[s];
+    if(!actors||!actors.length) return `<div class="dp-sec-block"><div class="dp-sec-hdr"><div class="dp-sec-dot" style="background:${col};opacity:.3"></div><div class="dp-sec-name" style="color:#ccc">${s}</div></div><div class="dp-sec-gap">No coverage</div></div>`;
+    return `<div class="dp-sec-block" style="border-left:3px solid ${col}"><div class="dp-sec-hdr"><div class="dp-sec-dot" style="background:${col}"></div><div class="dp-sec-name" style="color:${col}">${s}</div></div>${actors.map(a=>`<div class="dp-org-row"><span class="dp-org-name">${a.org}</span><span class="dp-org-type">${a.type}</span><span class="dp-org-reach">${a.reach.toLocaleString()}</span></div>`).join('')}</div>`;
+  }).join('');
 }
 
 function closeDetail(){
   document.getElementById('detail-panel').classList.remove('open');
   selectedWoreda=null;
+  filterWoreda='';
+  document.getElementById('sel-woreda').value='';
   updateMapColors();
   renderWoredaList();
 }
 
-// ════════════════════════════════════════════════════════════════
-// REFRESH
-// ════════════════════════════════════════════════════════════════
-function refresh(){
-  renderKPI();renderCovBars();renderWoredaList();updateMapColors();
-  if(selectedWoreda) openDetail(selectedWoreda);
-}
-function refreshActivities(){
-  renderActKPI();renderActSummary();renderActivityList();
-  updateActivityMarkers();
-  if(selectedWoreda) openDetail(selectedWoreda);
+function switchDpTab(tab){
+  currentDpTab=tab;
+  ['act','cov'].forEach(t=>{
+    document.getElementById('dptab-'+t).classList.toggle('active',t===tab);
+    document.getElementById('dppanel-'+t).classList.toggle('active',t===tab);
+  });
 }
 
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// REFRESH
+// ═══════════════════════════════════════════════
+function refresh(){
+  renderKPI();
+  renderCovBars();
+  renderWoredaList();
+  updateMapColors();
+  rebuildActivityMarkers();
+  if(selectedWoreda){renderDpActivities(selectedWoreda);renderDpCoverage(selectedWoreda);}
+  // update topbar context
+  const suffix=filterZone?('· '+filterZone.toUpperCase()):'· 2025-Q4';
+  document.getElementById('t-ctx').textContent=`// BENISHANGUL-GUMUZ · 6 SECTORS ${suffix}`;
+}
+
+// ═══════════════════════════════════════════════
 // TOUR
-// ════════════════════════════════════════════════════════════════
-const TOUR_STEPS=[
-  {
-    title:'Two layers, one coordination view',
-    text:'This dashboard has two modes — switch with the tabs in the sidebar. <span class="tc-hl">Coverage</span> shows which sectors are present per woreda (static 4W view). <span class="tc-hl">Activities</span> shows what was done or planned, month by month, with markers on the map. This is your pre-meeting brief.'
-  },
+// ═══════════════════════════════════════════════
+const TOUR=[
   {
     title:'Coverage — who does what where',
-    text:'Each woreda is coloured by the number of sectors covered. <span class="tc-hl">Grey = no organisation present</span>. Filter by sector or actor type to isolate gaps. The woreda list is sorted gaps-first — uncovered woredas in red at the top. Click any woreda to open its transectoral profile.',
-    action:()=>{switchTab('coverage');}
+    text:'Each woreda is coloured by the number of sectors covered. <span class="tc-hl">Green = 3+ sectors</span>, yellow = 2, orange = 1, <span class="tc-hl">grey = no organisation present</span>. Filter by sector and actor type to isolate gaps. The woreda list on the right is sorted alphabetically.',
+    action:()=>{closeDetail();map.setView([10.2,35.5],8,{animate:true});}
   },
   {
-    title:'Activities — what happened and what is planned',
-    text:'Switch to the <span class="tc-hl">Activities</span> tab. Each dot on the map is one activity — colour = type (distribution, training, coordination, assessment…). <span class="tc-hl">Solid dots = implemented</span>. <span class="tc-hl">Dashed dots = planned</span>. Dots cluster at zoom-out; click any cluster or individual dot to see the details.',
-    action:()=>{switchTab('activities');refreshActivities();}
+    title:'Activity markers — implemented and planned',
+    text:'Coloured dots on the map are activities. <span class="tc-hl">Solid dot = implemented</span>. <span class="tc-hl">Dashed dot = planned</span>. Dots cluster at zoom-out — click any cluster to expand. Use the Period filter in the sidebar to show specific months or the planned period.',
+    action:()=>{closeDetail();}
   },
   {
-    title:'Month filter — past and planned periods',
-    text:'Past months run from <span class="tc-hl">September 2025</span> to the current month. Planned activities cover <span class="tc-hl">June through August 2026</span>. Toggle individual months or the full planned period to prepare your coordination meeting agenda or identify coverage gaps ahead of the lean season.',
-    action:()=>{switchTab('activities');}
+    title:'Zone and woreda filters',
+    text:'The <span class="tc-hl">Zone</span> dropdown filters both the map and the woreda list to a single administrative zone. The <span class="tc-hl">Woreda</span> dropdown then cascades — select a woreda directly and the detail panel opens automatically.',
+    action:()=>{
+      document.getElementById('sel-zone').value='Assosa';
+      onZoneChange();
+      map.flyTo([10.2,34.6],9,{animate:true});
+    }
   },
   {
-    title:'Woreda profile — coverage + activity history in one click',
-    text:'Click any woreda — on the map or in the sidebar list. The detail panel opens with two tabs: <span class="tc-hl">Coverage</span> (organisations present per sector) and <span class="tc-hl">Activities</span> (every implemented and planned activity matching your current filters). This is what you bring to the cluster meeting instead of the Excel.',
-    action:()=>{switchTab('coverage');setTimeout(()=>selectWoreda('Bambasi'),400);}
+    title:'Woreda detail panel — activities first',
+    text:'Click any woreda on the map or in the list. The panel opens on <span class="tc-hl">Activities by default</span> — every implemented and planned activity for that woreda, filtered by your current period selection. Switch to the Coverage tab to see all organisations present per sector.',
+    action:()=>{
+      document.getElementById('sel-zone').value='';onZoneChange();
+      setTimeout(()=>selectWoreda('Bambasi'),400);
+    }
+  },
+  {
+    title:'Build your coordination brief',
+    text:'Combine the filters — sector, actor type, zone, period — to answer the question your cluster meeting needs answered: <span class="tc-hl">who is planning what in June, and which woredas have nothing planned?</span> Every combination updates the map, the list, and the woreda profiles in real time.',
+    action:()=>{
+      closeDetail();
+      document.getElementById('sel-zone').value='';
+      onZoneChange();
+      map.setView([10.2,35.5],8,{animate:true});
+    }
   },
 ];
 
 let _ts=0;
 function tourRender(){
-  const s=TOUR_STEPS[_ts];
-  document.getElementById('tc-step').textContent='Step '+(_ts+1)+' of '+TOUR_STEPS.length;
+  const s=TOUR[_ts];
+  document.getElementById('tc-step').textContent='Step '+(_ts+1)+' of '+TOUR.length;
   document.getElementById('tc-title').textContent=s.title;
   document.getElementById('tc-text').innerHTML=s.text;
-  document.getElementById('tc-counter').textContent=(_ts+1)+' / '+TOUR_STEPS.length;
+  document.getElementById('tc-ctr').textContent=(_ts+1)+' / '+TOUR.length;
   const dots=document.getElementById('tc-dots');dots.innerHTML='';
-  TOUR_STEPS.forEach((_,i)=>{const d=document.createElement('div');d.className='tc-dot'+(i===_ts?' active':i<_ts?' done':'');d.onclick=()=>tourGo(i);dots.appendChild(d);});
+  TOUR.forEach((_,i)=>{const d=document.createElement('div');d.className='tc-dot'+(i===_ts?' active':i<_ts?' done':'');d.onclick=()=>tourGo(i);dots.appendChild(d);});
   const prev=document.getElementById('tc-prev');prev.style.opacity=_ts===0?'0.25':'1';prev.style.pointerEvents=_ts===0?'none':'auto';
   const next=document.getElementById('tc-next');
-  if(_ts===TOUR_STEPS.length-1){next.textContent='Access the tool →';next.className='tc-btn unlock';next.onclick=tourUnlock;}
+  if(_ts===TOUR.length-1){next.textContent='Access the tool →';next.className='tc-btn unlock';next.onclick=tourUnlock;}
   else{next.textContent='Next →';next.className='tc-btn primary';next.onclick=tourNext;}
   if(s.action) s.action();
 }
-function tourGo(i){_ts=Math.max(0,Math.min(TOUR_STEPS.length-1,i));tourRender();}
+function tourGo(i){_ts=Math.max(0,Math.min(TOUR.length-1,i));tourRender();}
 function tourNext(){tourGo(_ts+1);}
 function tourPrev(){tourGo(_ts-1);}
-function tourUnlock(){document.getElementById('tour-overlay').style.display='none';}
+function tourUnlock(){
+  // Reset to general view before unlocking
+  closeDetail();
+  document.getElementById('sel-zone').value='';
+  onZoneChange();
+  map.setView([10.2,35.5],8,{animate:true});
+  document.getElementById('tour-overlay').style.display='none';
+}
 
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // INIT
-// ════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 initMap();
-renderMonthSelector();
+buildZoneDropdown();
+onZoneChange(); // populate woreda dropdown with all woredas
+renderMonthBlock();
 refresh();
-refreshActivities();
 tourRender();
 
 function toggleDrawer(){
