@@ -567,26 +567,160 @@ function render(){
 }
 
 function focusNode(id){
-  focusedId=id;document.getElementById('t-reset').classList.add('visible');
-  const nd=NODES.find(n=>n.id===id);if(!nd)return;
-  const nb=NBR.get(id)||new Set();
-  d3.selectAll('line.rl').each(function(d){d3.select(this).transition().duration(300).style('opacity',d.source===id||d.target===id?1:0);});
-  d3.selectAll('g.ng').transition().duration(300).style('opacity',d=>(d.id===id||nb.has(d.id))?1:0.05);
-  d3.selectAll('g.ag').transition().duration(300).style('opacity',d=>abcVisible&&nb.has(d.id)?1:0.02);
-  const el=document.getElementById('svg');
-  const sc=1.9,tx=el.clientWidth/2-nd.x*sc,ty=el.clientHeight/2-nd.y*sc;
-  svgR.transition().duration(500).call(zB.transform,d3.zoomIdentity.translate(tx,ty).scale(sc));
+  focusedId=id;
+  document.getElementById('t-reset').classList.add('visible');
+  document.getElementById('tooltip').style.display='none';
   openSidebar(id);
+  renderEgo(id);
+}
+
+function renderEgo(id){
+  const svg=d3.select('#svg');
+  svg.selectAll('*').remove();
+  const W2=svg.node().clientWidth||900;
+  const H2=svg.node().clientHeight||600;
+
+  // center — account for sidebar width (320px)
+  const sidebarOpen=document.getElementById('sidebar').classList.contains('open');
+  const cx=(W2-(sidebarOpen?320:0))/2;
+  const cy=H2/2;
+
+  const center=NODES.find(n=>n.id===id); if(!center) return;
+  const nb=NBR.get(id)||new Set();
+
+  // Collect neighbor nodes — include ABC only if abcVisible
+  const neighbors=NODES.filter(n=>n.id!==id && nb.has(n.id) && (n.type!=='abc'||abcVisible));
+
+  // Radial placement — group by type so same-type nodes cluster together
+  const typeOrder=['cluster','un','government','ingo','nngo','donor','abc'];
+  neighbors.sort((a,b)=>{
+    const ta=typeOrder.indexOf(a.type),tb=typeOrder.indexOf(b.type);
+    return ta===tb?a.name.localeCompare(b.name):ta-tb;
+  });
+
+  const n=neighbors.length;
+  const orbitR=Math.min(cx,cy)*0.62;
+  neighbors.forEach((nd,i)=>{
+    const angle=(2*Math.PI*i/n)-Math.PI/2;
+    nd._ex=cx+orbitR*Math.cos(angle);
+    nd._ey=cy+orbitR*Math.sin(angle);
+  });
+  center._ex=cx; center._ey=cy;
+
+  // Defs
+  const defs=svg.append('defs');
+  [['gn','34,197,94'],['gw','74,158,255'],['gh','167,139,250'],['ga','239,68,68'],['gf','245,158,11'],['gg','201,168,76']].forEach(([did,rgb])=>{
+    defs.append('filter').attr('id','ef_'+did).html(`<feGaussianBlur stdDeviation="6" result="b"/><feFlood flood-color="rgba(${rgb},0.3)" result="c"/><feComposite in="c" in2="b" operator="in" result="s"/><feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge>`);
+  });
+
+  const g=svg.append('g');
+
+  // Links
+  const egoLinks=ALL_LINKS.filter(l=>(l.source===id||l.target===id)&&nb.has(l.source===id?l.target:l.source));
+  g.selectAll('line.el').data(egoLinks).join('line').attr('class','el')
+    .attr('x1',cx).attr('y1',cy)
+    .attr('x2',d=>{const tid=d.source===id?d.target:d.source;const tn=neighbors.find(n=>n.id===tid);return tn?tn._ex:cx;})
+    .attr('y2',d=>{const tid=d.source===id?d.target:d.source;const tn=neighbors.find(n=>n.id===tid);return tn?tn._ey:cy;})
+    .attr('stroke',d=>lS(d.type)).attr('stroke-width',d=>lW(d.type)+0.5)
+    .attr('stroke-dasharray',d=>lD(d.type))
+    .style('opacity',0).transition().duration(400).delay(100).style('opacity',1);
+
+  // Link type labels on lines
+  egoLinks.forEach(l=>{
+    const tid=l.source===id?l.target:l.source;
+    const tn=neighbors.find(n=>n.id===tid); if(!tn) return;
+    const mx=(cx+tn._ex)/2, my=(cy+tn._ey)/2;
+    const lbl=l.type==='coordinates'?'cluster':l.type==='funding'?'funds':l.type==='consortium'?'consortium':l.type==='abc'?'abc gap':l.type==='knows'?'informal':'';
+    if(!lbl) return;
+    g.append('text').attr('x',mx).attr('y',my-5).attr('text-anchor','middle').attr('font-family','IBM Plex Mono,monospace').attr('font-size',8).attr('fill',lS(l.type)).attr('opacity',0.55).attr('pointer-events','none').text(lbl);
+  });
+
+  // Neighbor nodes
+  function drawNode(sel, nd, isCenter){
+    const r=isCenter?nR(nd)+6:nR(nd);
+    const x=nd._ex, y=nd._ey;
+    const ng=sel.append('g').attr('class','ego-n').attr('transform',`translate(${x},${y})`).style('cursor','pointer').style('opacity',0);
+    // glow ring for center
+    if(isCenter){
+      ng.append('circle').attr('r',r+14).attr('fill','none').attr('stroke','rgba(201,168,76,0.15)').attr('stroke-width',1).attr('pointer-events','none');
+      ng.append('circle').attr('r',r+7).attr('fill','none').attr('stroke','rgba(201,168,76,0.25)').attr('stroke-width',0.5).attr('pointer-events','none');
+    }
+    // score ring
+    if(!isCenter&&nd.type!=='cluster'&&nd.type!=='abc'){
+      ng.append('circle').attr('r',r+4).attr('fill','none').attr('stroke',ss(nd.score)).attr('stroke-width',1.2).attr('opacity',0.35).attr('pointer-events','none');
+    }
+    // main circle / diamond
+    if(nd.type==='abc'){
+      ng.append('rect').attr('width',r*2.2).attr('height',r*2.2).attr('x',-r*1.1).attr('y',-r*1.1).attr('rx',2).attr('transform','rotate(45)').attr('fill','rgba(239,68,68,0.08)').attr('stroke','#ef4444').attr('stroke-width',1.5).attr('filter','url(#ef_ga)');
+    } else {
+      ng.append('circle').attr('r',r)
+        .attr('fill',isCenter?'rgba(255,255,255,0.09)':nd.type==='cluster'?'rgba(255,255,255,0.07)':'rgba(255,255,255,0.05)')
+        .attr('stroke',isCenter?'#C9A84C':TC[nd.type]||'#fff')
+        .attr('stroke-width',isCenter?2.5:nd.type==='cluster'?2:1)
+        .attr('filter',isCenter?'url(#ef_gg)':nd.id==='cl_nut'?'url(#ef_gn)':nd.id==='cl_wsh'?'url(#ef_gw)':nd.id==='cl_hlt'?'url(#ef_gh)':nd.id==='cl_food'?'url(#ef_gf)':null);
+    }
+    // moons
+    if(nd.sectors?.length>0){
+      moons(nd.sectors,r).forEach(m=>{ng.append('circle').attr('cx',m.x).attr('cy',m.y).attr('r',m.r).attr('fill',m.color).attr('opacity',0.9).attr('pointer-events','none');});
+    }
+    // label — inside node
+    ng.append('text').attr('text-anchor','middle').attr('dominant-baseline','central').attr('y',-1)
+      .attr('font-size',isCenter?10:nd.type==='cluster'?9.5:8.5)
+      .attr('font-weight',isCenter||nd.type==='cluster'?'500':'400')
+      .attr('font-family','Inter,sans-serif')
+      .attr('fill',isCenter?'#fff':nd.type==='cluster'?'rgba(255,255,255,0.92)':'rgba(255,255,255,0.75)')
+      .attr('pointer-events','none')
+      .text(nd.name.length>14?nd.name.split(' ').slice(0,2).join(' '):nd.name);
+    // score badge (not center, not cluster, not abc)
+    if(!isCenter&&nd.type!=='cluster'&&nd.type!=='abc'){
+      ng.append('circle').attr('cx',r*0.72).attr('cy',-r*0.72).attr('r',7.5).attr('fill',ss(nd.score)).attr('stroke','#080c11').attr('stroke-width',1.5).attr('pointer-events','none');
+      ng.append('text').attr('x',r*0.72).attr('y',-r*0.72).attr('text-anchor','middle').attr('dominant-baseline','central').attr('font-size',6.5).attr('font-weight','500').attr('font-family','IBM Plex Mono,monospace').attr('fill','#fff').attr('pointer-events','none').text(nd.score);
+    }
+    // type label below node (not center)
+    if(!isCenter){
+      ng.append('text').attr('text-anchor','middle').attr('y',r+14)
+        .attr('font-size',8).attr('font-family','IBM Plex Mono,monospace')
+        .attr('fill',TC[nd.type]||'rgba(255,255,255,0.3)').attr('opacity',0.55).attr('pointer-events','none')
+        .text(TL[nd.type]||'');
+    }
+    // fade in
+    ng.transition().duration(350).delay(isCenter?0:150).style('opacity',1);
+    return ng;
+  }
+
+  const nodesG=g.append('g');
+  // draw neighbors first (so center is on top)
+  neighbors.forEach(nd=>{
+    const ng=drawNode(nodesG,nd,false);
+    // click neighbor → focus that node
+    ng.on('click',(e)=>{e.stopPropagation();focusNode(nd.id);});
+    // hover
+    const tip=document.getElementById('tooltip');
+    ng.on('mouseover',(e)=>{
+      tip.innerHTML=`<strong>${nd.name}</strong><br>${TL[nd.type]}${nd.staff?' · '+nd.staff+' staff':''}<br><span style="color:rgba(255,255,255,0.3)">${(NBR.get(nd.id)||new Set()).size} total connections</span>`;
+      tip.style.display='block';
+    }).on('mousemove',e=>{tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}).on('mouseout',()=>{tip.style.display='none';});
+  });
+  // center node
+  drawNode(nodesG,center,true);
+
+  // click background → reset
+  svg.on('click',()=>resetView());
+
+  // reset zoom state so resetView re-renders cleanly
+  zB=d3.zoom().scaleExtent([0.3,3]).on('zoom',e=>g.attr('transform',e.transform));
+  svg.call(zB);
+  svgR=svg;
+
+  document.getElementById('t-ctx').textContent=`// ${center.name.toUpperCase()}`;
 }
 function resetView(){
-  focusedId=null;document.getElementById('t-reset').classList.remove('visible');
+  focusedId=null;
+  document.getElementById('t-reset').classList.remove('visible');
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('tooltip').style.display='none';
-  d3.selectAll('line.rl').transition().duration(300).style('opacity',0);
-  d3.selectAll('g.ng').transition().duration(300).style('opacity',1);
-  d3.selectAll('g.ag').transition().duration(300).style('opacity',abcVisible?1:0);
-  svgR.transition().duration(500).call(zB.transform,d3.zoomIdentity);
   document.getElementById('t-ctx').textContent='// SOMALI REGION · ETHIOPIA · 2025';
+  render();
 }
 
 function openSidebar(id){
