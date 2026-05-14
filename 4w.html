@@ -357,7 +357,7 @@ a{color:inherit}
 
   // ── TOOLTIP ───────────────────────────────────────────────
   function makeTooltip(feature){
-    var pcode=feature.properties.pcode||"";
+    var pcode=feature.properties.adm3_pcode||feature.properties.pcode||"";
     var row=aggByPcode.get(pcode);
     var wname=n(row&&row.Woreda)||"Unknown";
     var region=n(row&&row.Region)||"—";
@@ -374,13 +374,13 @@ a{color:inherit}
     if(adm3FocusLayer)map.removeLayer(adm3FocusLayer);
     adm3AllLayer=L.geoJSON(GEO_ADM3,{style:{pane:"adm3bg",color:"#111827",weight:0.6,opacity:0.25,fillOpacity:0.04,fillColor:"#ffffff"}}).addTo(map);
     adm3FocusLayer=L.geoJSON(GEO_ADM3,{
-      filter:function(f){return focusPcodes.has(f.properties.pcode);},
-      style:function(f){var row=aggByPcode.get(f.properties.pcode);var nc=safeNum(row&&row.ngo_count);return{pane:"adm3focus",color:"#111827",weight:0.9,opacity:0.85,fillOpacity:0.85,fillColor:ngoColor(nc)};},
+      filter:function(f){return focusPcodes.has(f.properties.adm3_pcode||f.properties.pcode);},
+      style:function(f){var row=aggByPcode.get(f.properties.adm3_pcode||f.properties.pcode);var nc=safeNum(row&&row.ngo_count);return{pane:"adm3focus",color:"#111827",weight:0.9,opacity:0.85,fillOpacity:0.85,fillColor:ngoColor(nc)};},
       onEachFeature:function(f,layer){
         layer.bindTooltip(makeTooltip(f),{sticky:true,direction:"auto"});
         layer.on("click",function(){
           try{var b=layer.getBounds();if(b&&b.isValid())map.fitBounds(b,{padding:[18,18]});}catch(e){}
-          var pcode=f.properties.pcode;
+          var pcode=f.properties.adm3_pcode||f.properties.pcode;
           lastSelectedPcode=pcode;
           renderDetails(pcode);
         });
