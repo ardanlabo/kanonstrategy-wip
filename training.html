@@ -2,342 +2,480 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Fluency · Kanon Strategy</title>
+<meta name="robots" content="noindex, nofollow">
+<title>AI Fluency — Kanon Strategy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --void:#0D1117;--void2:#131920;--navy:#0F2952;--gold:#C9A84C;--gold-d:#A8863A;
-  --parch:#F7F6F2;--ink:#1A1C1E;--mid:#3D4149;--muted:#6B7280;--rule:#C4C7CE;
-  --serif:'IBM Plex Serif',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:var(--sans);background:var(--void);color:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
-a{text-decoration:none;color:inherit;}
-
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;background:var(--void);border-bottom:0.5px solid rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:space-between;padding:0 64px;}
-.tl{display:flex;align-items:center;gap:12px;}
-.t-sep{width:1px;height:16px;background:rgba(201,168,76,0.25);}
-.t-brand{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:0.18em;color:rgba(255,255,255,0.85);}
-.t-product{font-family:var(--serif);font-weight:300;font-size:13px;color:rgba(255,255,255,0.4);}
-.t-back{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);transition:color 0.2s;}
-.t-back:hover{color:rgba(201,168,76,0.7);}
-
-/* HERO */
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:end;padding-top:52px;}
-.hero-left{padding:80px 64px;border-right:0.5px solid rgba(255,255,255,0.06);}
-.hero-right{padding:80px 64px;display:flex;flex-direction:column;justify-content:flex-end;gap:0;}
-.hero-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(201,168,76,0.5);margin-bottom:28px;}
-.hero-title{font-family:var(--serif);font-weight:300;font-size:clamp(36px,4.5vw,60px);line-height:1.1;color:#fff;margin-bottom:28px;}
-.hero-title em{font-style:italic;color:rgba(255,255,255,0.4);}
-.hero-rule{width:40px;height:1px;background:var(--gold);margin-bottom:28px;}
-.hero-sub{font-family:var(--sans);font-weight:300;font-size:14px;line-height:1.85;color:rgba(255,255,255,0.35);margin-bottom:40px;}
-.hero-sub strong{color:rgba(255,255,255,0.6);font-weight:400;}
-.btn-primary{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:12px 24px;transition:all 0.2s;display:inline-block;}
-.btn-primary:hover{background:rgba(201,168,76,0.08);border-color:var(--gold);}
-
-.hero-quote-block{padding-bottom:40px;border-bottom:0.5px solid rgba(255,255,255,0.06);margin-bottom:40px;}
-.hero-quote{font-family:var(--serif);font-weight:300;font-style:italic;font-size:16px;line-height:1.75;color:rgba(255,255,255,0.32);margin-bottom:14px;}
-.hero-quote-src{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:rgba(255,255,255,0.15);text-transform:uppercase;}
-.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);}
-.hs-cell{background:var(--void);padding:22px 18px;}
-.hs-num{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--gold);line-height:1;margin-bottom:5px;}
-.hs-lbl{font-family:var(--sans);font-weight:300;font-size:10px;color:rgba(255,255,255,0.22);line-height:1.5;}
-
-/* PROBLEM */
-.problem{display:grid;grid-template-columns:1fr 1fr;border-top:0.5px solid rgba(255,255,255,0.06);}
-.problem-left{padding:80px 64px;background:var(--void2);}
-.problem-right{padding:80px 64px;background:var(--void);border-left:0.5px solid rgba(255,255,255,0.06);}
-.s-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(201,168,76,0.4);margin-bottom:14px;}
-.s-title{font-family:var(--serif);font-weight:300;font-size:clamp(24px,3vw,36px);line-height:1.2;color:#fff;margin-bottom:18px;}
-.s-rule{width:28px;height:1px;background:var(--gold);margin-bottom:22px;}
-.s-body{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.9;color:rgba(255,255,255,0.35);}
-.s-body strong{color:rgba(255,255,255,0.6);font-weight:400;}
-.p-list{display:flex;flex-direction:column;gap:0;margin-top:8px;}
-.p-item{padding:16px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;gap:14px;align-items:flex-start;}
-.p-item:first-child{border-top:0.5px solid rgba(255,255,255,0.05);}
-.p-mark{font-family:var(--mono);font-size:10px;color:rgba(201,168,76,0.4);flex-shrink:0;padding-top:1px;}
-.p-text{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.65;color:rgba(255,255,255,0.32);}
-.p-text strong{color:rgba(255,255,255,0.55);font-weight:400;}
-
-/* WHAT */
-.what{padding:100px 64px;border-top:0.5px solid rgba(255,255,255,0.06);}
-.what-header{max-width:580px;margin-bottom:56px;}
-.what-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.05);}
-.wc{background:var(--void2);padding:36px 30px;position:relative;overflow:hidden;}
-.wc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
-.wc:hover::before{transform:scaleX(1);}
-.wc-num{font-family:var(--mono);font-size:30px;font-weight:500;color:rgba(201,168,76,0.1);line-height:1;margin-bottom:18px;}
-.wc-title{font-family:var(--serif);font-weight:300;font-size:17px;color:#fff;margin-bottom:10px;line-height:1.3;}
-.wc-body{font-family:var(--sans);font-weight:300;font-size:11px;line-height:1.8;color:rgba(255,255,255,0.28);}
-.wc-body strong{color:rgba(255,255,255,0.5);font-weight:400;}
-
-/* HOW */
-.how{display:grid;grid-template-columns:300px 1fr;border-top:0.5px solid rgba(255,255,255,0.06);}
-.how-left{padding:80px 48px;background:var(--void2);border-right:0.5px solid rgba(255,255,255,0.06);}
-.how-right{padding:80px 64px;}
-.how-specs{margin-top:28px;display:flex;flex-direction:column;gap:0;}
-.how-spec{padding:10px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;gap:10px;}
-.how-spec-l{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,0.18);letter-spacing:0.08em;text-transform:uppercase;}
-.how-spec-v{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.4);text-align:right;}
-.how-steps{display:flex;flex-direction:column;gap:0;}
-.how-step{padding:26px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:grid;grid-template-columns:72px 1fr;gap:16px;}
-.how-step:first-child{border-top:0.5px solid rgba(255,255,255,0.05);}
-.hs-wk{font-family:var(--mono);font-size:10px;color:rgba(201,168,76,0.4);padding-top:3px;}
-.hs-title{font-family:var(--sans);font-weight:500;font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:5px;}
-.hs-desc{font-family:var(--sans);font-weight:300;font-size:11px;line-height:1.7;color:rgba(255,255,255,0.28);}
-
-/* NOT FOR EVERYONE */
-.nfe{padding:80px 64px;background:var(--void2);border-top:0.5px solid rgba(255,255,255,0.06);}
-.nfe-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px;}
-.nfe-col-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding-bottom:14px;border-bottom:0.5px solid rgba(255,255,255,0.08);margin-bottom:20px;}
-.nfe-col-lbl--y{color:#22c55e;}
-.nfe-col-lbl--n{color:rgba(255,255,255,0.18);}
-.nfe-items{display:flex;flex-direction:column;gap:10px;}
-.nfe-item{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.65;display:flex;gap:12px;}
-.nfe-item::before{font-family:var(--mono);font-size:10px;flex-shrink:0;margin-top:1px;}
-.nfe-y::before{content:'✓';color:rgba(34,197,94,0.6);}
-.nfe-n::before{content:'✕';color:rgba(255,255,255,0.12);}
-.nfe-y{color:rgba(255,255,255,0.42);}
-.nfe-n{color:rgba(255,255,255,0.18);}
-
-/* CTA */
-.cta{padding:100px 64px;border-top:0.5px solid rgba(201,168,76,0.08);display:grid;grid-template-columns:1fr auto;gap:64px;align-items:center;}
-.cta-title{font-family:var(--serif);font-weight:300;font-size:clamp(28px,4vw,50px);line-height:1.15;color:#fff;margin-bottom:14px;}
-.cta-sub{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.7;color:rgba(255,255,255,0.28);max-width:460px;}
-.cta-right{display:flex;flex-direction:column;gap:12px;align-items:flex-end;}
-.cta-email{font-family:var(--mono);font-size:12px;color:rgba(255,255,255,0.25);transition:color 0.2s;}
-.cta-email:hover{color:var(--gold);}
-
-footer{padding:28px 64px;border-top:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;}
-.f-copy{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.15);}
-.f-link{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.2);transition:color 0.2s;}
-.f-link:hover{color:rgba(255,255,255,0.5);}
-
-@media(max-width:1000px){
-  .topbar,.what,.nfe,.cta,footer{padding-left:24px;padding-right:24px;}
-  .hero,.problem,.how{grid-template-columns:1fr;}
-  .hero-left,.hero-right,.problem-left,.problem-right,.how-left,.how-right{padding:48px 24px;}
-  .hero-right,.problem-right,.how-right{border-left:none;border-top:0.5px solid rgba(255,255,255,0.06);}
-  .what-grid{grid-template-columns:1fr;}
-  .nfe-grid{grid-template-columns:1fr;gap:40px;}
-  .cta{grid-template-columns:1fr;gap:32px;}
-  .cta-right{align-items:flex-start;}
-}
-
-  /* ── MOBILE ── */
-  @media(max-width:640px){
-    .hero{grid-template-columns:1fr;padding-top:52px;}
-    .hero-left,.hero-right{padding:48px 24px;}
-    .hero-right{border-left:none;border-top:0.5px solid rgba(255,255,255,0.06);}
-    .hero-stats{grid-template-columns:1fr 1fr;}
-    .problem{grid-template-columns:1fr;}
-    .problem-right{border-left:none;border-top:0.5px solid rgba(255,255,255,0.06);}
-    .problem-left,.problem-right{padding:48px 24px;}
-    .what{padding:64px 24px;}
-    .what-grid{grid-template-columns:1fr;}
-    .how{grid-template-columns:1fr;}
-    .how-left,.how-right{padding:48px 24px;}
-    .how-right{border-left:none;border-top:0.5px solid rgba(255,255,255,0.06);}
-    .nfe{padding:64px 24px;}
-    .nfe-grid{grid-template-columns:1fr;gap:32px;}
-    .cta{padding:64px 24px;grid-template-columns:1fr;gap:24px;}
-    .cta-right{align-items:flex-start;}
-    footer{padding:24px;}
-    .topbar{padding:0 16px;}
+  :root {
+    --void:#0D1117;--void2:#131920;--navy:#0F2952;--gold:#C9A84C;--gold-d:#A8863A;
+    --parch:#F7F6F2;--warm:#EDECEA;--ink:#1A1C1E;--mid:#3D4149;--muted:#6B7280;--rule:#C4C7CE;
+    --serif:'IBM Plex Serif',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace;
   }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--parch);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  a{text-decoration:none;color:inherit;}
 
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--void);border-bottom:0.5px solid rgba(201,168,76,0.15);padding:0 64px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+  .nav-logo{display:flex;align-items:center;gap:14px;}
+  .nav-sep{width:1px;height:20px;background:rgba(201,168,76,0.3);}
+  .nav-wordmark{display:flex;flex-direction:column;gap:1px;}
+  .nav-wordmark-name{font-family:var(--sans);font-weight:300;font-size:13px;letter-spacing:0.22em;color:#fff;}
+  .nav-wordmark-sub{font-family:var(--sans);font-weight:400;font-size:7.5px;letter-spacing:0.42em;color:var(--muted);text-transform:uppercase;}
+  .nav-links{display:flex;gap:36px;align-items:center;}
+  .nav-link{font-family:var(--sans);font-weight:400;font-size:12px;letter-spacing:0.06em;color:rgba(255,255,255,0.45);transition:color 0.2s;}
+  .nav-link:hover{color:rgba(255,255,255,0.85);}
+  .nav-cta{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);border:0.5px solid rgba(201,168,76,0.4);padding:7px 18px;transition:all 0.2s;}
+  .nav-cta:hover{background:rgba(201,168,76,0.08);}
+
+  /* HEADER */
+  .page-header{padding:160px 64px 100px;background:var(--parch);border-bottom:0.5px solid var(--rule);display:grid;grid-template-columns:1fr 520px;gap:80px;align-items:end;}
+  .header-label{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--gold-d);text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:12px;}
+  .header-label::before{content:'';display:block;width:32px;height:0.5px;background:var(--gold-d);}
+  .page-headline{font-family:var(--serif);font-weight:300;font-size:clamp(38px,5vw,68px);line-height:1.05;letter-spacing:-0.01em;color:var(--navy);}
+  .page-headline .ghost{color:var(--rule);font-style:italic;}
+  .page-headline .accent{color:var(--navy);font-style:italic;}
+  .header-standfirst{font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.8;color:var(--mid);margin-bottom:36px;border-left:1.5px solid var(--gold);padding-left:24px;}
+  .header-meta{display:flex;gap:40px;flex-wrap:wrap;}
+  .header-meta-label{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-d);margin-bottom:5px;}
+  .header-meta-value{font-family:var(--sans);font-weight:400;font-size:13px;color:var(--ink);}
+
+  /* PROBLEM */
+  .problem{background:var(--void);padding:120px 64px;position:relative;overflow:hidden;}
+  .problem-grid{display:grid;grid-template-columns:480px 1fr;gap:100px;align-items:start;}
+  .problem-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--gold-d);margin-bottom:32px;}
+  .problem-statement{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.8vw,36px);line-height:1.45;color:rgba(255,255,255,0.88);}
+  .problem-statement strong{color:var(--gold);font-weight:400;}
+  .problem-right{padding-top:48px;}
+  .problem-items{display:flex;flex-direction:column;}
+  .problem-item{padding:26px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:40px 1fr;gap:20px;}
+  .problem-item:first-child{border-top:0.5px solid rgba(255,255,255,0.06);}
+  .problem-item-num{font-family:var(--mono);font-size:10px;color:rgba(201,168,76,0.4);padding-top:3px;}
+  .problem-item-text{font-family:var(--sans);font-weight:300;font-size:14px;line-height:1.75;color:rgba(255,255,255,0.38);}
+  .problem-item-text strong{color:rgba(255,255,255,0.75);font-weight:400;}
+  .problem-bg-num{position:absolute;right:64px;bottom:-20px;font-family:var(--serif);font-size:260px;font-weight:300;line-height:1;color:rgba(201,168,76,0.04);pointer-events:none;user-select:none;letter-spacing:-0.05em;}
+
+  /* FORMATS */
+  .formats{padding:120px 64px;background:var(--parch);border-bottom:0.5px solid var(--rule);}
+  .formats-header{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-bottom:80px;align-items:end;}
+  .formats-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--gold-d);margin-bottom:20px;}
+  .formats-headline{font-family:var(--serif);font-weight:300;font-size:clamp(26px,3vw,42px);line-height:1.2;color:var(--navy);}
+  .formats-intro{font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.8;color:var(--mid);align-self:end;}
+  .formats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);}
+  .format-card{background:var(--parch);padding:44px 36px;border-top:2px solid transparent;transition:border-color 0.25s,background 0.2s;}
+  .format-card:hover{border-top-color:var(--gold);background:var(--warm);}
+  .format-spec{font-family:var(--mono);font-size:9.5px;color:var(--gold-d);letter-spacing:0.1em;margin-bottom:16px;}
+  .format-name{font-family:var(--serif);font-weight:300;font-size:20px;line-height:1.25;color:var(--navy);margin-bottom:14px;}
+  .format-body{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.75;color:var(--muted);}
+  .format-deliverable{margin-top:20px;padding-top:20px;border-top:0.5px solid var(--rule);font-family:var(--mono);font-size:9px;color:var(--gold-d);letter-spacing:0.08em;}
+
+  /* PROGRAMME */
+  .programme{background:var(--void);padding:120px 64px;border-top:0.5px solid rgba(201,168,76,0.08);}
+  .programme-top{display:grid;grid-template-columns:340px 1fr;gap:80px;align-items:start;}
+  .programme-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--gold-d);margin-bottom:20px;}
+  .programme-headline{font-family:var(--serif);font-weight:300;font-size:clamp(26px,3vw,40px);line-height:1.2;color:#fff;margin-bottom:20px;}
+  .programme-body{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.85;color:rgba(255,255,255,0.35);}
+  .programme-specs{display:flex;flex-direction:column;gap:0;margin-top:32px;}
+  .spec-row{padding:10px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;gap:16px;}
+  .spec-label{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.18);}
+  .spec-val{font-family:var(--mono);font-size:9.5px;color:rgba(255,255,255,0.45);text-align:right;}
+  .programme-steps{display:flex;flex-direction:column;}
+  .prog-step{padding:28px 0;border-bottom:0.5px solid rgba(255,255,255,0.05);display:grid;grid-template-columns:88px 1fr;gap:20px;}
+  .prog-step:first-child{border-top:0.5px solid rgba(255,255,255,0.05);}
+  .prog-wk{font-family:var(--mono);font-size:10px;color:rgba(201,168,76,0.45);padding-top:3px;}
+  .prog-title{font-family:var(--sans);font-weight:500;font-size:13px;color:rgba(255,255,255,0.72);margin-bottom:6px;}
+  .prog-desc{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.75;color:rgba(255,255,255,0.3);}
+  .prog-desc strong{color:rgba(255,255,255,0.55);font-weight:400;}
+
+  /* MODULES */
+  .modules{padding:120px 64px;background:var(--warm);border-bottom:0.5px solid var(--rule);}
+  .modules-header{margin-bottom:64px;}
+  .modules-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--gold-d);margin-bottom:16px;}
+  .modules-headline{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.8vw,38px);line-height:1.2;color:var(--navy);max-width:600px;}
+  .modules-note{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.7;color:var(--muted);max-width:520px;margin-top:16px;font-style:italic;}
+  .modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);}
+  .module{background:var(--parch);padding:40px 32px;transition:background 0.2s;}
+  .module:hover{background:#fff;}
+  .module-code{font-family:var(--mono);font-size:9px;color:var(--gold-d);letter-spacing:0.1em;margin-bottom:14px;}
+  .module-title{font-family:var(--serif);font-weight:300;font-size:17px;line-height:1.3;color:var(--navy);margin-bottom:10px;}
+  .module-body{font-family:var(--sans);font-weight:300;font-size:12px;line-height:1.75;color:var(--muted);}
+
+  /* FOR WHOM */
+  .for-whom{padding:120px 64px;background:var(--parch);border-bottom:0.5px solid var(--rule);}
+  .for-grid{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start;}
+  .for-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--gold-d);margin-bottom:24px;}
+  .for-headline{font-family:var(--serif);font-weight:300;font-size:clamp(26px,3.2vw,44px);line-height:1.15;color:var(--navy);margin-bottom:28px;}
+  .for-body{font-family:var(--sans);font-weight:300;font-size:14px;line-height:1.85;color:var(--mid);}
+  .for-rows{display:flex;flex-direction:column;padding-top:8px;}
+  .for-row{padding:22px 0;border-bottom:0.5px solid var(--rule);display:grid;grid-template-columns:180px 1fr;gap:28px;}
+  .for-row:first-child{border-top:0.5px solid var(--rule);}
+  .for-role{font-family:var(--sans);font-weight:500;font-size:13px;color:var(--ink);padding-top:2px;}
+  .for-reason{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.65;color:var(--muted);}
+
+  /* NOT THIS */
+  .not-this{background:var(--navy);padding:100px 64px;}
+  .not-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:rgba(201,168,76,0.55);margin-bottom:48px;}
+  .not-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,0.08);}
+  .not-card{padding:44px 40px;}
+  .not-card.no{background:var(--navy);}
+  .not-card.yes{background:rgba(15,41,82,0.7);}
+  .not-card-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:18px;}
+  .not-card-label.no{color:rgba(255,255,255,0.2);}
+  .not-card-label.yes{color:rgba(201,168,76,0.65);}
+  .not-card-title{font-family:var(--serif);font-weight:300;font-size:17px;line-height:1.4;margin-bottom:14px;}
+  .not-card.no .not-card-title{color:rgba(255,255,255,0.3);}
+  .not-card.yes .not-card-title{color:rgba(255,255,255,0.88);}
+  .not-card-text{font-family:var(--sans);font-weight:300;font-size:13px;line-height:1.75;}
+  .not-card.no .not-card-text{color:rgba(255,255,255,0.2);}
+  .not-card.yes .not-card-text{color:rgba(255,255,255,0.42);}
+
+  /* CTA */
+  .cta{background:var(--parch);padding:120px 64px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;border-top:0.5px solid var(--rule);}
+  .cta-label{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--gold-d);margin-bottom:24px;}
+  .cta-headline{font-family:var(--serif);font-weight:300;font-size:clamp(28px,3.5vw,48px);line-height:1.1;color:var(--navy);margin-bottom:20px;}
+  .cta-rule{width:32px;height:1.5px;background:var(--gold);margin-bottom:24px;}
+  .cta-body{font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.8;color:var(--mid);}
+  .cta-right{display:flex;flex-direction:column;gap:20px;align-items:flex-start;}
+  .cta-email{font-family:var(--mono);font-size:17px;color:var(--navy);border-bottom:0.5px solid rgba(15,41,82,0.25);padding-bottom:6px;transition:color 0.2s,border-color 0.2s;}
+  .cta-email:hover{color:var(--gold-d);border-color:var(--gold-d);}
+  .cta-note{font-family:var(--sans);font-weight:300;font-size:12px;color:var(--muted);line-height:1.65;max-width:320px;}
+
+  footer{background:var(--void);padding:32px 64px;border-top:0.5px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;}
+  .footer-copy{font-family:var(--sans);font-size:11px;font-weight:300;color:rgba(255,255,255,0.2);}
+  .footer-links{display:flex;gap:28px;}
+  .footer-link{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.25);transition:color 0.2s;}
+  .footer-link:hover{color:rgba(255,255,255,0.55);}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.75s ease,transform 0.75s ease;}
+  .reveal.visible{opacity:1;transform:none;}
+
+  @media(max-width:960px){
+    nav{padding:0 24px;}
+    .page-header{grid-template-columns:1fr;gap:48px;padding:120px 24px 80px;}
+    .problem,.formats,.programme,.modules,.for-whom,.not-this,.cta{padding-left:24px;padding-right:24px;}
+    .problem-grid{grid-template-columns:1fr;gap:56px;}
+    .problem-bg-num{display:none;}
+    .formats-header{grid-template-columns:1fr;gap:32px;}
+    .formats-grid,.modules-grid,.not-grid{grid-template-columns:1fr;}
+    .programme-top{grid-template-columns:1fr;gap:48px;}
+    .for-grid{grid-template-columns:1fr;gap:56px;}
+    .cta{grid-template-columns:1fr;gap:48px;}
+    .nav-links{display:none;}
+    footer{padding:24px;flex-direction:column;gap:12px;}
+  }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="tl">
-    <svg width="20" height="20" viewBox="0 0 120 120" fill="none">
-      <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2.5"/>
-      <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="2"/>
-      <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="2"/>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="50" stroke="#C9A84C" stroke-width="2"/>
+      <circle cx="60" cy="60" r="32" stroke="#C9A84C" stroke-width="1.8"/>
+      <circle cx="60" cy="60" r="16" stroke="#C9A84C" stroke-width="1.8"/>
       <circle cx="60" cy="60" r="4" fill="#C9A84C"/>
-      <circle cx="60" cy="10" r="5" fill="#C9A84C"/>
-      <circle cx="103.3" cy="85" r="5" fill="#C9A84C"/>
-      <circle cx="16.7" cy="85" r="5" fill="#C9A84C"/>
+      <circle cx="60" cy="10" r="5.5" fill="#C9A84C"/>
+      <circle cx="103.3" cy="85" r="5.5" fill="#C9A84C"/>
+      <circle cx="16.7" cy="85" r="5.5" fill="#C9A84C"/>
+      <circle cx="87.7" cy="44" r="4" fill="#C9A84C"/>
+      <circle cx="60" cy="92" r="4" fill="#C9A84C"/>
+      <circle cx="32.3" cy="44" r="4" fill="#C9A84C"/>
+      <circle cx="60" cy="44" r="2.8" fill="#C9A84C"/>
+      <circle cx="73.9" cy="68" r="2.8" fill="#C9A84C"/>
+      <circle cx="46.1" cy="68" r="2.8" fill="#C9A84C"/>
     </svg>
-    <div class="t-sep"></div>
-    <span class="t-brand">KANON</span>
-    <div class="t-sep"></div>
-    <span class="t-product">AI Fluency</span>
+    <div class="nav-sep"></div>
+    <div class="nav-wordmark">
+      <span class="nav-wordmark-name">KANON</span>
+      <span class="nav-wordmark-sub">Strategy</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="work.html" class="nav-link">Work</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="about.html#contact" class="nav-cta">Get in touch</a>
   </div>
-  <a href="index.html" class="t-back">← Back</a>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="reveal">
+    <p class="header-label">AI capacity building</p>
+    <h1 class="page-headline">
+      Your teams are already<br>
+      using AI.<br>
+      <span class="ghost">Without</span><br>
+      <span class="accent">a framework.</span>
+    </h1>
+  </div>
+  <div class="header-right reveal">
+    <p class="header-standfirst">The gap is not technological. It is methodological. Staff experiment individually, without shared protocols, without understanding what happens to the data they feed into external tools. This programme builds the framework your organisation is missing. The training is tailor-made for your actual workflows, delivered at your pace.</p>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <div class="header-meta-label">Formats</div>
+        <div class="header-meta-value">Half-day to 10-week cycle</div>
+      </div>
+      <div class="header-meta-item">
+        <div class="header-meta-label">Delivery</div>
+        <div class="header-meta-value">On-site · EN · FR</div>
+      </div>
+      <div class="header-meta-item">
+        <div class="header-meta-label">Context</div>
+        <div class="header-meta-value">Humanitarian · Development</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-eyebrow">Capacity building · Horn of Africa</p>
-    <h1 class="hero-title">Your teams are already<br>using AI. <em>Without a framework.</em></h1>
-    <div class="hero-rule"></div>
-    <p class="hero-sub">Most humanitarian organisations have no shared methodology for AI use. Staff experiment individually. Data protection rules are ignored or unknown. Outputs are unverifiable. <strong>The gap is not technological : it is methodological.</strong> This programme builds the framework your organisation is missing, department by department, from your actual files and workflows.</p>
-    <a href="mailto:andre@kanonstrategy.com" class="btn-primary">Discuss your context →</a>
-  </div>
-  <div class="hero-right">
-    <div class="hero-quote-block">
-      <p class="hero-quote">"A finance module built on generic templates wastes three hours. A finance module built on your actual reporting formats changes how the team works the following week."</p>
-      <span class="hero-quote-src">Kanon · Programme methodology</span>
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-bg-num">gap</div>
+  <div class="problem-grid">
+    <div class="reveal">
+      <p class="problem-label">// the real problem</p>
+      <p class="problem-statement">It's not that your teams don't use AI. They do. Individually, inconsistently, and often without knowing <strong>what happens to the data they feed into external tools.</strong></p>
     </div>
-    <div class="hero-stats">
-      <div class="hs-cell"><div class="hs-num">10</div><div class="hs-lbl">Weeks from go-ahead to a fully equipped, AI-literate team</div></div>
-      <div class="hs-cell"><div class="hs-num">6</div><div class="hs-lbl">Department-specific prompt libraries, transferred at handover</div></div>
-      <div class="hs-cell"><div class="hs-num">0</div><div class="hs-lbl">Generic templates. Every session built from your actual documents</div></div>
-      <div class="hs-cell"><div class="hs-num">∞</div><div class="hs-lbl">Reuse. Everything produced belongs to you permanently</div></div>
+    <div class="problem-right reveal">
+      <div class="problem-items">
+        <div class="problem-item">
+          <div class="problem-item-num">01</div>
+          <p class="problem-item-text"><strong>Beneficiary data entered into ChatGPT</strong> because someone needed a quick translation and didn't think it through. No protocol. No shared understanding of where the data goes.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-item-num">02</div>
+          <p class="problem-item-text"><strong>Five staff writing the same sitrep five different ways.</strong> None using the prompt structure that would cut preparation time in half. The efficiency gains AI should deliver aren't materialising.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-item-num">03</div>
+          <p class="problem-item-text"><strong>AI outputs treated as final.</strong> Hallucinations in donor reports, incorrect figures in logistics summaries, no verification step. The tool is used. The methodology isn't.</p>
+        </div>
+        <div class="problem-item">
+          <div class="problem-item-num">04</div>
+          <p class="problem-item-text"><strong>Zero institutional memory.</strong> When the person who figured it out leaves, the knowledge leaves with them. No shared prompt library. No internal reference. Nothing that survives a staff rotation.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- PROBLEM -->
-<div class="problem">
-  <div class="problem-left">
-    <p class="s-eyebrow">The real problem</p>
-    <h2 class="s-title">It's not that your teams<br>don't use AI.</h2>
-    <div class="s-rule"></div>
-    <p class="s-body">They do. Individually, inconsistently, and often without understanding what happens to the data they feed into external tools. <strong>The risk isn't that AI is ignored : it is used without guardrails.</strong><br><br>At the same time, the efficiency gains that AI should deliver , hours reclaimed from repetitive drafting, reporting, consolidation, aren't materialising. Not because the tools don't work. Because the workflows haven't been restructured to use them properly.</p>
+<!-- FORMATS -->
+<section class="formats">
+  <div class="formats-header">
+    <div class="reveal">
+      <p class="formats-label">// engagement formats</p>
+      <h2 class="formats-headline">From a half-day introduction to a full organisational programme.</h2>
+    </div>
+    <p class="formats-intro reveal">Every format is built from your actual documents and workflows. It is not adapted from a generic catalogue. The depth of the engagement depends on what your organisation needs and what it is ready for.</p>
   </div>
-  <div class="problem-right">
-    <p class="s-eyebrow">What this looks like in practice</p>
-    <div class="p-list">
-      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>Beneficiary data entered into ChatGPT</strong> because someone needed a quick translation and didn't think it through.</p></div>
-      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>Five staff writing the same sitrep five different ways.</strong> None using the prompt structure that would cut the time in half.</p></div>
-      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>AI outputs treated as final</strong> : hallucinations in donor reports, incorrect figures in logistics summaries, no verification step.</p></div>
-      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>No shared language between departments.</strong> Finance uses one tool, programme another, coordination none. Zero cross-team learning.</p></div>
-      <div class="p-item"><span class="p-mark">·</span><p class="p-text"><strong>Zero institutional memory.</strong> When the person who figured it out leaves, the knowledge leaves with them.</p></div>
+  <div class="formats-grid">
+    <div class="format-card reveal">
+      <div class="format-spec">HALF-DAY · 3 HOURS · ALL STAFF</div>
+      <h3 class="format-name">Introduction session</h3>
+      <p class="format-body">A focused entry point for teams that want to understand what AI can and cannot do before committing to a full programme. AI landscape, hallucination risks, data protection basics and a first live exercise on your own documents.</p>
+      <div class="format-deliverable">Deliverable — shared data protocol draft</div>
+    </div>
+    <div class="format-card reveal">
+      <div class="format-spec">FULL DAY · 2×3H · TARGETED DEPARTMENT</div>
+      <h3 class="format-name">Department module</h3>
+      <p class="format-body">One department, one day. A 30-minute pre-session scoping with the department head defines which tasks to target — sitreps, financial summaries, procurement files, field reports. Every exercise runs on your actual files. The session produces a prompt library your team uses the following week.</p>
+      <div class="format-deliverable">Deliverable — department-specific prompt library</div>
+    </div>
+    <div class="format-card reveal">
+      <div class="format-spec">10-WEEK CYCLE · 9 SESSIONS · FULL ORGANISATION</div>
+      <h3 class="format-name">Full programme</h3>
+      <p class="format-body">Compliance before productivity. Foundation before specialisation. Two all-staff sessions establish the shared language and data protection baseline. Six department modules build the specific workflows. A closing session produces the institutional reference your organisation needs to sustain adoption independently.</p>
+      <div class="format-deliverable">Deliverables — 6 prompt libraries · AI reference guide · lessons learned</div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- WHAT -->
-<div class="what">
-  <div class="what-header">
-    <p class="s-eyebrow">What this programme produces</p>
-    <h2 class="s-title">Not a training.<br>A system.</h2>
-    <div class="s-rule"></div>
-    <p class="s-body" style="color:rgba(255,255,255,0.35)">Most AI trainings produce awareness. This programme produces infrastructure: the shared language, the department-specific toolkits, and the institutional protocols that make AI use consistent, safe and measurable.</p>
-  </div>
-  <div class="what-grid">
-    <div class="wc">
-      <div class="wc-num">01</div>
-      <h3 class="wc-title">A compliance baseline every department operates from</h3>
-      <p class="wc-body">Two all-staff foundation sessions define what AI can and cannot receive from your organisation: beneficiary data, health records, financial information, staff data. <strong>Everyone leaves with a department-level data protocol they drafted themselves.</strong> Not a policy from HQ. A working protocol, built during the session.</p>
-    </div>
-    <div class="wc">
-      <div class="wc-num">02</div>
-      <h3 class="wc-title">Six department-specific prompt libraries</h3>
-      <p class="wc-body">One module per department: Finance, Logistics, Procurement, Operations, Coordination, Technical. Content defined by a 30-minute pre-session scoping with each department head. <strong>Every prompt tested against your actual documents during the session.</strong> The library produced is yours at handover.</p>
-    </div>
-    <div class="wc">
-      <div class="wc-num">03</div>
-      <h3 class="wc-title">An AI reference guide your organisation actually uses</h3>
-      <p class="wc-body">The closing session consolidates everything built across ten weeks : what works, what does not, which practices to sustain, recommendations for a second cycle. <strong>Formatted for onboarding new staff.</strong> Not for a shelf.</p>
-    </div>
-  </div>
-</div>
-
-<!-- HOW -->
-<div class="how">
-  <div class="how-left">
-    <p class="s-eyebrow">Structure</p>
-    <h2 class="s-title" style="font-size:26px">Ten weeks.<br>Three layers.</h2>
-    <div class="s-rule"></div>
-    <p class="s-body" style="color:rgba(255,255,255,0.3);font-size:12px">The sequence is deliberate. Compliance before productivity. Foundation before specialisation. Shared language before department-specific toolkits.</p>
-    <div class="how-specs">
-      <div class="how-spec"><span class="how-spec-l">Duration</span><span class="how-spec-v">10 weeks</span></div>
-      <div class="how-spec"><span class="how-spec-l">Format</span><span class="how-spec-v">On-site · 3h sessions</span></div>
-      <div class="how-spec"><span class="how-spec-l">Foundation</span><span class="how-spec-v">2 sessions · all staff</span></div>
-      <div class="how-spec"><span class="how-spec-l">Modules</span><span class="how-spec-v">6 sessions · targeted</span></div>
-      <div class="how-spec"><span class="how-spec-l">Closing</span><span class="how-spec-v">1 session · all staff</span></div>
-      <div class="how-spec"><span class="how-spec-l">Language</span><span class="how-spec-v">EN · FR available</span></div>
-      <div class="how-spec"><span class="how-spec-l">Replication</span><span class="how-spec-v">Other missions on request</span></div>
-    </div>
-  </div>
-  <div class="how-right">
-    <div class="how-steps">
-      <div class="how-step">
-        <span class="hs-wk">Week 1</span>
-        <div>
-          <div class="hs-title">Pre-programme scoping</div>
-          <div class="hs-desc">30-minute intake with each department head. Pain points, highest-volume tasks, existing tool usage, data sensitivity profile. This defines session content. Not a generic curriculum.</div>
-        </div>
-      </div>
-      <div class="how-step">
-        <span class="hs-wk">Wk 2–3</span>
-        <div>
-          <div class="hs-title">Foundation curriculum, all staff</div>
-          <div class="hs-desc">Session 1: AI landscape, ethics, bias, hallucination risks, what changes in daily workflows and what doesn't. Session 2: data protection, GDPR obligations, what goes into an AI tool and what never does. Every participant leaves with a draft department data protocol.</div>
-        </div>
-      </div>
-      <div class="how-step">
-        <span class="hs-wk">Wk 4–9</span>
-        <div>
-          <div class="hs-title">Specialised modules, one per department</div>
-          <div class="hs-desc">Finance, Logistics, Procurement, Operations & Programme, Coordination, Technical. Each session targets the specific high-volume tasks identified in pre-module scoping. Every module produces one shared prompt library, tested against real department files.</div>
-        </div>
-      </div>
-      <div class="how-step">
-        <span class="hs-wk">Week 10</span>
-        <div>
-          <div class="hs-title">Closing session</div>
-          <div class="hs-desc">Cross-team lessons learned, updated AI reference guide, recommendations for next steps. No new tools introduced. The session produces the institutional memory the organisation needs to sustain adoption independently.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- NOT FOR EVERYONE -->
-<div class="nfe">
-  <p class="s-eyebrow">Before you contact us</p>
-  <h2 class="s-title" style="max-width:480px">This programme is built for specific contexts.</h2>
-  <div class="nfe-grid">
+<!-- 10-WEEK STRUCTURE -->
+<section class="programme">
+  <div class="programme-top reveal">
     <div>
-      <div class="nfe-col-lbl nfe-col-lbl--y">This is for you if</div>
-      <div class="nfe-items">
-        <div class="nfe-item nfe-y">Your teams carry high volumes of repetitive documentation: sitreps, 4W matrices, donor reports, procurement files.</div>
-        <div class="nfe-item nfe-y">You operate in a context where data sensitivity is a real operational concern, not a theoretical one.</div>
-        <div class="nfe-item nfe-y">You want institutional ownership, a programme your organisation runs independently after handover.</div>
-        <div class="nfe-item nfe-y">You're willing to dedicate 30 minutes per department head before the programme starts. That's what makes the content work.</div>
-        <div class="nfe-item nfe-y">You're based in Ethiopia or the Horn of Africa , or ready to host an on-site programme.</div>
+      <p class="programme-label">// 10-week programme</p>
+      <h2 class="programme-headline">Three layers. One sequence. Deliberate.</h2>
+      <p class="programme-body">The order is not arbitrary. Compliance before productivity. Shared language before department-specific toolkits. Foundation before specialisation. Each layer depends on the one before it.</p>
+      <div class="programme-specs">
+        <div class="spec-row"><span class="spec-label">Duration</span><span class="spec-val">10 weeks from go-ahead</span></div>
+        <div class="spec-row"><span class="spec-label">Session format</span><span class="spec-val">On-site · 3h each</span></div>
+        <div class="spec-row"><span class="spec-label">Foundation</span><span class="spec-val">2 sessions · all staff</span></div>
+        <div class="spec-row"><span class="spec-label">Modules</span><span class="spec-val">6 sessions · targeted</span></div>
+        <div class="spec-row"><span class="spec-label">Closing</span><span class="spec-val">1 session · all staff</span></div>
+        <div class="spec-row"><span class="spec-label">Language</span><span class="spec-val">EN · FR available</span></div>
+        <div class="spec-row"><span class="spec-label">Replication</span><span class="spec-val">Other missions on request</span></div>
       </div>
     </div>
-    <div>
-      <div class="nfe-col-lbl nfe-col-lbl--n">This is not for you if</div>
-      <div class="nfe-items">
-        <div class="nfe-item nfe-n">You're looking for a one-day awareness session with no follow-through.</div>
-        <div class="nfe-item nfe-n">You want a generic AI introduction that could run for any organisation in any sector.</div>
-        <div class="nfe-item nfe-n">You expect it to run without department head involvement. It can't.</div>
-        <div class="nfe-item nfe-n">You're looking for an ongoing managed service. Kanon builds and transfers. It does not manage.</div>
+    <div class="programme-steps">
+      <div class="prog-step">
+        <span class="prog-wk">Week 1</span>
+        <div>
+          <div class="prog-title">Pre-programme scoping</div>
+          <div class="prog-desc">A 30-minute intake with each department head. Pain points, highest-volume tasks, existing tool usage, data sensitivity profile. <strong>This is what makes the content work.</strong> Not a generic curriculum — a programme defined by your actual workflows.</div>
+        </div>
+      </div>
+      <div class="prog-step">
+        <span class="prog-wk">Wk 2–3</span>
+        <div>
+          <div class="prog-title">Foundation curriculum — all staff</div>
+          <div class="prog-desc">Session 1: AI landscape, ethics, bias, hallucination risks, what changes in daily workflows. Session 2: data protection, GDPR obligations, what goes into an AI tool and what never does. <strong>Every participant leaves with a draft data protocol for their department.</strong></div>
+        </div>
+      </div>
+      <div class="prog-step">
+        <span class="prog-wk">Wk 4–9</span>
+        <div>
+          <div class="prog-title">Specialised modules — one per department</div>
+          <div class="prog-desc">Finance, Logistics, Procurement, Operations &amp; Programme, Coordination, Technical. Each session targets the high-volume tasks identified in scoping. <strong>Every module produces one prompt library, tested against real department files, retained permanently by the organisation.</strong></div>
+        </div>
+      </div>
+      <div class="prog-step">
+        <span class="prog-wk">Week 10</span>
+        <div>
+          <div class="prog-title">Closing session — all staff</div>
+          <div class="prog-desc">No new tools introduced. Cross-team lessons learned, updated AI reference guide, recommendations for next steps. <strong>The institutional memory the organisation needs to sustain adoption independently — after handover.</strong></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- MODULES -->
+<section class="modules">
+  <div class="modules-header reveal">
+    <p class="modules-label">// specialised modules</p>
+    <h2 class="modules-headline">One session per department. Content defined by your workflows, not a standard curriculum.</h2>
+    <p class="modules-note">"A finance module built on generic templates wastes three hours. A finance module built on your actual reporting formats changes how the team works the following week."</p>
+  </div>
+  <div class="modules-grid">
+    <div class="module reveal">
+      <div class="module-code">S3 · FINANCE</div>
+      <h3 class="module-title">Finance</h3>
+      <p class="module-body">Budget tracking, financial reporting, variance analysis, donor financial templates. AI-assisted drafting of financial summaries and reconciliation notes without exposing sensitive figures to external tools.</p>
+    </div>
+    <div class="module reveal">
+      <div class="module-code">S4 · LOGISTICS</div>
+      <h3 class="module-title">Logistics</h3>
+      <p class="module-body">Waybills, stock reports, supply chain documentation, movement tracking summaries. Structuring and synthesising logistics data at speed — without manual reformatting.</p>
+    </div>
+    <div class="module reveal">
+      <div class="module-code">S5 · PROCUREMENT</div>
+      <h3 class="module-title">Procurement</h3>
+      <p class="module-body">RFQ drafting, supplier communication, procurement reports, compliance documentation. Accelerating the document cycle without losing audit-trail quality.</p>
+    </div>
+    <div class="module reveal">
+      <div class="module-code">S6 · OPERATIONS &amp; PROGRAMME</div>
+      <h3 class="module-title">Operations &amp; Programme</h3>
+      <p class="module-body">Sitreps, 5W/4W matrices, proposal narratives, indicator tracking, field reports. The highest documentation workload in any humanitarian mission — and the clearest gain from structured AI-assisted drafting.</p>
+    </div>
+    <div class="module reveal">
+      <div class="module-code">S7 · COORDINATION</div>
+      <h3 class="module-title">Coordination</h3>
+      <p class="module-body">Meeting prep, stakeholder briefs, talking points, inter-agency communication. Synthesising inputs from multiple partners into coherent, sendable outputs in minutes rather than hours.</p>
+    </div>
+    <div class="module reveal">
+      <div class="module-code">S8 · TECHNICAL</div>
+      <h3 class="module-title">Technical &amp; Expertise</h3>
+      <p class="module-body">Technical report drafting, literature synthesis, guidelines adaptation, training materials. For technical staff who carry significant writing workloads — and who can reclaim that time without sacrificing quality.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section class="for-whom">
+  <div class="for-grid">
+    <div class="reveal">
+      <p class="for-label">// who this is for</p>
+      <h2 class="for-headline">Organisations that carry high documentation volumes and operate where data sensitivity is a real concern.</h2>
+      <p class="for-body">This programme is not for tech teams. It is for the people who write the sitreps, manage the budgets, coordinate the supply chains — and who have been told AI is useful without ever being shown exactly how, and without anyone explaining what to do when it gets the data wrong.</p>
+    </div>
+    <div class="reveal">
+      <div class="for-rows">
+        <div class="for-row">
+          <div class="for-role">Head of Mission</div>
+          <div class="for-reason">Understand what AI adoption looks like in your mission before it happens informally. Build the governance framework that makes it consistent and safe across departments.</div>
+        </div>
+        <div class="for-row">
+          <div class="for-role">Programme Director</div>
+          <div class="for-reason">Cut sitrep and donor report preparation time without lowering quality. Spend the hours reclaimed on decisions that require human judgment.</div>
+        </div>
+        <div class="for-row">
+          <div class="for-role">MEAL Coordinator</div>
+          <div class="for-reason">Automate the structural work in assessment analysis, indicator tracking, and monitoring reports. Build prompt-based workflows your team can run independently.</div>
+        </div>
+        <div class="for-row">
+          <div class="for-role">Department Head</div>
+          <div class="for-reason">Identify the two or three tasks in your department's weekly workload where AI delivers an immediate, measurable gain — and build the protocol to use it consistently.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOT THIS -->
+<section class="not-this">
+  <p class="not-label reveal">// what this is not</p>
+  <div class="not-grid reveal">
+    <div class="not-card no">
+      <div class="not-card-label no">Not this</div>
+      <h3 class="not-card-title">A generic AI awareness session adapted for the humanitarian sector</h3>
+      <p class="not-card-text">Built for another audience and rebranded. No sitrep examples. No 4W files. No understanding of donor templates or beneficiary data obligations. Participants leave knowing what AI is. Not how their organisation should use it.</p>
+    </div>
+    <div class="not-card yes">
+      <div class="not-card-label yes">This</div>
+      <h3 class="not-card-title">A programme built from your files, your workflows, and your organisation's actual risk profile</h3>
+      <p class="not-card-text">Every exercise runs on documents your teams produce. Every prompt is tested against your reporting formats. Every module produces a deliverable your organisation owns permanently. Participants leave with a working toolkit, not a certificate.</p>
+    </div>
+    <div class="not-card no">
+      <div class="not-card-label no">Not this</div>
+      <h3 class="not-card-title">An ongoing managed service that creates dependency on an external provider</h3>
+      <p class="not-card-text">Kanon builds and transfers. It does not manage. The prompt libraries, the reference guide, the data protocols. Everything is yours at handover. The programme is designed to make itself unnecessary.</p>
+    </div>
+    <div class="not-card yes">
+      <div class="not-card-label yes">This</div>
+      <h3 class="not-card-title">Institutional ownership from day one</h3>
+      <p class="not-card-text">At the end of the programme, your organisation has the shared language, the department-specific toolkits, and the internal protocols to sustain AI adoption without external support. Staff rotations don't reset the clock. The knowledge stays.</p>
+    </div>
+  </div>
+</section>
 
 <!-- CTA -->
-<div class="cta">
-  <div>
-    <h2 class="cta-title">Tell me about your organisation.<br>We'll take it from there.</h2>
-    <p class="cta-sub">A short message describing your context: sector, team size, main documentation pain points. That is enough to scope a first conversation. No form. No pitch deck. A direct exchange.</p>
+<section class="cta">
+  <div class="reveal">
+    <p class="cta-label">// start here</p>
+    <h2 class="cta-headline">Tell me about your organisation. We'll take it from there.</h2>
+    <div class="cta-rule"></div>
+    <p class="cta-body">A short message: your sector, team size, and the documentation workload that costs your teams the most time. That's enough to scope a first conversation. No form. No pitch deck. A direct exchange about whether this programme fits your context.</p>
   </div>
-  <div class="cta-right">
-    <a href="mailto:andre@kanonstrategy.com" class="btn-primary">Get in touch →</a>
-    <a href="mailto:andre@kanonstrategy.com" class="cta-email">andre@kanonstrategy.com</a>
+  <div class="cta-right reveal">
+    <a href="mailto:contact@kanonstrategy.com" class="cta-email">contact@kanonstrategy.com</a>
+    <p class="cta-note">Response within 24 hours. For the 10-week programme, a scoping call with your operations or HR lead is the natural next step. For a half-day or department module, a brief exchange is usually enough.</p>
   </div>
-</div>
+</section>
 
 <footer>
-  <span class="f-copy">© 2026 Kanon Strategy FZE</span>
-  <a href="index.html" class="f-link">← Back to site</a>
+  <span class="footer-copy">© 2026 Kanon Strategy FZE</span>
+  <div class="footer-links">
+    <a href="work.html" class="footer-link">Work</a>
+    <a href="about.html" class="footer-link">About</a>
+    <a href="about.html#contact" class="footer-link">Contact</a>
+  </div>
 </footer>
 
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  reveals.forEach(el => io.observe(el));
+</script>
 </body>
 </html>
