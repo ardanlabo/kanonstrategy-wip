@@ -30,7 +30,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#080c11;color:#fff;-web
 .graph-wrap{flex:1;position:relative;overflow:hidden;}
 #svg{width:100%;height:100%;display:block;cursor:default;}
 /* LEGEND — white bg */
-.legend{position:absolute;top:14px;left:16px;background:#fff;border:1px solid #e5e7eb;padding:14px 16px;display:flex;flex-direction:column;gap:12px;z-index:10;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.12);min-width:168px;}
+.legend{position:absolute;bottom:38px;right:16px;background:#fff;border:1px solid #e5e7eb;padding:10px 14px;display:flex;flex-direction:row;gap:20px;z-index:10;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.12);}
 .lg-sec{display:flex;flex-direction:column;}
 .lg-title{font-family:'IBM Plex Mono',monospace;font-size:8px;color:#6b7280;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;border-bottom:1px solid #f3f4f6;padding-bottom:3px;}
 .lg-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
@@ -440,39 +440,86 @@ let W=0,H=0,focusedId=null,abcVisible=false,zB=null,svgR=null,mG=null;
 
 function nR(d){
   if(d.type==='abc') return 0;
-  if(d.type==='cluster') return 22;
-  if(d.id==='ocha') return 19;
-  if(d.type==='un') return 16;
-  if(d.score>=83) return 15;
-  if(d.score>=70) return 13;
-  return 12;
+  if(d.type==='cluster') return 28;
+  if(d.id==='ocha') return 24;
+  if(d.type==='un') return 20;
+  if(d.score>=83) return 18;
+  if(d.score>=70) return 16;
+  return 15;
 }
 function moons(sectors,r){
   const n=sectors.length; if(!n) return [];
-  const oR=r+12;
+  const oR=r+15;
   return sectors.map((s,i)=>{
     const frac=n===1?0.5:i/(n-1);
     const a=(frac*Math.PI*1.6)-Math.PI*0.8-Math.PI/2;
-    return{x:oR*Math.cos(a),y:oR*Math.sin(a),r:3.5,color:SC[s]||'#888'};
+    return{x:oR*Math.cos(a),y:oR*Math.sin(a),r:5,color:SC[s]||'#888'};
   });
 }
 function placeNodes(W,H){
-  const PAD=50;
-  function b(z){return{x0:z.x0*W+PAD,y0:z.y0*H+PAD,x1:z.x1*W-PAD,y1:z.y1*H-PAD};}
-  const g={government:[],un:[],donor:[],ingo:[],nngo:[],cluster:[]};
-  NODES.filter(n=>!n.abc).forEach(n=>{if(g[n.type])g[n.type].push(n);});
-  Object.entries(g).forEach(([k,nodes])=>{
-    if(!nodes.length) return;
-    const bnd=b(ZONES[k]||ZONES.cluster);
-    const zW=bnd.x1-bnd.x0,zH=bnd.y1-bnd.y0;
-    const cols=Math.max(1,Math.ceil(Math.sqrt(nodes.length*(zW/Math.max(zH,1)))));
-    const rows=Math.ceil(nodes.length/cols);
-    nodes.forEach((n,i)=>{n.x=bnd.x0+(zW/cols)*((i%cols)+0.5);n.y=bnd.y0+(zH/rows)*(Math.floor(i/cols)+0.5);});
+  // Row y positions
+  const R1y=H*0.18;
+  const R2y=H*0.50;
+  const R3y=H*0.80;
+
+  // GOVERNMENT — 4 nodes, left column
+  const govNodes=NODES.filter(n=>n.type==='government');
+  govNodes.forEach((n,i)=>{
+    n.x=W*0.04+(W*0.20/(govNodes.length-1||1))*i;
+    n.y=R1y+(i%2)*H*0.12;
   });
-  // ABC nodes grouped in a row just below cluster zone
-  const abcY=H*0.72;
-  const abcXs=[W*0.20,W*0.38,W*0.56,W*0.74];
-  NODES.filter(n=>n.abc).forEach((n,i)=>{n.x=abcXs[i]||W*0.5;n.y=abcY;});
+
+  // UN — 7 nodes, centre, 4+3 layout
+  const unNodes=NODES.filter(n=>n.type==='un');
+  const unCols=4, unX0=W*0.26, unSpan=W*0.42;
+  unNodes.forEach((n,i)=>{
+    const col=i%unCols, row=Math.floor(i/unCols);
+    const rowCount=(row===0)?Math.min(unCols,unNodes.length):unNodes.length-unCols;
+    const rowSpan=unSpan*(rowCount-1)/(unCols-1);
+    const offset=(unSpan-rowSpan)/2;
+    n.x=unX0+offset+rowSpan/(rowCount-1||1)*col;
+    n.y=R1y+row*H*0.16;
+  });
+
+  // DONORS — 3 nodes, right
+  const donNodes=NODES.filter(n=>n.type==='donor');
+  donNodes.forEach((n,i)=>{
+    n.x=W*0.77+(W*0.16/(donNodes.length-1||1))*i;
+    n.y=R1y+(i%2)*H*0.12;
+  });
+
+  // CLUSTERS — 5 nodes, centred horizontally in left 65% of width
+  const clNodes=NODES.filter(n=>n.type==='cluster');
+  const clCount=clNodes.length;
+  const clX0=W*0.08, clSpan=W*0.55;
+  clNodes.forEach((n,i)=>{
+    n.x=clX0+clSpan/(clCount-1)*i;
+    n.y=R2y;
+  });
+
+  // ABC — 4 nodes, 2×2 grid to the RIGHT of clusters
+  const abcNodes=NODES.filter(n=>n.abc);
+  const abcX0=W*0.72, abcColGap=W*0.11, abcRowGap=H*0.12;
+  abcNodes.forEach((n,i)=>{
+    n.x=abcX0+(i%2)*abcColGap;
+    n.y=R2y+(Math.floor(i/2)-0.5)*abcRowGap;
+  });
+
+  // INGO — 9 nodes, left 55%, 5+4 layout
+  const ingoNodes=NODES.filter(n=>n.type==='ingo');
+  const ingoCols=5, ingoX0=W*0.03, ingoSpan=W*0.52;
+  ingoNodes.forEach((n,i)=>{
+    n.x=ingoX0+ingoSpan/(ingoCols-1)*(i%ingoCols);
+    n.y=R3y+Math.floor(i/ingoCols)*H*0.14;
+  });
+
+  // NNGO — 4 nodes, right 35%, 2×2
+  const nngoNodes=NODES.filter(n=>n.type==='nngo');
+  const nngoX0=W*0.63, nngoSpan=W*0.33, nngoCols=2;
+  nngoNodes.forEach((n,i)=>{
+    n.x=nngoX0+nngoSpan/(nngoCols-1||1)*(i%nngoCols);
+    n.y=R3y+Math.floor(i/nngoCols)*H*0.14;
+  });
 }
 function lS(t){if(t==='coordinates')return'#C9A84C';if(t==='funding')return'rgba(245,158,11,0.75)';if(t==='consortium')return'rgba(148,163,184,0.7)';if(t==='knows')return'rgba(100,116,139,0.5)';if(t==='abc')return'#ef4444';return'rgba(255,255,255,0.2)';}
 function lW(t){if(t==='coordinates')return 2.5;if(t==='funding')return 1.5;if(t==='consortium')return 1.2;return 0.8;}
@@ -492,25 +539,25 @@ function render(){
   svg.on('click',()=>{if(focusedId)resetView();});
   mG=svg.append('g');
 
-  // Zone backgrounds — BIGGER labels
-  const zoneDefs=[
-    {z:ZONES.government,label:'GOVERNMENT',    sub:'State authority · cluster co-leads',stroke:'rgba(249,115,22,0.22)',fill:'rgba(249,115,22,0.05)'},
-    {z:ZONES.un,        label:'UN AGENCIES',   sub:'Cluster leads · pipeline · provider of last resort',stroke:'rgba(167,139,250,0.22)',fill:'rgba(167,139,250,0.05)'},
-    {z:ZONES.donor,     label:'DONORS',        sub:'Institutional funding flows',stroke:'rgba(245,158,11,0.22)',fill:'rgba(245,158,11,0.05)'},
-    {z:ZONES.ingo,      label:'INGO',          sub:'Direct implementation · ET-RRM consortium',stroke:'rgba(74,158,255,0.22)',fill:'rgba(74,158,255,0.05)'},
-    {z:ZONES.nngo,      label:'CSO / NNGO',    sub:'Local access · sub-partners · EHF direct',stroke:'rgba(52,211,153,0.22)',fill:'rgba(52,211,153,0.05)'},
-    {z:ZONES.cluster,   label:'CLUSTERS',      sub:'Sector coordination forums',stroke:'rgba(255,255,255,0.1)',fill:'rgba(255,255,255,0.02)'},
-  ];
+  // Zone labels — fixed positions matching placeNodes layout
   const zg=mG.append('g').attr('pointer-events','none');
-  zoneDefs.forEach(({z,label,sub,stroke,fill})=>{
-    const x=z.x0*W+3,y=z.y0*H+3,w=(z.x1-z.x0)*W-6,h=(z.y1-z.y0)*H-6;
-    zg.append('rect').attr('x',x).attr('y',y).attr('width',w).attr('height',h).attr('rx',3).attr('fill',fill).attr('stroke',stroke).attr('stroke-width',0.5).attr('stroke-dasharray','5 4');
-    zg.append('text').attr('x',x+10).attr('y',y+19).attr('font-family','IBM Plex Mono,monospace').attr('font-size',11).attr('font-weight','500').attr('letter-spacing','0.12em').attr('fill',stroke).text(label);
-    zg.append('text').attr('x',x+10).attr('y',y+33).attr('font-family','Inter,sans-serif').attr('font-size',9).attr('font-weight','300').attr('fill',stroke).attr('opacity',0.65).text(sub);
-  });
-  // ABC zone label
-  zg.append('text').attr('x',W*0.09).attr('y',H*0.65).attr('font-family','IBM Plex Mono,monospace').attr('font-size',10).attr('font-weight','500').attr('letter-spacing','0.12em').attr('fill','rgba(239,68,68,0.5)').text('ABC ZONE GAPS');
-  zg.append('text').attr('x',W*0.09).attr('y',H*0.65+14).attr('font-family','Inter,sans-serif').attr('font-size',9).attr('fill','rgba(239,68,68,0.35)').text('Co-location without coordination');
+  function zoneLabel(x,y,label,sub,color){
+    zg.append('text').attr('x',x).attr('y',y).attr('font-family','IBM Plex Mono,monospace').attr('font-size',10).attr('font-weight','500').attr('letter-spacing','0.13em').attr('fill',color).attr('opacity',0.5).text(label);
+    zg.append('text').attr('x',x).attr('y',y+14).attr('font-family','Inter,sans-serif').attr('font-size',9).attr('font-weight','300').attr('fill',color).attr('opacity',0.28).text(sub);
+  }
+  // Horizontal dividers between rows
+  zg.append('line').attr('x1',0).attr('y1',H*0.34).attr('x2',W).attr('y2',H*0.34).attr('stroke','rgba(255,255,255,0.05)').attr('stroke-width',0.5);
+  zg.append('line').attr('x1',0).attr('y1',H*0.63).attr('x2',W).attr('y2',H*0.63).attr('stroke','rgba(255,255,255,0.05)').attr('stroke-width',0.5);
+  // Vertical divider between INGO and NNGO
+  zg.append('line').attr('x1',W*0.58).attr('y1',H*0.63).attr('x2',W*0.58).attr('y2',H).attr('stroke','rgba(255,255,255,0.04)').attr('stroke-width',0.5);
+
+  zoneLabel(W*0.02, H*0.05, 'GOVERNMENT', 'State authority · co-leads clusters', 'rgba(249,115,22,1)');
+  zoneLabel(W*0.30, H*0.05, 'UN AGENCIES', 'Cluster leads · pipeline · provider of last resort', 'rgba(167,139,250,1)');
+  zoneLabel(W*0.74, H*0.05, 'DONORS', 'Institutional funding', 'rgba(245,158,11,1)');
+  zoneLabel(W*0.08, H*0.37, 'CLUSTERS', 'Sector coordination forums', 'rgba(255,255,255,1)');
+  zoneLabel(W*0.70, H*0.37, 'ABC GAPS', 'Co-location · no mechanism', 'rgba(239,68,68,1)');
+  zoneLabel(W*0.02, H*0.66, 'INGO', 'Direct implementation · ET-RRM', 'rgba(74,158,255,1)');
+  zoneLabel(W*0.61, H*0.66, 'CSO / NNGO', 'Local access · EHF direct recipients', 'rgba(52,211,153,1)');
 
   const nById=new Map(NODES.map(n=>[n.id,n]));
 
@@ -531,17 +578,17 @@ function render(){
   nSel.append('circle').attr('r',nR).attr('fill',d=>d.type==='cluster'?'rgba(255,255,255,0.07)':'rgba(255,255,255,0.05)').attr('stroke',d=>TC[d.type]||'#fff').attr('stroke-width',d=>d.type==='cluster'?2:1)
     .attr('filter',d=>d.id==='cl_nut'?'url(#gf_gn)':d.id==='cl_wsh'?'url(#gf_gw)':d.id==='cl_hlt'?'url(#gf_gh)':d.id==='cl_food'?'url(#gf_gf)':null);
   nSel.filter(d=>d.sectors?.length>0).each(function(d){moons(d.sectors,nR(d)).forEach(m=>{d3.select(this).append('circle').attr('cx',m.x).attr('cy',m.y).attr('r',m.r).attr('fill',m.color).attr('opacity',0.9).attr('pointer-events','none');});});
-  nSel.append('text').attr('text-anchor','middle').attr('dominant-baseline','central').attr('y',-1).attr('font-size',d=>d.type==='cluster'?9.5:8.5).attr('font-weight',d=>d.type==='cluster'?'500':'400').attr('font-family','Inter,sans-serif').attr('fill',d=>d.type==='cluster'?'rgba(255,255,255,0.92)':'rgba(255,255,255,0.75)').attr('pointer-events','none').text(d=>{const w=d.name.split(' ');return d.name.length>14?w.slice(0,2).join(' '):d.name;});
-  nSel.filter(d=>d.type!=='cluster').append('circle').attr('cx',d=>nR(d)*0.72).attr('cy',d=>-nR(d)*0.72).attr('r',7.5).attr('fill',d=>ss(d.score)).attr('stroke','#080c11').attr('stroke-width',1.5).attr('pointer-events','none');
-  nSel.filter(d=>d.type!=='cluster').append('text').attr('x',d=>nR(d)*0.72).attr('y',d=>-nR(d)*0.72).attr('text-anchor','middle').attr('dominant-baseline','central').attr('font-size',6.5).attr('font-weight','500').attr('font-family','IBM Plex Mono,monospace').attr('fill','#fff').attr('pointer-events','none').text(d=>d.score);
+  nSel.append('text').attr('text-anchor','middle').attr('dominant-baseline','central').attr('y',-1).attr('font-size',d=>d.type==='cluster'?11:10).attr('font-weight',d=>d.type==='cluster'?'500':'400').attr('font-family','Inter,sans-serif').attr('fill',d=>d.type==='cluster'?'rgba(255,255,255,0.92)':'rgba(255,255,255,0.75)').attr('pointer-events','none').text(d=>{const w=d.name.split(' ');return d.name.length>14?w.slice(0,2).join(' '):d.name;});
+  nSel.filter(d=>d.type!=='cluster').append('circle').attr('cx',d=>nR(d)*0.72).attr('cy',d=>-nR(d)*0.72).attr('r',9).attr('fill',d=>ss(d.score)).attr('stroke','#080c11').attr('stroke-width',1.5).attr('pointer-events','none');
+  nSel.filter(d=>d.type!=='cluster').append('text').attr('x',d=>nR(d)*0.72).attr('y',d=>-nR(d)*0.72).attr('text-anchor','middle').attr('dominant-baseline','central').attr('font-size',8).attr('font-weight','500').attr('font-family','IBM Plex Mono,monospace').attr('fill','#fff').attr('pointer-events','none').text(d=>d.score);
   nSel.style('opacity',0).transition().delay((_,i)=>i*10).duration(280).style('opacity',1);
 
   // ABC nodes
   const abcG=mG.append('g');
   const abcSel=abcG.selectAll('g.ag').data(NODES.filter(n=>n.abc)).join('g').attr('class','ag').attr('transform',d=>`translate(${d.x},${d.y})`).style('cursor','pointer').style('opacity',abcVisible?1:0);
-  abcSel.append('rect').attr('width',28).attr('height',28).attr('x',-14).attr('y',-14).attr('rx',2).attr('transform','rotate(45)').attr('fill','rgba(239,68,68,0.08)').attr('stroke','#ef4444').attr('stroke-width',1.5).attr('filter','url(#gf_ga)');
-  abcSel.append('rect').attr('width',42).attr('height',42).attr('x',-21).attr('y',-21).attr('rx',2).attr('transform','rotate(45)').attr('fill','none').attr('stroke','rgba(239,68,68,0.2)').attr('stroke-width',1).attr('pointer-events','none');
-  abcSel.append('text').attr('text-anchor','middle').attr('dominant-baseline','central').attr('y',-1).attr('font-size',8).attr('font-family','Inter,sans-serif').attr('fill','#ef4444').attr('pointer-events','none').text(d=>d.name);
+  abcSel.append('rect').attr('width',36).attr('height',36).attr('x',-18).attr('y',-18).attr('rx',2).attr('transform','rotate(45)').attr('fill','rgba(239,68,68,0.08)').attr('stroke','#ef4444').attr('stroke-width',1.5).attr('filter','url(#gf_ga)');
+  abcSel.append('rect').attr('width',52).attr('height',52).attr('x',-26).attr('y',-26).attr('rx',2).attr('transform','rotate(45)').attr('fill','none').attr('stroke','rgba(239,68,68,0.2)').attr('stroke-width',1).attr('pointer-events','none');
+  abcSel.append('text').attr('text-anchor','middle').attr('dominant-baseline','central').attr('y',-1).attr('font-size',9).attr('font-family','Inter,sans-serif').attr('font-weight','500').attr('fill','#ef4444').attr('pointer-events','none').text(d=>d.name);
 
   const tip=document.getElementById('tooltip');
   function showL(id){
